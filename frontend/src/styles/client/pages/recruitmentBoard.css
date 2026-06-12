@@ -1,0 +1,390 @@
+.recruitment-page {
+  padding: 24px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.recruitment-page__header {
+  background-color: #0056b3; 
+  color: white;
+  padding: 16px 24px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.recruitment-page__title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.kanban-board {
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  padding-bottom: 16px;
+  align-items: flex-start;
+}
+
+.kanban-column {
+  flex: 1;
+  min-width: 280px;
+  max-width: 320px;
+  background-color: #f1f3f5;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  /* Không giới hạn chiều cao để column tự dãn theo số lượng thẻ */
+  overflow: visible;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.kanban-column__header {
+  padding: 12px 16px;
+  font-weight: 600;
+  font-size: 16px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
+  color: #333;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.kanban-column__count {
+  background: rgba(0,0,0,0.1);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 14px;
+}
+
+/* Specific colors for columns — tất cả header vàng như screenshot */
+.kanban-column--applied .kanban-column__header,
+.kanban-column--screening .kanban-column__header,
+.kanban-column--interview .kanban-column__header,
+.kanban-column--offer .kanban-column__header {
+  background-color: #f5e642; /* Vàng đồng nhất */
+  color: #333;
+}
+
+/* Màu nền thẻ theo từng cột */
+.candidate-card--applied   { background-color: #ffd9d9; border-color: #f5b8b8; } /* Pink   */
+.candidate-card--screening { background-color: #e8e0ff; border-color: #c9bef5; } /* Lavender */
+.candidate-card--interview { background-color: #d0eaff; border-color: #a8d0f5; } /* Sky blue */
+.candidate-card--offer     { background-color: #d0f5e0; border-color: #9de5be; } /* Mint green */
+
+.kanban-column__content {
+  padding: 12px;
+  /* flex column + gap để các thẻ xếp thẳng hàng, dãn đều nhau */
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-height: 150px;
+  /* overflow visible để dropdown popover không bị clip */
+  overflow: visible;
+}
+
+/* Candidate Card */
+.candidate-card {
+  /* background-color được override bởi class --applied/--screening/etc */
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  transition: transform 0.3s ease-out, box-shadow 0.2s;
+  user-select: none;
+  touch-action: none;
+  overflow: visible;
+  flex-shrink: 0;
+}
+
+.candidate-card:not(.candidate-card--dragging):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.candidate-card--dragging {
+  box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  z-index: 10;
+}
+
+.candidate-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  position: relative;
+}
+
+.candidate-card__header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.candidate-card__id {
+  font-size: 12px;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+.candidate-card__menu-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.candidate-card__menu-trigger {
+  background: none;
+  border: none;
+  font-size: 18px;
+  color: #495057;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  user-select: none;
+}
+
+.candidate-card__menu-trigger:hover {
+  background-color: #f1f3f5;
+  color: #212529;
+}
+
+.candidate-card__menu-trigger:active {
+  transform: scale(0.95);
+}
+
+.candidate-card__status-badge {
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 12px;
+  background-color: #e9ecef;
+  color: #495057;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card body: khu vực hiển thị các trường label: value */
+.candidate-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+
+.candidate-card__field {
+  display: flex;
+  gap: 6px;
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: #212529;
+  flex-wrap: wrap;
+}
+
+.candidate-card__field-label {
+  font-weight: 600;
+  color: #212529;
+  white-space: nowrap;
+}
+
+.candidate-card__field-value {
+  color: #333;
+}
+
+
+/* Swipe hint text */
+.candidate-card__swipe-hint {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 20;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Swipe direction indicators */
+.candidate-card__swipe-indicators {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 8px;
+  pointer-events: none;
+  border-radius: 8px;
+}
+
+.candidate-card__indicator {
+  font-size: 24px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.2s ease-out;
+  color: #0d6efd;
+}
+
+.candidate-card__indicator--left {
+  opacity: 0;
+}
+
+.candidate-card__indicator--right {
+  opacity: 0;
+}
+
+.candidate-card__indicator.active {
+  opacity: 1;
+  animation: pulse 0.3s ease-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.candidate-card__footer {
+  margin-top: auto;
+}
+
+.candidate-card__btn-detail {
+  width: 100%;
+  background-color: #198754;
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  user-select: none;
+}
+
+.candidate-card__btn-detail:hover {
+  background-color: #157347;
+}
+
+.candidate-card__btn-detail:active {
+  transform: scale(0.98);
+}
+
+/* Popover Menu — render bằng React Portal vào document.body */
+/* position: fixed + tọa độ được set bằng inline style trong JSX */
+.candidate-card__popover {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  overflow: hidden;
+  min-width: 160px;
+  border: 1px solid #e9ecef;
+  animation: popoverFadeIn 0.18s ease-out;
+}
+
+@keyframes popoverFadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+.candidate-card__popover-header {
+  background-color: #cfe2ff;
+  padding: 12px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #084298;
+  border-bottom: 1px solid #b6d4fe;
+  line-height: 1.4;
+  display: block;
+}
+
+.candidate-card__popover-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.candidate-card__popover-item {
+  background: transparent;
+  border: none;
+  padding: 12px 12px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 500;
+  color: #212529;
+  cursor: pointer;
+  transition: all 0.15s;
+  user-select: none;
+  border-radius: 0;
+  line-height: 1.4;
+  width: 100%;
+  text-align: left;
+}
+
+.candidate-card__popover-item:not(.active):hover {
+  background-color: #f1f3f5;
+  padding-left: 14px;
+}
+
+.candidate-card__popover-item.active {
+  background-color: #0d6efd;
+  color: white;
+  font-weight: 600;
+}
+
+.candidate-card__popover-item.active:hover {
+  background-color: #0b5ed7;
+  padding-left: 14px;
+}
+
+/* Scrollbar styling for Kanban */
+.kanban-board::-webkit-scrollbar {
+  height: 8px;
+}
+
+.kanban-board::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.kanban-board::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.kanban-board::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}

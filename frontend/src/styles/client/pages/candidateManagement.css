@@ -1,0 +1,545 @@
+/* ===== CANDIDATE MANAGEMENT PAGE ===== */
+.candidate-page {
+  padding: 32px 40px;
+  min-height: 100%;
+}
+
+/* Header */
+.candidate-page__header {
+  margin-bottom: 24px;
+}
+
+.candidate-page__title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 4px;
+}
+
+.candidate-page__subtitle {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+/* Filters */
+.candidate-page__filters {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.candidate-page__filter-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 8px 14px;
+  min-width: 180px;
+}
+
+.candidate-page__filter-input .filter-icon {
+  font-size: 14px;
+  opacity: 0.5;
+}
+
+.candidate-page__filter-input input {
+  border: none;
+  outline: none;
+  font-size: 14px;
+  color: #333;
+  background: transparent;
+  width: 100%;
+}
+
+.candidate-page__filter-input input::placeholder {
+  color: #aaa;
+}
+
+.candidate-page__filter-select {
+  padding: 10px 14px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  color: #333;
+  background: #fff;
+  cursor: pointer;
+  outline: none;
+  min-width: 160px;
+}
+
+.candidate-page__btn-search {
+  padding: 10px 28px;
+  background: #0087f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  margin-left: auto;
+}
+
+.candidate-page__btn-search:hover {
+  background: #006ed0;
+}
+
+.candidate-page__btn-clear {
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+  border-radius: 50%;
+  font-size: 20px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.candidate-page__btn-clear:hover {
+  background: #e0e0e0;
+  color: #333;
+}
+
+/* Tooltip / Quick Preview */
+.candidate-page__tooltip {
+  background: linear-gradient(180deg, #2a2a3e 0%, #1a1a2e 100%);
+  border: 1px solid rgba(0, 135, 241, 0.3);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  padding: 20px;
+  width: 240px;
+  animation: slideUp 0.2s ease-out;
+  margin-bottom: 12px;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -90%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -100%);
+  }
+}
+
+.candidate-page__tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: center;
+}
+
+.candidate-page__tooltip-avatar {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0087f1, #00c6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 700;
+  font-size: 24px;
+  margin: 0 auto;
+}
+
+.candidate-page__tooltip-name {
+  font-weight: 700;
+  font-size: 16px;
+  color: #fff;
+  margin: 4px 0 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.candidate-page__tooltip-title {
+  font-size: 13px;
+  color: #aaa;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.candidate-page__tooltip-links {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+
+.candidate-page__tooltip-links {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin: 4px 0;
+}
+
+.candidate-page__tooltip-github {
+  text-align: center;
+  padding: 8px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 8px;
+}
+
+.candidate-page__tooltip-github-link {
+  display: inline-block;
+  color: #00c6ff;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  word-break: break-all;
+  transition: color 0.2s ease;
+  max-width: 200px;
+}
+
+.candidate-page__tooltip-github-link:hover {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.candidate-page__tooltip-github-link.cv-link {
+  color: #ffa500;
+}
+
+.candidate-page__tooltip-github-link.cv-link:hover {
+  color: #ffb84d;
+}
+
+.candidate-page__tooltip-no-github {
+  display: inline-block;
+  color: #999;
+  font-size: 12px;
+}
+
+.candidate-page__tooltip-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 12px;
+  background: rgba(0, 135, 241, 0.2);
+  color: #00c6ff;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  border: 1px solid rgba(0, 135, 241, 0.4);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.candidate-page__tooltip-link:hover {
+  background: rgba(0, 135, 241, 0.4);
+  border-color: #00c6ff;
+  box-shadow: 0 2px 8px rgba(0, 198, 255, 0.3);
+}
+
+.candidate-page__tooltip-link.cv-link {
+  color: #ffa500;
+  border-color: rgba(255, 165, 0, 0.4);
+  background: rgba(255, 165, 0, 0.1);
+}
+
+.candidate-page__tooltip-link.cv-link:hover {
+  background: rgba(255, 165, 0, 0.2);
+  border-color: #ffa500;
+  box-shadow: 0 2px 8px rgba(255, 165, 0, 0.3);
+}
+
+.candidate-page__tooltip-link.github-link {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.candidate-page__tooltip-link.github-link:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: #fff;
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.2);
+}
+
+.candidate-page__tooltip-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 8px;
+  margin-bottom: 0;
+}
+
+.candidate-page__tooltip-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.candidate-page__tooltip-btn.primary {
+  background: linear-gradient(135deg, #0087f1, #00c6ff);
+  color: #fff;
+}
+
+.candidate-page__tooltip-btn.primary:hover {
+  background: linear-gradient(135deg, #006ed0, #00a8d8);
+  box-shadow: 0 4px 12px rgba(0, 135, 241, 0.4);
+}
+
+.candidate-page__tooltip-btn.secondary {
+  background: transparent;
+  color: #00c6ff;
+  border: 1px solid #00c6ff;
+}
+
+.candidate-page__tooltip-btn.secondary:hover {
+  background: rgba(0, 198, 255, 0.1);
+  box-shadow: 0 2px 8px rgba(0, 198, 255, 0.2);
+}
+
+/* Table Wrapper */
+.candidate-page__table-wrapper {
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #eee;
+  overflow: hidden;
+}
+
+.candidate-page__loading {
+  padding: 60px;
+  text-align: center;
+  color: #888;
+  font-size: 15px;
+}
+
+.candidate-page__empty {
+  text-align: center;
+  padding: 40px;
+  color: #999;
+  font-size: 14px;
+}
+
+/* Table */
+.candidate-page__table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.candidate-page__table thead {
+  background: #fafafa;
+  border-bottom: 1px solid #eee;
+}
+
+.candidate-page__table th {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+  white-space: nowrap;
+}
+
+.candidate-page__table td {
+  padding: 14px 16px;
+  font-size: 14px;
+  color: #333;
+  border-bottom: 1px solid #f2f2f2;
+}
+
+.candidate-page__table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.candidate-page__table tbody tr:hover {
+  background: #f8faff;
+}
+
+.candidate-page__table input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  accent-color: #0087f1;
+}
+
+/* User Cell */
+.candidate-page__user-cell {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.candidate-page__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #0087f1, #00c6ff);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+
+/* Status Badges */
+.candidate-page__status {
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.candidate-page__status.status-verified {
+  color: #007E00;
+}
+
+.candidate-page__status.status-risk {
+  color: #E7A900;
+}
+
+.candidate-page__status.status-unanalyzed {
+  color: #6b7280;
+}
+
+.candidate-page__status.status-scheduled {
+  color: #007E00;
+}
+
+.candidate-page__status.status-interview {
+  color: #007E00;
+}
+
+/* Footer */
+.candidate-page__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+/* Pagination */
+.candidate-page__pagination {
+  display: flex;
+  gap: 6px;
+}
+
+.candidate-page__page-btn {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  color: #555;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.candidate-page__page-btn:hover {
+  background: #f0f4ff;
+  border-color: #0087f1;
+  color: #0087f1;
+}
+
+.candidate-page__page-btn.active {
+  background: #0087f1;
+  border-color: #0087f1;
+  color: #fff;
+}
+
+/* Send Email Button */
+.candidate-page__btn-email {
+  padding: 10px 24px;
+  background: #0087f1;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s ease;
+}
+
+.candidate-page__btn-email:hover {
+  background: #006ed0;
+}
+
+/* Actions Container */
+.candidate-page__actions {
+  display: flex;
+  gap: 12px;
+}
+
+/* Schedule Interview Button */
+.candidate-page__btn-schedule {
+  padding: 10px 24px;
+  background: linear-gradient(135deg, #2ecc71 0%, #27ae60 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s ease;
+}
+
+.candidate-page__btn-schedule:hover {
+  background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
+}
+
+/* Table Actions Cell */
+.candidate-page__actions-cell {
+  text-align: center;
+  white-space: nowrap;
+}
+
+.candidate-page__edit-btn {
+  width: 36px;
+  height: 36px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  background: #fff;
+  color: #0087f1;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  font-size: 16px;
+}
+
+.candidate-page__edit-btn:hover {
+  background: #0087f1;
+  border-color: #0087f1;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 135, 241, 0.2);
+}

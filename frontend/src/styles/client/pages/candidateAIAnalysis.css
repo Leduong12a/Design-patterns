@@ -1,0 +1,268 @@
+/* ===== CANDIDATE AI ANALYSIS PAGE ===== */
+
+.caa-page {
+  min-height: 100vh;
+  background: #f5f7fb;
+  padding: 24px;
+}
+
+.caa-back {
+  background: #fff;
+  border: 1.5px solid #ddd;
+  color: #333;
+  padding: 10px 18px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  margin-bottom: 24px;
+  transition: all 0.2s;
+}
+
+.caa-back:hover {
+  background: #f5f5f5;
+  border-color: #bbb;
+}
+
+/* Loading */
+.caa-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  background: #fff;
+  border-radius: 12px;
+  padding: 80px 40px;
+  color: #666;
+  font-size: 15px;
+}
+
+.caa-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e0e7ff;
+  border-top-color: #0087f1;
+  border-radius: 50%;
+  animation: caa-spin 0.8s linear infinite;
+}
+
+@keyframes caa-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Container */
+.caa-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.caa-header {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+}
+
+.caa-header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 8px 0;
+}
+
+.caa-header p {
+  font-size: 14px;
+  color: #888;
+  margin: 0;
+}
+
+/* Form Card */
+.caa-form-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 32px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+}
+
+.caa-form-group {
+  margin-bottom: 28px;
+  display: flex;
+  flex-direction: column;
+}
+
+.caa-form-group:last-of-type {
+  margin-bottom: 0;
+}
+
+.caa-form-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin-bottom: 10px;
+  display: block;
+}
+
+.caa-form-label--danger {
+  color: #dc2626;
+}
+
+.caa-form-value {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  padding: 12px 16px;
+  background: #f9fafb;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
+}
+
+.caa-form-value--textarea {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  min-height: 80px;
+}
+
+.caa-form-value--list {
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+/* Score display */
+.caa-score-display {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.caa-score-badge {
+  font-size: 32px;
+  font-weight: 700;
+  color: #0087f1;
+  min-width: 100px;
+  padding: 12px 16px;
+  background: #e8f3ff;
+  border-radius: 8px;
+  text-align: center;
+}
+
+.caa-score-status {
+  font-size: 14px;
+  color: #666;
+}
+
+/* Lists */
+.caa-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.caa-list li {
+  font-size: 14px;
+  color: #333;
+  line-height: 1.6;
+  padding: 10px 16px;
+  background: #f9fafb;
+  border-radius: 6px;
+  border-left: 3px solid #0087f1;
+}
+
+.caa-form-group.danger .caa-list li {
+  border-left-color: #dc2626;
+  background: #fef2f2;
+  color: #7f1d1d;
+}
+
+/* Actions */
+.caa-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid #e5e7eb;
+  flex-wrap: wrap;
+}
+
+.caa-btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  border: 1.5px solid #ddd;
+  background: #fff;
+  color: #333;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.caa-btn:hover:not(:disabled) {
+  border-color: #0087f1;
+  background: #e8f3ff;
+  color: #0087f1;
+}
+
+.caa-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.caa-btn--secondary {
+  background: #fff;
+  border-color: #ddd;
+  color: #333;
+}
+
+/* Empty state */
+.caa-empty {
+  background: #fff;
+  border-radius: 12px;
+  padding: 60px 40px;
+  text-align: center;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.05);
+}
+
+.caa-empty-text h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #1a1a2e;
+  margin: 0 0 8px 0;
+}
+
+.caa-empty-text p {
+  font-size: 14px;
+  color: #666;
+  margin: 0;
+  line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+  .caa-page {
+    padding: 16px;
+  }
+
+  .caa-header {
+    padding: 20px;
+  }
+
+  .caa-header h1 {
+    font-size: 22px;
+  }
+
+  .caa-form-card {
+    padding: 20px;
+  }
+
+  .caa-actions {
+    flex-direction: column;
+  }
+
+  .caa-btn {
+    width: 100%;
+  }
+}
