@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import * as database from './shared/infrastructure/config/database';
 import indexAdminRoute from './modules/admin/presentation/http/routes/index.route';
 import indexClientRoute from './modules/client/presentation/http/routes/index.route';
+import { errorHandler } from './shared/infrastructure/middlewares/error.middleware';
 
 const app = express();
 const PORT: number = parseInt(process.env.PORT ?? '3000', 10);
@@ -35,6 +36,8 @@ app.use(express.json());
 database.connectDatabase();
 indexAdminRoute(app);
 indexClientRoute(app);
+
+app.use(errorHandler);
 
 app.listen(PORT, () => {
   console.log(`Backend admin đang chạy tại: http://localhost:${PORT}`);

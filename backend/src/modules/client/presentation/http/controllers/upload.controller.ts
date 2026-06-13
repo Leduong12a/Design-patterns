@@ -4,6 +4,8 @@ import { CandidateRepository } from '../../../infrastructure/database/repositori
 import { JobRepository } from '../../../infrastructure/database/repositories/job.repository';
 import { UploadService } from '../../../infrastructure/external-service/upload.service';
 import { GeminiService } from '../../../infrastructure/external-service/gemini.service';
+import { asyncHandler } from '../../../../../shared/utils/asyncHandler';
+import { BadRequestError } from '../../../../../shared/utils/errors';
 
 const candidateRepository = new CandidateRepository();
 const jobRepository = new JobRepository();
@@ -11,30 +13,25 @@ const uploadService = new UploadService();
 const geminiService = new GeminiService();
 const uploadCVUseCase = new UploadCVUseCase(candidateRepository, jobRepository, uploadService, geminiService);
 
-export const uploadCV = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userID = res.locals.user.id;
-    const files = req.files as { [fieldname: string]: Express.Multer.File[] };
-    const cvFile = files?.cv?.[0];
-    const avatarFile = files?.avatar?.[0];
-    const { jobID } = req.body as { jobID: string };
+// [POST] /upload/cv
+export const uploadCV = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const userID = res.locals.user.id;
+  const files = req.files as { [fieldname: string]: Express.Multer.File[] };
+  const cvFile = files?.cv?.[0];
+  const avatarFile = files?.avatar?.[0];
+  const { jobID } = req.body as { jobID: string };
 
-    if (!cvFile) {
-      res.status(400).json({ message: 'Vui lòng tải lên file CV' });
-      return;
-    }
-
-    const { candidate } = await uploadCVUseCase.execute(
-      userID,
-      jobID,
-      cvFile,
-      avatarFile,
-    );
-
-    res.status(200).json({ message: 'CV processed successfully', candidate });
-  } catch (error: unknown) {
-    const e = error as { message?: string };
-    const statusCode = e.message?.includes('Vui lòng') ? 400 : 500;
-    res.status(statusCode).json({ message: e.message });
+  if (!cvFile) {
+    throw new BadRequestError('Vui lòng tải lên file CV');
   }
-};
+
+  const { candidate } = await uploadCVUseCase.execute(
+    userID,
+    jobID,
+    cvFile,
+    avatarFile,
+  );
+
+  res.status(200).json({ message: 'CV processed successfully', candidate });
+});
+

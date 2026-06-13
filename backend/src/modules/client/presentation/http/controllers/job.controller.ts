@@ -6,9 +6,10 @@ import { DeleteJobUseCase } from '../../../application/use-cases/job/delete-job.
 import { GetJobByIdUseCase } from '../../../application/use-cases/job/get-job-by-id.use-case';
 import { GetCanidateByJobUseCase } from '../../../application/use-cases/candidate/get-candidate-by-job.use-case';
 import { ICreateJobInputDto, IUpdateJobInputDto } from '../../../application/dtos/job/create.dto';
-
 import { JobRepository } from '../../../infrastructure/database/repositories/job.repository';
 import { CandidateRepository } from '../../../infrastructure/database/repositories/candidate.repository';
+import { asyncHandler } from '../../../../../shared/utils/asyncHandler';
+import { NotFoundError, BadRequestError } from '../../../../../shared/utils/errors';
 
 const jobRepository = new JobRepository();
 const candidateRepo = new CandidateRepository();
@@ -20,108 +21,75 @@ const getJobByIdUseCase = new GetJobByIdUseCase(jobRepository);
 const getCandidateByJobUseCase = new GetCanidateByJobUseCase(candidateRepo);
 
 // [POST] /job/create
-export const createJob = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userID = res.locals.user.id;
-    const { title, description, requirements } = req.body as ICreateJobInputDto;
+export const createJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const userID = res.locals.user.id;
+  const { title, description, requirements } = req.body as ICreateJobInputDto;
 
-    const newJob = await createJobUseCase.execute({ title, userID, description, requirements });
+  const newJob = await createJobUseCase.execute({ title, userID, description, requirements });
 
-    res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
-  } catch (error: unknown) {
-    const e = error as { message?: string };
-    res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi tạo công việc!' });
-  }
-};
+  res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
+});
 
 // [PATCH] /job/update/:id
-export const updateJob = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userID = res.locals.user.id;
-    const jobId = req.params['id'] as string;
+export const updateJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const userID = res.locals.user.id;
+  const jobId = req.params['id'] as string;
+  const updateData = req.body as IUpdateJobInputDto;
 
-    const updateData = req.body as IUpdateJobInputDto;
+  const updatedJob = await updateJobUseCase.execute(jobId, userID, updateData);
 
-    const updatedJob = await updateJobUseCase.execute(jobId, userID, updateData);
-
-    res.status(200).json({
-      success: true,
-      message: 'Cập nhật công việc thành công!',
-      updatedJob: updatedJob
-    });
-  } catch (error: unknown) {
-    const e = error as { message?: string };
-    res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi cập nhật công việc!' });
-  }
-};
+  res.status(200).json({
+    success: true,
+    message: 'Cập nhật công việc thành công!',
+    updatedJob: updatedJob
+  });
+});
 
 // [GET] /job
-export const getAllJob = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userID = res.locals.user.id;
+export const getAllJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const userID = res.locals.user.id;
 
-    const jobs = await getAllJobUseCase.execute(userID);
+  const jobs = await getAllJobUseCase.execute(userID);
 
-    res.status(200).json({ success: true, message: 'Thành công', jobs: jobs });
-  } catch (error: unknown) {
-    const e = error as { message?: string };
-    res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi tải danh sách công việc!' });
+  res.status(200).json({ success: true, message: 'Thành công', jobs: jobs });
+});
+
+// [GET] /job/:id/candidates
+export const getCandidateByJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const jobID = req.params.id?.toString() || "";
+
+  if (!jobID) {
+    throw new BadRequestError('ID công việc không hợp lệ!');
   }
-};
 
-// [GET] /job/:id/candidates 
-export const getCandidateByJob = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const jobID = req.params.id?.toString() || "";
+  const candidates = await getCandidateByJobUseCase.execute(jobID);
 
-    if (!jobID) {
-      res.status(400).json({ success: false, message: 'ID công việc không hợp lệ!' });
-      return;
-    }
-
-    const candidates = await getCandidateByJobUseCase.execute(jobID);
-
-    res.status(200).json({
-      success: true,
-      candidates: candidates
-    });
-  } catch (error: unknown) {
-    console.log("Get candidate by job error", error);
-    const e = error as { message?: string };
-    res.status(400).json({ success: false, message: e.message ?? 'Get candidate by job error ' });
-  }
-}
+  res.status(200).json({
+    success: true,
+    candidates: candidates
+  });
+});
 
 // [GET] /job/detail/:id
-export const getJobById = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const jobId = req.params['id'] as string;
+export const getJobById = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const jobId = req.params['id'] as string;
 
-    const job = await getJobByIdUseCase.execute(jobId);
+  const job = await getJobByIdUseCase.execute(jobId);
 
-    if (!job) {
-      res.status(404).json({ success: false, message: 'Không tìm thấy công việc!' });
-      return;
-    }
-
-    res.status(200).json({ success: true, message: 'Thành công', job: job });
-  } catch (error: unknown) {
-    const e = error as { message?: string };
-    res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi tải thông tin công việc!' });
+  if (!job) {
+    throw new NotFoundError('Không tìm thấy công việc!');
   }
-};
+
+  res.status(200).json({ success: true, message: 'Thành công', job: job });
+});
 
 // [DELETE] /job/delete/:id
-export const deleteJob = async (req: Request, res: Response): Promise<void> => {
-  try {
-    const userID = res.locals.user.id;
-    const jobId = req.params['id'] as string;
+export const deleteJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
+  const userID = res.locals.user.id;
+  const jobId = req.params['id'] as string;
 
-    await deleteJobUseCase.execute(jobId, userID);
+  await deleteJobUseCase.execute(jobId, userID);
 
-    res.status(200).json({ success: true, message: 'Xóa công việc thành công!' });
-  } catch (error: unknown) {
-    const e = error as { message?: string };
-    res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi xóa công việc!' });
-  }
-};
+  res.status(200).json({ success: true, message: 'Xóa công việc thành công!' });
+});
+
