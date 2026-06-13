@@ -2,42 +2,26 @@ import React, { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import Column from './components/Column';
 import candidateService from '../../../services/client/candidateService';
+import { ALL_STATES, getStateById } from './states/candidate-state';
+import { CandidateStateContext } from './states/candidate-state-context';
 import '../../../styles/client/pages/recruitmentBoard.css';
 
-const COLUMNS = [
-  // Cột mặc định tương ứng với status trong DB
-  { id: 'applied', title: 'Ứng tuyển', colorClass: 'kanban-column--applied' },
-  { id: 'screening', title: 'Sàng lọc', colorClass: 'kanban-column--screening' },
-  { id: 'interview', title: 'Phỏng vấn', colorClass: 'kanban-column--interview' },
-  { id: 'offer', title: 'Đề nghị', colorClass: 'kanban-column--offer' },
-  // Cột ẩn chứa các trạng thái cũ/khác nếu có (tuỳ chọn)
-];
+// ── State Pattern ──────────────────────────────────────────────
+// COLUMNS được tạo từ ALL_STATES — không hardcode array nữa.
+// Khi thêm trạng thái mới, chỉ cần thêm class trong candidate-state.js.
+const COLUMNS = ALL_STATES.map(state => ({
+  id:         state.id,
+  title:      state.label,
+  colorClass: state.colorClass,
+}));
+// ──────────────────────────────────────────────────────────────
 
 // Fallback status mapping nếu Backend trả về các status cũ
 const STATUS_MAPPING = {
   unverified: 'applied',
-  verified: 'screening',
-  scheduled: 'interview',
-  risky: 'applied'
-};
-
-// ═ Hàm validate quy trình tuyển dụng
-// Chỉ được chuyển trạng thái liền kề (tiến 1 hoặc lùi 1)
-const validateStatusChange = (currentStatus, newStatus) => {
-  const currentIndex = COLUMNS.findIndex(col => col.id === currentStatus);
-  const newIndex = COLUMNS.findIndex(col => col.id === newStatus);
-  
-  // Nếu trạng thái không thay đổi
-  if (currentIndex === newIndex) {
-    return { isValid: false, message: 'Trạng thái không thay đổi.' };
-  }
-  
-  // Nếu distance > 1 (nhảy cóc)
-  if (Math.abs(newIndex - currentIndex) > 1) {
-    return { isValid: false, message: 'Quy trình không hợp lệ!' };
-  }
-  
-  return { isValid: true };
+  verified:   'screening',
+  scheduled:  'interview',
+  risky:      'applied',
 };
 
 const RecruitmentBoard = () => {
@@ -52,23 +36,22 @@ const RecruitmentBoard = () => {
     try {
       setLoading(true);
       const res = await candidateService.getAll();
-      
+
       const mappedCandidates = (res.candidates || []).map(c => {
-        // Map old status to new Kanban status if needed
         let kanbanStatus = c.status;
-        if (!COLUMNS.find(col => col.id === kanbanStatus)) {
-             kanbanStatus = STATUS_MAPPING[kanbanStatus] || 'applied';
+        // Fallback nếu status không tồn tại trong State system
+        if (!getStateById(kanbanStatus)) {
+          kanbanStatus = STATUS_MAPPING[kanbanStatus] ?? 'applied';
         }
-        
         return {
-          id: c.id,
-          candidateCode: c.id.substring(0, 6).toUpperCase(), // Fake ID ngắn
-          name: c.fullName,
-          position: c.jobTitle || 'Chưa cập nhật',
-          status: kanbanStatus
+          id:            c.id,
+          candidateCode: c.id.substring(0, 6).toUpperCase(),
+          name:          c.fullName,
+          position:      c.jobTitle || 'Chưa cập nhật',
+          status:        kanbanStatus,
         };
       });
-      
+
       setCandidates(mappedCandidates);
     } catch (error) {
       console.error(error);
@@ -80,62 +63,51 @@ const RecruitmentBoard = () => {
 
   const handleStatusChange = async (candidateId, newStatus) => {
     try {
-      // Lấy current status của candidate
       const candidate = candidates.find(c => c.id === candidateId);
       if (!candidate) {
         toast.error('Không tìm thấy ứng viên!');
         return;
       }
 
-      const currentStatus = candidate.status;
-      
-      // ═ Validate quy trình tuyển dụng
-      const validation = validateStatusChange(currentStatus, newStatus);
-      if (!validation.isValid) {
-        toast.error(validation.message);
-        return; // ← Dừng lại, không cập nhật state, không gọi API
-      }
+      // ── State Pattern ────────────────────────────────────────
+      // CandidateStateContext.transition() tự validate quy trình.
+      // Không còn validateStatusChange() với if/else tính index.
+      const context = new CandidateStateContext(candidate.status);
+      const result = context.transition(newStatus);
 
-      // ═ Nếu hợp lệ: Optimistic update
-      setCandidates(prevCandidates => 
-        prevCandidates.map(c => 
-          c.id === candidateId ? { ...c, status: newStatus } : c
-        )
+      if (!result.success) {
+        toast.error(result.error);
+        return;
+      }
+      // ────────────────────────────────────────────────────────
+
+      // Optimistic update
+      setCandidates(prev =>
+        prev.map(c => c.id === candidateId ? { ...c, status: newStatus } : c)
       );
 
-      // Real API Call
-      console.log('Calling updateStatus with:', candidateId, newStatus);
-      const updateRes = await candidateService.updateStatus(candidateId, newStatus);
-      console.log('Update response:', updateRes);
-      
+      await candidateService.updateStatus(candidateId, newStatus);
       toast.success('Cập nhật trạng thái thành công!');
-      
-      // Fetch lại dữ liệu từ server để đảm bảo sync
-      setTimeout(() => {
-        fetchCandidates();
-      }, 500);
-      
-      // Lưu vào localStorage để báo cáo biết cập nhật (cross-tab sync)
+
+      setTimeout(() => fetchCandidates(), 500);
+
+      // Cross-tab sync
       const syncData = {
-        timestamp: Date.now(),
+        timestamp:   Date.now(),
         candidateId,
         newStatus,
-        type: 'candidate-status-changed'
+        type:        'candidate-status-changed',
       };
       localStorage.setItem('hr-agent-sync', JSON.stringify(syncData));
-      console.log('Saved sync data to localStorage:', syncData);
-      
-      // Dispatch custom event để Report page có thể lắng nghe (same-tab sync)
+
       window.dispatchEvent(new CustomEvent('candidate-status-changed', {
-        detail: { candidateId, newStatus, timestamp: Date.now() }
+        detail: { candidateId, newStatus, timestamp: Date.now() },
       }));
-      console.log('Dispatched candidate-status-changed event');
-      
+
     } catch (error) {
       console.error('Lỗi khi cập nhật trạng thái', error);
       toast.error(error?.response?.data?.message || 'Có lỗi xảy ra khi cập nhật trạng thái');
-      // Rollback (Fetch lại hoặc lưu state prev)
-      fetchCandidates(); 
+      fetchCandidates();
     }
   };
 
