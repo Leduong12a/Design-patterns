@@ -12,6 +12,7 @@ import {
   InterviewResultTemplate,
   RejectionTemplate,
   ProgressUpdateTemplate,
+  OfferEmailTemplate,
 } from './email-template.prototype';
 
 // Các key định danh cố định để truy xuất template theo id hoặc tên
@@ -20,6 +21,7 @@ export const EMAIL_TEMPLATE_KEYS = {
   INTERVIEW_RESULT: 'interview_result',         // id: 2
   REJECTION: 'rejection',                       // id: 3
   PROGRESS_UPDATE: 'progress_update',           // id: 4
+  OFFER_NOTIFICATION: 'offer_notification',     // id: 5 — Dùng bởi OfferEmailDecorator
 } as const;
 
 export type EmailTemplateKey = typeof EMAIL_TEMPLATE_KEYS[keyof typeof EMAIL_TEMPLATE_KEYS];
@@ -30,6 +32,7 @@ const TEMPLATE_ID_MAP: Record<number, EmailTemplateKey> = {
   2: EMAIL_TEMPLATE_KEYS.INTERVIEW_RESULT,
   3: EMAIL_TEMPLATE_KEYS.REJECTION,
   4: EMAIL_TEMPLATE_KEYS.PROGRESS_UPDATE,
+  5: EMAIL_TEMPLATE_KEYS.OFFER_NOTIFICATION,
 };
 
 // ─── Email Template Registry ─────────────────────────────────
@@ -74,6 +77,7 @@ function createDefaultRegistry(): EmailTemplateRegistry {
   registry.register(EMAIL_TEMPLATE_KEYS.INTERVIEW_RESULT, new InterviewResultTemplate());
   registry.register(EMAIL_TEMPLATE_KEYS.REJECTION, new RejectionTemplate());
   registry.register(EMAIL_TEMPLATE_KEYS.PROGRESS_UPDATE, new ProgressUpdateTemplate());
+  registry.register(EMAIL_TEMPLATE_KEYS.OFFER_NOTIFICATION, new OfferEmailTemplate());
 
   return registry;
 }

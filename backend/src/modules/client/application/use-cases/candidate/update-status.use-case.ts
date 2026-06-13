@@ -1,6 +1,12 @@
 import type { ICandidateReadRepo, ICandidateWriteRepo, IStatus } from "../../../application/ports/repositories/candidate.interface";
 
-export class UpdateStatusUseCase {
+// Interface dùng chung cho UseCase gốc và tất cả Decorator bọc ngoài
+// Decorator Pattern yêu cầu Decorator và Component gốc cùng implement một interface
+export interface IUpdateStatusUseCase {
+  execute(candidateID: string, status: IStatus): Promise<void>;
+}
+
+export class UpdateStatusUseCase implements IUpdateStatusUseCase {
 
   constructor(
     private readonly candidateRepo: ICandidateReadRepo & ICandidateWriteRepo

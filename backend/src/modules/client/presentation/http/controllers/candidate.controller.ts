@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 import { GetCandidatesUseCase } from '../../../application/use-cases/candidate/get-candidate.use-case';
 import { GetCandidateDetailUseCase } from '../../../application/use-cases/candidate/get-candidate-detail.use-case';
 import { UpdateStatusUseCase } from '../../../application/use-cases/candidate/update-status.use-case';
+import { OfferEmailDecorator } from '../../../application/use-cases/candidate/offer-email.decorator';
 import { CandidateRepository } from '../../../infrastructure/database/repositories/candidate.repository';
+import { MailService } from '../../../infrastructure/external-service/mail.service';
 import { CandidateStatus } from '../../../domain/candidate';
 import { asyncHandler } from '../../../../../shared/utils/asyncHandler';
 import { NotFoundError, BadRequestError } from '../../../../../shared/utils/errors';
@@ -58,7 +60,19 @@ export const updateStatus = asyncHandler(async (req: Request, res: Response): Pr
     throw new BadRequestError(`Trạng thái không hợp lệ. Các trạng thái cho phép: ${validStatuses.join(', ')}`);
   }
 
-  const updateStatusUseCase = new UpdateStatusUseCase(candidateRepository);
+  // ── Decorator Pattern ──────────────────────────────────────────────────────
+  // Controller chỉ biết interface IUpdateStatusUseCase.
+  // OfferEmailDecorator bọc UpdateStatusUseCase:
+  //   - Cập nhật DB (do UpdateStatusUseCase thực hiện bên trong)
+  //   - Nếu status === "offer" → tự động gửi email thông báo trúng tuyển
+  // ─────────────────────────────────────────────────────────────────────────
+  const baseUseCase = new UpdateStatusUseCase(candidateRepository);
+  const updateStatusUseCase = new OfferEmailDecorator(
+    baseUseCase,
+    candidateRepository,
+    new MailService(),
+  );
+
   await updateStatusUseCase.execute(id, { status: status as any });
 
   res.status(200).json({

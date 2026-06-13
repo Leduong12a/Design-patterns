@@ -197,3 +197,34 @@ Trân trọng,
     return copy;
   }
 }
+
+// ─── Concrete Prototype 5: Thư thông báo trúng tuyển (Offer) ─
+export class OfferEmailTemplate extends EmailTemplate {
+  constructor() {
+    super(
+      '[HR-Agent] Chúc mừng! Bạn đã được nhận vào vị trí [Tên Vị Trí]',
+      `Thân gửi [Tên Ứng Viên],
+
+Chúng tôi rất vui được thông báo rằng bạn đã vượt qua tất cả các vòng tuyển dụng và được chính thức nhận vào vị trí [Tên Vị Trí] tại [Công ty].
+
+Đội ngũ tuyển dụng của chúng tôi đã ấn tượng với kinh nghiệm, kỹ năng và thái độ chuyên nghiệp của bạn trong suốt quá trình phỏng vấn.
+
+Các bước tiếp theo:
+- Bộ phận HR sẽ liên hệ với bạn trong vòng 1-2 ngày làm việc để thông báo ngày bắt đầu và các thủ tục nhận việc.
+- Vui lòng chuẩn bị các giấy tờ cần thiết (CMND/CCCD, bằng cấp, ảnh 3x4...) để hoàn tất hồ sơ.
+- Nếu có bất kỳ câu hỏi nào, đừng ngần ngại liên hệ với chúng tôi qua email này.
+
+Một lần nữa, chúc mừng bạn và chào mừng bạn đến với [Công ty]!
+
+Trân trọng,
+[Tên Chuyên Viên / Công ty]`,
+    );
+  }
+
+  override clone(): OfferEmailTemplate {
+    const copy = new OfferEmailTemplate();
+    copy.title = this.title;
+    copy.content = this.content;
+    return copy;
+  }
+}
