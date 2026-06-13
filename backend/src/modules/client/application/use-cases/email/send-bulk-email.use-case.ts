@@ -1,6 +1,7 @@
 import type { ICandidateReadRepo } from '../../../application/ports/repositories/candidate.interface';
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
 import type { IMailService } from '../../../application/ports/services/mail.service';
+import { defaultEmailTemplateRegistry } from '../../../../../shared/templates/email/email-template-registry';
 
 export interface SendBulkEmailInput {
   candidateIds: string[];
@@ -30,45 +31,9 @@ export class SendBulkEmailUseCase {
     private readonly mailSvc: IMailService,
   ) { }
 
-  private replacePlaceholders(content: string, candidate: any, jobTitle?: string): string {
-    let result = content;
-
-    const personal = candidate.getPersonal();
-    if (personal?.fullName) {
-      result = result.replace(/\[Tên Ứng Viên\]/g, personal.fullName);
-      result = result.replace(/\[Tên Ứng viên\]/g, personal.fullName);
-    }
-
-    if (personal?.email) {
-      result = result.replace(/\[Email\]/g, personal.email);
-    }
-
-    if (personal?.phone) {
-      result = result.replace(/\[Điện thoại\]/g, personal.phone);
-      result = result.replace(/\[SĐT\]/g, personal.phone);
-    }
-
-    if (jobTitle) {
-      result = result.replace(/\[Tên Vị Trí\]/g, jobTitle);
-      result = result.replace(/\[Vị Trí\]/g, jobTitle);
-    }
-
-    result = result.replace(/\[Công ty\]/g, process.env.COMPANY_NAME || 'công ty chúng tôi');
-
-    return result;
-  }
-
   async execute(input: SendBulkEmailInput): Promise<SendBulkEmailResult> {
     if (!input.candidateIds || input.candidateIds.length === 0) {
       throw new Error('Danh sách ứng viên không được để trống.');
-    }
-
-    if (!input.title?.trim()) {
-      throw new Error('Tiêu đề email không được để trống.');
-    }
-
-    if (!input.content?.trim()) {
-      throw new Error('Nội dung email không được để trống.');
     }
 
     const failed: Array<{
@@ -78,10 +43,10 @@ export class SendBulkEmailUseCase {
     }> = [];
     let totalSent = 0;
 
-    const candidatePromises = input.candidateIds.map(id =>
-      this.candidateRepo.getById(id)
+    // Tải toàn bộ ứng viên song song
+    const candidates = await Promise.all(
+      input.candidateIds.map(id => this.candidateRepo.getById(id)),
     );
-    const candidates = await Promise.all(candidatePromises);
 
     for (let i = 0; i < candidates.length; i++) {
       const candidate = candidates[i];
@@ -89,10 +54,7 @@ export class SendBulkEmailUseCase {
 
       try {
         if (!candidate) {
-          failed.push({
-            candidateId,
-            error: 'Không tìm thấy ứng viên.',
-          });
+          failed.push({ candidateId, error: 'Không tìm thấy ứng viên.' });
           continue;
         }
 
@@ -106,34 +68,50 @@ export class SendBulkEmailUseCase {
           continue;
         }
 
+        // Lấy tiêu đề công việc nếu có
         let jobTitle: string | undefined;
         const jobID = candidate.getJobID();
         if (jobID) {
           try {
             const job = await this.jobRepo.getById(jobID.toString());
             jobTitle = job?.getTitle();
-          } catch (e) {
+          } catch {
             console.warn(`Could not fetch job for candidate ${candidateId}`);
           }
         }
 
-        const personalizedTitle = this.replacePlaceholders(input.title, candidate, jobTitle);
-        const personalizedContent = this.replacePlaceholders(input.content, candidate, jobTitle);
+        // ── Prototype Pattern ────────────────────────────────────────
+        // Nếu template id được hỗ trợ trong registry → clone từ prototype gốc.
+        // Nếu không (template tùy chỉnh từ frontend) → dùng EmailTemplate
+        // với title/content do người dùng nhập, rồi điền placeholder.
+        // ────────────────────────────────────────────────────────────
+        let emailTemplate;
 
-        const htmlContent = `
-          <html>
-            <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-              <div style="max-width: 600px; margin: 0 auto; padding: 20px;">
-                ${personalizedContent.split('\n').map(line => `<p>${line}</p>`).join('')}
-              </div>
-            </body>
-          </html>
-        `;
+        if (defaultEmailTemplateRegistry.hasId(input.template.id)) {
+          // Lấy bản clone từ Prototype Registry → đảm bảo không ảnh hưởng mẫu gốc
+          emailTemplate = defaultEmailTemplateRegistry.getById(input.template.id);
+        } else {
+          // Template tùy chỉnh: vẫn dùng base EmailTemplate để tận dụng logic chung
+          const { EmailTemplate } = await import('../../../../../shared/templates/email/email-template.prototype');
+          emailTemplate = new EmailTemplate(input.title, input.content);
+        }
 
-        // Send email
+        // Điền thông tin ứng viên và vị trí vào bản clone
+        emailTemplate.replacePlaceholders(
+          {
+            fullName: personal.fullName,
+            email: personal.email,
+            phone: personal.phone,
+          },
+          jobTitle,
+        );
+
+        // Render ra HTML hoàn chỉnh từ bản clone đã cá nhân hóa
+        const htmlContent = emailTemplate.toHtml();
+
         const sent = await this.mailSvc.sendEmail(
           personal.email,
-          personalizedTitle,
+          emailTemplate.title,
           htmlContent,
         );
 
