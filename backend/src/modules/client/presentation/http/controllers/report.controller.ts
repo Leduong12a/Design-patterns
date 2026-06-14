@@ -9,7 +9,6 @@ const candidateRepo = new CandidateRepository();
 const interviewRepo = new InterviewScheduleRepository();
 const getStatisticsUseCase = new GetStatisticsUseCase(candidateRepo, interviewRepo);
 
-// [GET] /report/statistics
 export const getStatistics = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = res.locals.user?.id || res.locals.user?._id; 
   const { filterCriteria, filterDate } = req.query;
@@ -29,4 +28,3 @@ export const getStatistics = asyncHandler(async (req: Request, res: Response): P
     data: reportData,
   });
 });
-

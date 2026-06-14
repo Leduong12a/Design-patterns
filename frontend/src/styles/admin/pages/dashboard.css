@@ -1,4 +1,4 @@
-/* ===== Dashboard Page ===== */
+
 .dashboard__title {
   font-size: 24px;
   font-weight: 700;
@@ -12,7 +12,6 @@
   margin-bottom: 28px;
 }
 
-/* Stats Grid */
 .dashboard__stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -106,7 +105,6 @@
   color: #ef4444;
 }
 
-/* Chart Section */
 .dashboard__charts {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -173,7 +171,6 @@
   opacity: 0.4;
 }
 
-/* Responsive */
 @media (max-width: 1200px) {
   .dashboard__stats {
     grid-template-columns: repeat(2, 1fr);

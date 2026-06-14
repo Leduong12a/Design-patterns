@@ -24,7 +24,6 @@ function Header() {
     }
   };
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
@@ -42,7 +41,7 @@ function Header() {
       <div className="header__actions">
         <div className="header__divider" />
 
-        {/* User trigger + dropdown */}
+        {}
         <div
           className={`header__user${showDropdown ? " header__user--open" : ""}`}
           ref={dropdownRef}

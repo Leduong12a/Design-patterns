@@ -13,11 +13,11 @@ const CandidateManagement = () => {
   const [candidates, setCandidates] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  // Input values (before clicking search)
+  
   const [searchSkillInput, setSearchSkillInput] = useState("");
   const [searchExpInput, setSearchExpInput] = useState("");
   const [filterStatusInput, setFilterStatusInput] = useState("all");
-  // Applied filters (after clicking search)
+  
   const [searchSkill, setSearchSkill] = useState("");
   const [searchExp, setSearchExp] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -54,18 +54,15 @@ const CandidateManagement = () => {
     }
   };
 
-  
   const matchesSkill = (candidate, searchTerm) => {
     if (!searchTerm) return true;
     
     let skills = candidate.allSkills || [];
     
-    // Xử lý nếu skills là string
     if (typeof skills === "string") {
       skills = skills.split(",").map(s => s.trim()).filter(s => s);
     }
     
-    // Đảm bảo là mảng
     if (!Array.isArray(skills)) {
       skills = [];
     }
@@ -89,7 +86,6 @@ const CandidateManagement = () => {
     return candidate.status === status;
   };
 
-
   const filtered = useMemo(() => {
     return candidates.filter((candidate) => {
       const hasSkill = matchesSkill(candidate, searchSkill);
@@ -99,13 +95,11 @@ const CandidateManagement = () => {
     });
   }, [candidates, searchSkill, searchExp, filterStatus]);
 
-
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
   const startIndex = (currentPage - 1) * ITEMS_PER_PAGE; 
   const endIndex = currentPage * ITEMS_PER_PAGE;         
   const paginatedData = filtered.slice(startIndex, endIndex);
 
- 
   const toggleSelect = (id) => {
     setSelectedIds((prev) => {
      
@@ -164,8 +158,6 @@ const CandidateManagement = () => {
     return d.toLocaleDateString("vi-VN");
   };
 
-
-
   const getJobTitle = (jobID) => {
     if (!jobID) return "—";
     const job = jobs.find((j) => j.id === jobID || j._id === jobID);
@@ -197,7 +189,6 @@ const CandidateManagement = () => {
     });
     setHoveredCandidateId(candidateId);
     
-    // Fetch full candidate data để lấy githubLink
     try {
       const res = await candidateService.getById(candidateId);
       setHoveredCandidateData(res.candidate);
@@ -218,7 +209,6 @@ const CandidateManagement = () => {
         <p className="candidate-page__subtitle">Quản lý ứng viên</p>
       </div>
 
-   
       <div className="candidate-page__filters">
         <div className="candidate-page__filter-input">
           <MdSearch className="filter-icon" />
@@ -263,7 +253,6 @@ const CandidateManagement = () => {
         </button>
       </div>
 
-    
       <div className="candidate-page__table-wrapper">
         {loading ? (
           <div className="candidate-page__loading">Đang tải dữ liệu...</div>
@@ -351,7 +340,6 @@ const CandidateManagement = () => {
         )}
       </div>
 
-    
       <div className="candidate-page__footer">
         <div className="candidate-page__pagination">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
@@ -385,7 +373,7 @@ const CandidateManagement = () => {
         </div>
       </div>
 
-      {/* Quick Preview Tooltip */}
+      {}
       {hoveredCandidateId && hoveredCandidateData && (
         <div
           className="candidate-page__tooltip"
@@ -398,22 +386,22 @@ const CandidateManagement = () => {
           }}
         >
           <div className="candidate-page__tooltip-content">
-            {/* Avatar */}
+            {}
             <div className="candidate-page__tooltip-avatar">
               {hoveredCandidateData?.personal?.fullName.charAt(0)}
             </div>
 
-            {/* Name */}
+            {}
             <p className="candidate-page__tooltip-name">
               {hoveredCandidateData?.personal?.fullName}
             </p>
 
-            {/* Job Title */}
+            {}
             <p className="candidate-page__tooltip-title">
               {getJobTitle(hoveredCandidateData?.jobID)}
             </p>
 
-            {/* GitHub Link */}
+            {}
             <div className="candidate-page__tooltip-github">
               {hoveredCandidateData?.personal?.githubLink ? (
                 <a

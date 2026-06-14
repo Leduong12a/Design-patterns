@@ -13,7 +13,6 @@ const uploadService = new UploadService();
 const geminiService = new GeminiService();
 const uploadCVUseCase = new UploadCVUseCase(candidateRepository, jobRepository, uploadService, geminiService);
 
-// [POST] /upload/cv
 export const uploadCV = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID = res.locals.user.id;
   const files = req.files as { [fieldname: string]: Express.Multer.File[] };
@@ -34,4 +33,3 @@ export const uploadCV = asyncHandler(async (req: Request, res: Response): Promis
 
   res.status(200).json({ message: 'CV processed successfully', candidate });
 });
-

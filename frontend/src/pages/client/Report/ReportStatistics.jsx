@@ -33,11 +33,9 @@ const ReportStatistics = () => {
     chartData: []
   });
 
-  // Modal State
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportFormat, setExportFormat] = useState('');
 
-  // Fetch statistics - wrapped in useCallback để tránh vấn đề closure
   const fetchStatistics = useCallback(async () => {
     let filterDate = '';
     if (filterCriteria === 'Theo tháng') filterDate = filterMonth;
@@ -49,7 +47,6 @@ const ReportStatistics = () => {
       if (response && response.success) {
         setStats(response.data);
 
-        // Hiện thông báo nếu lọc theo tháng mà không có dữ liệu
         if (filterCriteria === 'Theo tháng' && response.data.totalCVs === 0 && response.data.totalEmailsSent === 0) {
           toast.info('Không có dữ liệu thống kê!', {
             position: "top-right",
@@ -69,16 +66,15 @@ const ReportStatistics = () => {
     fetchStatistics();
   }, [fetchStatistics]);
 
-  // Auto-refresh khi status thay đổi từ localStorage (sync across tabs)
   React.useEffect(() => {
     const handleStorageChange = (e) => {
-      // Lắng nghe thay đổi từ localStorage
+      
       if (e.key === 'hr-agent-sync') {
         try {
           const syncData = JSON.parse(e.newValue);
           if (syncData && syncData.type === 'candidate-status-changed') {
             console.log('Detected status change from another tab, updating stats:', syncData);
-            // Delay một chút để backend cập nhật xong
+            
             setTimeout(() => {
               fetchStatistics();
             }, 1000);
@@ -89,7 +85,6 @@ const ReportStatistics = () => {
       }
     };
 
-    // Listen để nhận thay đổi từ localStorage (từ tabs khác)
     window.addEventListener('storage', handleStorageChange);
     console.log('Storage listener registered for cross-tab sync');
 
@@ -98,17 +93,15 @@ const ReportStatistics = () => {
     };
   }, [fetchStatistics]);
 
-  // Auto-refresh khi status thay đổi từ custom event (same-tab sync)
   React.useEffect(() => {
     const handleCustomEvent = (e) => {
       console.log('Detected status change from custom event, updating stats:', e.detail);
-      // Delay một chút để backend cập nhật xong
+      
       setTimeout(() => {
         fetchStatistics();
       }, 1000);
     };
 
-    // Listen để nhận thay đổi từ custom event (từ cùng tab)
     window.addEventListener('candidate-status-changed', handleCustomEvent);
     console.log('Custom event listener registered for same-tab sync');
 
@@ -121,17 +114,15 @@ const ReportStatistics = () => {
     navigate(-1);
   };
 
-  // --- EXPORT LOGIC ---
   const exportToExcel = () => {
-    // Tóm tắt chung
+    
     const summaryData = [
       { 'Chỉ số': 'Số lượng CV đã tiếp nhận', 'Giá trị': stats.totalCVs },
       { 'Chỉ số': 'Số lịch phỏng vấn đã tạo', 'Giá trị': stats.totalEmailsSent },
       { 'Chỉ số': 'Tỷ lệ phỏng vấn hoàn thành', 'Giá trị': stats.responseRate },
-      { 'Chỉ số': '', 'Giá trị': '' } // Dòng trống ngăn cách
+      { 'Chỉ số': '', 'Giá trị': '' } 
     ];
 
-    // Chi tiết biểu đồ
     const chartDataFormatted = stats.chartData.map(item => ({
       'Thời gian': item.name,
       'CV tiếp nhận': item.blueValue,
@@ -139,19 +130,15 @@ const ReportStatistics = () => {
       'Hoàn thành': item.grayValue
     }));
 
-    // Gộp data
     const finalData = [...summaryData, ...chartDataFormatted];
 
-    // Tạo Worksheet và Workbook
     const ws = XLSX.utils.json_to_sheet(finalData);
 
-    // Auto-size columns cơ bản
     ws['!cols'] = [{ wch: 25 }, { wch: 15 }, { wch: 15 }, { wch: 15 }];
 
     const wb = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(wb, ws, "Thong_Ke");
 
-    // Tải file về máy
     XLSX.writeFile(wb, `Bao_Cao_Thong_Ke_${filterCriteria.replace(' ', '_')}.xlsx`);
   };
 
@@ -164,7 +151,7 @@ const ReportStatistics = () => {
 
     try {
       toast.info("Đang xử lý PDF, vui lòng chờ...", { autoClose: 2000 });
-      // html2canvas chụp phần background trắng và scale để nét hơn
+      
       const canvas = await html2canvas(reportElement, { scale: 2, backgroundColor: "#f8f9fa" });
       const imgData = canvas.toDataURL('image/png');
 
@@ -189,11 +176,10 @@ const ReportStatistics = () => {
     }
     setShowExportModal(false);
   };
-  // ----------------------
-
+  
   return (
     <div className="report-page-container">
-      {/* Header Area */}
+      {}
       <div className="report-header">
         <a href="#!" className="report-back-btn" onClick={(e) => { e.preventDefault(); handleBack(); }}>
 
@@ -202,11 +188,11 @@ const ReportStatistics = () => {
         <h1 className="report-title">Báo cáo &amp; Thống kê</h1>
       </div>
 
-      {/* Main Content Area (Khu vực sẽ chụp PDF) */}
+      {}
       <div id="report-client-content" className="report-content-wrapper">
-        {/* Left Column (40%) */}
+        {}
         <div className="report-left-col">
-          {/* Filters Card */}
+          {}
           <div className="report-filters-card mb-4">
             <div className="filter-row">
               <label className="filter-label">Tiêu chí lọc :</label>
@@ -221,7 +207,7 @@ const ReportStatistics = () => {
               </select>
             </div>
 
-            {/* Dropdown tháng */}
+            {}
             {filterCriteria === 'Theo tháng' && (
               <div className="filter-row">
                 <label className="filter-label">Thời gian :</label>
@@ -237,7 +223,7 @@ const ReportStatistics = () => {
               </div>
             )}
 
-            {/* Dropdown tuần */}
+            {}
             {filterCriteria === 'Theo Tuần' && (
               <div className="filter-row">
                 <label className="filter-label">Thời gian :</label>
@@ -254,7 +240,7 @@ const ReportStatistics = () => {
             )}
           </div>
 
-          {/* Stats Card */}
+          {}
           <div className="report-stats-card">
             {loading ? (
               <div className="text-center py-4">Đang tải...</div>
@@ -277,7 +263,7 @@ const ReportStatistics = () => {
           </div>
         </div>
 
-        {/* Right Column (60%) */}
+        {}
         <div className="report-right-col">
           <div className="report-chart-card">
             <h5 className="chart-title mb-4">Biểu đồ thống kê CV</h5>
@@ -320,7 +306,7 @@ const ReportStatistics = () => {
         </div>
       </div>
 
-      {/* Footer Area */}
+      {}
       <div className="report-footer">
         <button
           className="btn btn-export-data"
@@ -330,11 +316,11 @@ const ReportStatistics = () => {
         </button>
       </div>
 
-      {/* --- MODAL XUẤT DỮ LIỆU --- */}
+      {}
       {showExportModal && (
         <div className="export-modal-overlay">
           <div className="export-modal">
-            {/* Header Modal */}
+            {}
             <div className="export-modal-header">
               <h5 className="export-modal-title">Xuất dữ liệu thống kê</h5>
               <button
@@ -346,7 +332,7 @@ const ReportStatistics = () => {
               </button>
             </div>
 
-            {/* Body Modal */}
+            {}
             <div className="export-modal-body">
               <div className="export-modal-row">
                 <label className="export-modal-label">Chọn định dạng :</label>
@@ -362,7 +348,7 @@ const ReportStatistics = () => {
               </div>
             </div>
 
-            {/* Footer Modal */}
+            {}
             <div className="export-modal-footer">
               <button
                 className="export-modal-btn export-modal-btn--cancel"

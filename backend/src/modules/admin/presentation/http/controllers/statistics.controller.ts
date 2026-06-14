@@ -5,13 +5,10 @@ import InterviewSchedule from '../../../../client/infrastructure/database/models
 import User from '../../../../client/infrastructure/database/models/user.model';
 import mongoose from 'mongoose';
 
-
-// [GET] /admin/report/statistics
 export const getSystemStatistics = async (req: Request, res: Response): Promise<void> => {
   try {
     const { filterCriteria = 'Theo tháng', filterDate = '', hrId = null } = req.query;
 
-    // Parse filter date
     let startDate = new Date();
     let endDate = new Date();
 
@@ -38,10 +35,8 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       endDate = new Date(year, 11, 31, 23, 59, 59, 999);
     }
 
-    // Build filter for hrId if provided
     const userFilter = hrId && hrId !== 'null' ? new mongoose.Types.ObjectId(hrId as string) : null;
 
-    // 1. Count total CVs (Candidates)
     const cvCountResult = await Candidate.aggregate([
       {
         $match: {
@@ -53,7 +48,6 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
     ]);
     const totalCVsReceived = cvCountResult.length > 0 ? cvCountResult[0].total : 0;
 
-    // 2. Count open jobs
     const openJobsResult = await Job.aggregate([
       {
         $match: {
@@ -66,7 +60,6 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
     ]);
     const totalOpenJobs = openJobsResult.length > 0 ? openJobsResult[0].total : 0;
 
-    // 3. Count total emails sent (based on interview schedules)
     const interviewCountResult = await InterviewSchedule.aggregate([
       {
         $match: {
@@ -78,7 +71,6 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
     ]);
     const totalEmailsSent = interviewCountResult.length > 0 ? interviewCountResult[0].total : 0;
 
-    // 4. Calculate AI pass rate (candidates with status: verified, interview, offer)
     const aiPassResult = await Candidate.aggregate([
       {
         $match: {
@@ -108,12 +100,11 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       cvPassRate = ((passed / total) * 100).toFixed(1) + '%';
     }
 
-    // 5. Generate chart data (by week or month)
     let groupPipeline: any;
     let nameFormatter: (id: any) => string;
 
     if (filterCriteria === 'Theo tháng') {
-      // Group by week within month: Week 1 (1-7), Week 2 (8-14), Week 3 (15-21), Week 4 (22-31)
+      
       groupPipeline = {
         $group: {
           _id: {
@@ -139,7 +130,7 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       };
       nameFormatter = (weekNum) => `Tuần ${weekNum}`;
     } else {
-      // Group by month for quarterly/yearly
+      
       groupPipeline = {
         $group: {
           _id: { $dateToString: { format: '%Y-%m', date: '$createdAt' } },
@@ -169,7 +160,6 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       { $sort: { _id: 1 } }
     ]);
 
-    // Get interviews by same period
     const interviewsDataResult = await InterviewSchedule.aggregate([
       {
         $match: {
@@ -210,7 +200,6 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       { $sort: { _id: 1 } }
     ]);
 
-    // Get completed interviews
     const completedDataResult = await InterviewSchedule.aggregate([
       {
         $match: {
@@ -252,7 +241,6 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
       { $sort: { _id: 1 } }
     ]);
 
-    // Merge chart data
     const chartData = chartDataResult.map((item) => {
       const interviews = interviewsDataResult.find(
         (int) => int._id === item._id
@@ -264,9 +252,9 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
 
       return {
         name: nameFormatter(item._id),
-        blueValue: item.cvReceived || 0,          // CV tiếp nhận
-        orangeValue: interviews.interviewScheduled || 0, // Lịch phỏng vấn
-        grayValue: completed.completed || 0       // Hoàn thành
+        blueValue: item.cvReceived || 0,          
+        orangeValue: interviews.interviewScheduled || 0, 
+        grayValue: completed.completed || 0       
       };
     });
 
@@ -295,11 +283,9 @@ export const getSystemStatistics = async (req: Request, res: Response): Promise<
   }
 };
 
-
-// [GET] /admin/report/users
 export const getAllHRs = async (req: Request, res: Response): Promise<void> => {
   try {
-    // Lấy tất cả users active từ database
+    
     const users = await User.find({ deleted: false, status: 'active' })
       .select('_id fullName email status')
       .sort({ createdAt: -1 })
@@ -330,13 +316,10 @@ export const getAllHRs = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-
-// [GET] /admin/report/export
 export const exportStatistics = async (req: Request, res: Response): Promise<void> => {
   try {
     const { filterCriteria = 'Theo tháng', filterDate = '', format = 'pdf' } = req.query;
 
-    // Validate format
     if (!['pdf', 'excel'].includes(format as string)) {
       res.status(400).json({
         success: false,
@@ -346,7 +329,6 @@ export const exportStatistics = async (req: Request, res: Response): Promise<voi
       return;
     }
 
-    // Generate file name
     const fileName = `Thong_Ke_Admin_${filterDate || 'all'}.${format === 'excel' ? 'xlsx' : 'pdf'}`;
 
     res.json({

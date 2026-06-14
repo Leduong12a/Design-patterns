@@ -34,4 +34,3 @@ export const validateScheduleInterview: RequestHandler = (req, res, next) => {
 
   next();
 };
-

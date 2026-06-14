@@ -60,7 +60,7 @@ function UserSearch() {
 
   return (
     <div className="user-create">
-      {/* Header */}
+      {}
       <div className="user-create__header">
         <button
           className="user-create__back"
@@ -77,7 +77,7 @@ function UserSearch() {
         </div>
       </div>
 
-      {/* Search Card */}
+      {}
       <div className="user-create__card">
         <form onSubmit={handleSearch} className="user-create__form">
           <div className="user-create__field">
@@ -116,7 +116,7 @@ function UserSearch() {
           </div>
         </form>
 
-        {/* Search Results */}
+        {}
         {searched && (
           <div style={{ marginTop: "30px", paddingTop: "20px", borderTop: "1px solid #e0e0e0" }}>
             <h3 style={{ marginBottom: "15px" }}>Kết quả tìm kiếm:</h3>

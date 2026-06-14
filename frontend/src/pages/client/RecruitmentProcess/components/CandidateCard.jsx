@@ -19,16 +19,10 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
   const menuTriggerRef = useRef(null);
   const isDownRef = useRef(false);
 
-  // ── State Pattern ──────────────────────────────────────────
-  // Tạo Context từ status hiện tại của ứng viên.
-  // Context tự biết có thể tiến/lùi không — không cần tính index.
   const context = new CandidateStateContext(status);
   const canSwipeRightToNext = context.canAdvance();
   const canSwipeLeftToPrev  = context.canGoBack();
-  // ──────────────────────────────────────────────────────────
-
-  // ─── Drag / Swipe handlers ───────────────────────────────
-
+  
   const handleMouseDown = (e) => {
     isDownRef.current = true;
     dragStartRef.current = { x: e.clientX, offset: 0 };
@@ -62,9 +56,7 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     const offset = dragStartRef.current.offset;
 
     if (Math.abs(offset) > threshold) {
-      // ── State Pattern ──────────────────────────────────────
-      // advance() / goBack() tự xử lý validate bên trong Context.
-      // Không cần if/else kiểm tra index hay khoảng cách cột.
+      
       if (offset > threshold) {
         const result = context.advance();
         if (result.success) onStatusChange(id, result.state.id);
@@ -74,7 +66,7 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
         if (result.success) onStatusChange(id, result.state.id);
         else toast.error(result.error);
       }
-      // ──────────────────────────────────────────────────────
+      
     }
 
     setSwipeOffset(0);
@@ -94,8 +86,6 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
       document.removeEventListener('touchend', handleEndDrag);
     };
   }, [isDragging, handleGlobalMouseMove, handleGlobalTouchMove, handleEndDrag]);
-
-  // ─── Popover / Menu handlers ─────────────────────────────
 
   const handleMenuToggle = (e) => {
     e.stopPropagation();
@@ -124,8 +114,7 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
   }, [menuOpen]);
 
   const handleStatusSelect = (targetStateId) => {
-    // ── State Pattern ──────────────────────────────────────
-    // Context.transition() tự validate — không cần if/else kiểm tra index.
+    
     const result = context.transition(targetStateId);
     if (!result.success) {
       toast.error(result.error);
@@ -133,7 +122,7 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
       return;
     }
     onStatusChange(id, result.state.id);
-    // ──────────────────────────────────────────────────────
+    
     setMenuOpen(false);
   };
 
@@ -143,16 +132,13 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     return 'Vuốt để chuyển';
   };
 
-  // ─── Popover items: lấy từ State, không hardcode array ──
-  // Chỉ hiển thị 2 lựa chọn: trạng thái trước và trạng thái sau
   const currentState = context.getCurrentState();
   const popoverOptions = [
     currentState.getPrevious(),
     currentState,
     currentState.getNext(),
-  ].filter(Boolean); // Bỏ null (trạng thái đầu/cuối)
+  ].filter(Boolean); 
 
-  // ─── Popover Portal ──────────────────────────────────────
   const popoverEl = menuOpen ? ReactDOM.createPortal(
     <div
       ref={menuRef}
@@ -184,7 +170,6 @@ const CandidateCard = ({ candidate, onStatusChange }) => {
     document.body
   ) : null;
 
-  // ─── Render ──────────────────────────────────────────────
   return (
     <>
       <div

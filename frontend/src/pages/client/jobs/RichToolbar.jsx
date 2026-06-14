@@ -10,7 +10,6 @@ const RichToolbar = ({ textareaRef }) => {
     const newVal =
       el.value.slice(0, start) + before + selected + after + el.value.slice(end);
     
-    // Simulate input event to update React state
     const nativeInputValueSetter = Object.getOwnPropertyDescriptor(
       window.HTMLTextAreaElement.prototype,
       "value"

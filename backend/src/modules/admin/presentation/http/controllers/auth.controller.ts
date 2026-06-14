@@ -10,7 +10,6 @@ import { TokenService } from '../../../../client/infrastructure/external-service
 const authRepository = new AuthRepository();
 const tokenService = new TokenService();
 
-// [POST] /admin/auth/login
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body as { email: string; password: string };
@@ -38,7 +37,6 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// [POST] /admin/auth/logout
 export const logout = (req: Request, res: Response): void => {
   try {
     const userID: string = res.locals.admin.id.toString() || "";

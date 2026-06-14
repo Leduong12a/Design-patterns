@@ -63,7 +63,7 @@ const StatsOverview = () => {
         icon={MdCheckCircle}
         colorClass="stats-card--green"
       />
-      {/* Optional: Add a card for Active Jobs if available */}
+      {}
     </div>
   );
 };

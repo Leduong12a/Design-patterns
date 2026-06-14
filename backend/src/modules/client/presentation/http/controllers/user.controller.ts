@@ -20,7 +20,6 @@ const verifyOtpUseCase = new VerifyOtpUseCase(userRepository, otpRepository);
 const resetPasswordUseCase = new ResetPasswordUseCase(userRepository, otpRepository, passwordService);
 const ressetPassNotOTPUseCase = new ResetPassNotOTPUseCase(userRepository, passwordService);
 
-// [POST] /user/password/forgot
 export const forgotPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email } = req.body as { email: string };
 
@@ -29,7 +28,6 @@ export const forgotPassword = asyncHandler(async (req: Request, res: Response): 
   res.status(200).json({ success: true, message: 'Mã OTP đã được gửi đến email của bạn!', email: result.email });
 });
 
-// [POST] /user/password/otp
 export const verifyOTP = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email, otp } = req.body as { email: string; otp: string };
 
@@ -38,7 +36,6 @@ export const verifyOTP = asyncHandler(async (req: Request, res: Response): Promi
   res.status(200).json({ success: true, message: 'Xác thực OTP thành công!' });
 });
 
-// [POST] /user/password/reset
 export const resetPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email, password, confirmPassword } = req.body as {
     email: string;
@@ -51,7 +48,6 @@ export const resetPassword = asyncHandler(async (req: Request, res: Response): P
   res.status(200).json({ success: true, message: 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.' });
 });
 
-// [POST] /user/password/reset-not-otp
 export const resetNotOTP = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email, password, confirmPassword } = req.body as {
     email: string;

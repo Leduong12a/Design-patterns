@@ -10,7 +10,6 @@ import { NotFoundError, BadRequestError } from '../../../../../shared/utils/erro
 const verificationRepository = new VerificationRepository();
 const candidateRepository = new CandidateRepository();
 
-// [GET] /verification/:candidateID
 export const getVerificationDetail = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const candidateID = req.params.candidateID as string;
 
@@ -32,7 +31,6 @@ export const getVerificationDetail = asyncHandler(async (req: Request, res: Resp
   });
 });
 
-// [POST] /verification/candidate
 export const verifyCandidate = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { candidateID, data } = req.body;
 
@@ -51,7 +49,6 @@ export const verifyCandidate = asyncHandler(async (req: Request, res: Response):
   res.status(200).json({ success: true, message: 'Xác minh thành công!', verification: result });
 });
 
-// [POST] /verification/confirm
 export const confirmVerification = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { candidateID, status } = req.body;
 
@@ -72,4 +69,3 @@ export const confirmVerification = asyncHandler(async (req: Request, res: Respon
     message: result
   });
 });
-

@@ -13,7 +13,6 @@ const JobDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Edit Mode state
   const [isEditing, setIsEditing] = useState(location.state?.editMode || false);
   const [isSaving, setIsSaving] = useState(false);
   const [formData, setFormData] = useState({
@@ -65,7 +64,7 @@ const JobDetail = () => {
   const handleSave = async () => {
     try {
       setIsSaving(true);
-      // Chuyển string requirements thành mảng array
+      
       const reqArray = formData.requirements
         .split(',')
         .map(r => r.trim())
@@ -80,7 +79,7 @@ const JobDetail = () => {
 
       const res = await jobService.updateJob(id, updatePayload);
       if (res.success) {
-        // Cập nhật state nội bộ
+        
         const updatedJob = res.updatedJob || res.data?.updatedJob || res.job || { ...job, ...updatePayload };
         setJob(updatedJob);
         resetFormData(updatedJob);

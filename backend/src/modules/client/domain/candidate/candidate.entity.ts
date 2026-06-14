@@ -311,4 +311,3 @@ export class CandidateEntity {
   public getUpdatedAt(): Date | undefined { return this.updatedAt; }
   public setUpdatedAt(value: Date | undefined): void { this.updatedAt = value; }
 }
-

@@ -6,17 +6,12 @@ import { ALL_STATES, getStateById } from './states/candidate-state';
 import { CandidateStateContext } from './states/candidate-state-context';
 import '../../../styles/client/pages/recruitmentBoard.css';
 
-// ── State Pattern ──────────────────────────────────────────────
-// COLUMNS được tạo từ ALL_STATES — không hardcode array nữa.
-// Khi thêm trạng thái mới, chỉ cần thêm class trong candidate-state.js.
 const COLUMNS = ALL_STATES.map(state => ({
   id:         state.id,
   title:      state.label,
   colorClass: state.colorClass,
 }));
-// ──────────────────────────────────────────────────────────────
 
-// Fallback status mapping nếu Backend trả về các status cũ
 const STATUS_MAPPING = {
   unverified: 'applied',
   verified:   'screening',
@@ -39,7 +34,7 @@ const RecruitmentBoard = () => {
 
       const mappedCandidates = (res.candidates || []).map(c => {
         let kanbanStatus = c.status;
-        // Fallback nếu status không tồn tại trong State system
+        
         if (!getStateById(kanbanStatus)) {
           kanbanStatus = STATUS_MAPPING[kanbanStatus] ?? 'applied';
         }
@@ -69,9 +64,6 @@ const RecruitmentBoard = () => {
         return;
       }
 
-      // ── State Pattern ────────────────────────────────────────
-      // CandidateStateContext.transition() tự validate quy trình.
-      // Không còn validateStatusChange() với if/else tính index.
       const context = new CandidateStateContext(candidate.status);
       const result = context.transition(newStatus);
 
@@ -79,9 +71,7 @@ const RecruitmentBoard = () => {
         toast.error(result.error);
         return;
       }
-      // ────────────────────────────────────────────────────────
-
-      // Optimistic update
+      
       setCandidates(prev =>
         prev.map(c => c.id === candidateId ? { ...c, status: newStatus } : c)
       );
@@ -91,7 +81,6 @@ const RecruitmentBoard = () => {
 
       setTimeout(() => fetchCandidates(), 500);
 
-      // Cross-tab sync
       const syncData = {
         timestamp:   Date.now(),
         candidateId,

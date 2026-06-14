@@ -22,14 +22,10 @@ export interface ILinkedInResult {
   githubStars: number;
 }
 
-/**
- * Parse name, title, company from Google CSE snippet/title for LinkedIn results.
- * Typical LinkedIn title format: "Name - Title at Company | LinkedIn"
- */
 const parseLinkedInTitle = (title: string): { name: string; jobTitle: string; company: string } => {
-  // Remove LinkedIn suffix
+  
   const cleaned = title.replace(/\s*[\|–-]\s*LinkedIn.*$/i, '').trim();
-  // "Name - Title at Company" or "Name | Title"
+  
   const dashIdx = cleaned.indexOf(' - ');
   if (dashIdx !== -1) {
     const name = cleaned.slice(0, dashIdx).trim();
@@ -43,9 +39,6 @@ const parseLinkedInTitle = (title: string): { name: string; jobTitle: string; co
   return { name: cleaned, jobTitle: '', company: '' };
 };
 
-/**
- * Extract skills/keywords from snippet text (simple word extraction)
- */
 const extractSkillsFromSnippet = (snippet: string, keywords: string): string[] => {
   const techKeywords = keywords
     .split(/[\s,]+/)
@@ -59,11 +52,7 @@ const extractSkillsFromSnippet = (snippet: string, keywords: string): string[] =
 };
 
 export class LinkedInService {
-  /**
-   * Search LinkedIn profiles via Google Custom Search Engine.
-   * Returns profile URLs and parsed metadata from CSE snippet/title.
-   * Does NOT scrape LinkedIn directly (respects ToS).
-   */
+  
   async searchCandidates(keywords: string, limit = 10): Promise<ILinkedInResult[]> {
     if (!GOOGLE_CSE_API_KEY || !GOOGLE_CSE_ID) {
       console.warn('[LinkedIn] GOOGLE_CSE_API_KEY or GOOGLE_CSE_ID not configured. Skipping LinkedIn sourcing.');
@@ -76,7 +65,7 @@ export class LinkedInService {
         key: GOOGLE_CSE_API_KEY,
         cx: GOOGLE_CSE_ID,
         q,
-        num: Math.min(limit, 10), // Google CSE max 10 per request
+        num: Math.min(limit, 10), 
       },
       timeout: 10000,
     });

@@ -11,7 +11,6 @@ import { NotFoundError, BadRequestError } from '../../../../../shared/utils/erro
 
 const candidateRepository = new CandidateRepository();
 
-// [GET] /candidates
 export const getCandidates = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID: string = res.locals.user.id.toString() || "";
 
@@ -26,7 +25,6 @@ export const getCandidates = asyncHandler(async (req: Request, res: Response): P
   res.status(200).json({ success: true, message: 'Thành công', candidates: candidates });
 });
 
-// [GET] /candidates/:candidateID
 export const getCandidateDetail = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const candidateID = req.params.candidateID as string;
 
@@ -48,7 +46,6 @@ export const getCandidateDetail = asyncHandler(async (req: Request, res: Respons
   });
 });
 
-// [PATCH] /candidates/change-status/:id
 export const updateStatus = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const id: string = req.params.id?.toString() || '';
   const { status } = req.body;
@@ -60,12 +57,6 @@ export const updateStatus = asyncHandler(async (req: Request, res: Response): Pr
     throw new BadRequestError(`Trạng thái không hợp lệ. Các trạng thái cho phép: ${validStatuses.join(', ')}`);
   }
 
-  // ── Decorator Pattern ──────────────────────────────────────────────────────
-  // Controller chỉ biết interface IUpdateStatusUseCase.
-  // OfferEmailDecorator bọc UpdateStatusUseCase:
-  //   - Cập nhật DB (do UpdateStatusUseCase thực hiện bên trong)
-  //   - Nếu status === "offer" → tự động gửi email thông báo trúng tuyển
-  // ─────────────────────────────────────────────────────────────────────────
   const baseUseCase = new UpdateStatusUseCase(candidateRepository);
   const updateStatusUseCase = new OfferEmailDecorator(
     baseUseCase,

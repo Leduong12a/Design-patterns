@@ -1,13 +1,7 @@
 import API from "./index.js";
 
 const adminReportService = {
-  /**
-   * Lấy thống kê hệ thống (tổng hợp từ tất cả HR)
-   * @param {string} filterCriteria - Tiêu chí lọc: 'Theo tháng', 'Theo quý', 'Theo năm'
-   * @param {string} filterDate - Ngày tháng (YYYY-MM hoặc YYYY)
-   * @param {string|null} hrId - ID HR (null = tất cả HR)
-   * @returns {Promise<Object>}
-   */
+  
   getSystemStatistics: async (filterCriteria, filterDate, hrId = null) => {
     try {
       const params = { filterCriteria, filterDate };
@@ -26,10 +20,6 @@ const adminReportService = {
     }
   },
 
-  /**
-   * Lấy danh sách tất cả tài khoản HR
-   * @returns {Promise<Object>}
-   */
   getAllHRs: async () => {
     try {
       const res = await API.get("/admin/report/users");
@@ -45,16 +35,9 @@ const adminReportService = {
     }
   },
 
-  /**
-   * Xuất thống kê ra file (PDF/Excel)
-   * @param {string} filterCriteria - Tiêu chí lọc
-   * @param {string} filterDate - Ngày tháng
-   * @param {string} format - 'pdf' hoặc 'excel'
-   * @returns {Promise<Object>}
-   */
   exportStatistics: async (filterCriteria, filterDate, format = 'pdf') => {
     try {
-      // Validate format
+      
       if (!['pdf', 'excel'].includes(format)) {
         throw new Error('Định dạng không hợp lệ. Chỉ hỗ trợ: pdf, excel');
       }

@@ -19,7 +19,6 @@ const CandidateDetail = () => {
   const [showSaveModal, setShowSaveModal] = useState(false);
   const [tempVerificationData, setTempVerificationData] = useState(null);
 
-  // Manual GitHub link state
   const [showManualLinkModal, setShowManualLinkModal] = useState(false);
   const [manualLink, setManualLink] = useState("");
 
@@ -75,7 +74,7 @@ const CandidateDetail = () => {
       jobId,
       jobs.find((j) => j.id === jobId || j._id === jobId),
     );
-    // TODO: Sẽ gửi API cùng với phân tích AI sau
+    
   };
 
   const handleVerify = async (githubLink, candidateID) => {
@@ -86,8 +85,6 @@ const CandidateDetail = () => {
       setShowManualLinkModal(true);
       return;
     }
-
-    // Kiểm tra Email và SĐT
 
     const candidateEmail =
       candidate?.contact?.email ||
@@ -187,15 +184,14 @@ const CandidateDetail = () => {
         toast.success("Đã lưu kết quả kiểm chứng!");
         setShowSaveModal(false);
 
-        // Bước 2: Xác nhận và chuyển trường từ Ứng tuyển → Sàng lọc
         try {
           const confirmRes = await verificationService.confirmVerification(id, {
-            status: "verified", // Kiểm chứng thành công
+            status: "verified", 
           });
 
           if (confirmRes.success) {
             toast.success("Ứng viên đã kiểm chứng thành công!");
-            // Reload dữ liệu candidate để cập nhật status
+            
             await fetchDetail();
             setTimeout(() => {
               navigate(`/candidates/${id}/verify`);
@@ -251,7 +247,6 @@ const CandidateDetail = () => {
     createdAt,
   } = candidate;
 
-  // Recruitment Status Labels
   const recruitmentStatusLabels = {
     applied: "Ứng tuyển",
     screening: "Sàng lọc",
@@ -266,7 +261,6 @@ const CandidateDetail = () => {
     offer: "status-offer",
   };
 
-  // Verification Status Labels
   const verificationStatusLabels = {
     unverified: "Chưa kiểm chứng",
     verified: "Đã kiểm chứng ✅",
@@ -411,7 +405,7 @@ const CandidateDetail = () => {
           </div>
         </div>
 
-        {/* Side by side: Date saved and Job selection */}
+        {}
         <div className="cd-fields-row">
           <div className="cd-field">
             <div className="cd-field__label">Ngày lưu</div>
@@ -532,7 +526,7 @@ const CandidateDetail = () => {
         </div>
       )}
 
-      {/* Modal Thêm Link Thủ Công */}
+      {}
       {showManualLinkModal && (
         <div className="cd-modal-overlay">
           <div className="cd-modal">

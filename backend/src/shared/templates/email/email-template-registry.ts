@@ -1,10 +1,3 @@
-// ============================================================
-// Email Template Registry - Quản lý Prototype Pool
-// ============================================================
-// Registry lưu trữ tất cả prototype mẫu email đã đăng ký.
-// Khi cần sử dụng, registry LUÔN trả về bản clone (không phải
-// đối tượng gốc) để bảo vệ prototype không bị thay đổi.
-// ============================================================
 
 import {
   EmailTemplate,
@@ -15,18 +8,16 @@ import {
   OfferEmailTemplate,
 } from './email-template.prototype';
 
-// Các key định danh cố định để truy xuất template theo id hoặc tên
 export const EMAIL_TEMPLATE_KEYS = {
-  INTERVIEW_INVITATION: 'interview_invitation', // id: 1
-  INTERVIEW_RESULT: 'interview_result',         // id: 2
-  REJECTION: 'rejection',                       // id: 3
-  PROGRESS_UPDATE: 'progress_update',           // id: 4
-  OFFER_NOTIFICATION: 'offer_notification',     // id: 5 — Dùng bởi OfferEmailDecorator
+  INTERVIEW_INVITATION: 'interview_invitation', 
+  INTERVIEW_RESULT: 'interview_result',         
+  REJECTION: 'rejection',                       
+  PROGRESS_UPDATE: 'progress_update',           
+  OFFER_NOTIFICATION: 'offer_notification',     
 } as const;
 
 export type EmailTemplateKey = typeof EMAIL_TEMPLATE_KEYS[keyof typeof EMAIL_TEMPLATE_KEYS];
 
-// Ánh xạ từ id (frontend gửi lên) sang key registry
 const TEMPLATE_ID_MAP: Record<number, EmailTemplateKey> = {
   1: EMAIL_TEMPLATE_KEYS.INTERVIEW_INVITATION,
   2: EMAIL_TEMPLATE_KEYS.INTERVIEW_RESULT,
@@ -35,17 +26,13 @@ const TEMPLATE_ID_MAP: Record<number, EmailTemplateKey> = {
   5: EMAIL_TEMPLATE_KEYS.OFFER_NOTIFICATION,
 };
 
-// ─── Email Template Registry ─────────────────────────────────
 export class EmailTemplateRegistry {
   private readonly registry = new Map<EmailTemplateKey, EmailTemplate>();
 
-  // Đăng ký một prototype vào registry
   register(key: EmailTemplateKey, template: EmailTemplate): void {
     this.registry.set(key, template);
   }
 
-  // Lấy bản clone của prototype theo key
-  // Ném lỗi nếu key không tồn tại
   getByKey(key: EmailTemplateKey): EmailTemplate {
     const prototype = this.registry.get(key);
     if (!prototype) {
@@ -54,7 +41,6 @@ export class EmailTemplateRegistry {
     return prototype.clone();
   }
 
-  // Lấy bản clone của prototype theo id (id từ frontend)
   getById(id: number): EmailTemplate {
     const key = TEMPLATE_ID_MAP[id];
     if (!key) {
@@ -63,13 +49,11 @@ export class EmailTemplateRegistry {
     return this.getByKey(key);
   }
 
-  // Kiểm tra registry có hỗ trợ id này không
   hasId(id: number): boolean {
     return id in TEMPLATE_ID_MAP;
   }
 }
 
-// ─── Singleton: Registry đã đăng ký sẵn 4 mẫu mặc định ─────
 function createDefaultRegistry(): EmailTemplateRegistry {
   const registry = new EmailTemplateRegistry();
 

@@ -27,4 +27,3 @@ export class AuthRepository implements IAccountAdmin {
     return this.mapToEntity(adminDoc);
   }
 }
-

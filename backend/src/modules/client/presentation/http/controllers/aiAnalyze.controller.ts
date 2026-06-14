@@ -12,7 +12,6 @@ const jobRepository = new JobRepository();
 const aiAnalyzeRepository = new AiAnalysisRepository();
 const geminiService = new GeminiService();
 
-// [POST] /ai/analyze
 export const analyzeCandidate = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const input = req.body as AnalysisInputDto;
 
@@ -30,4 +29,3 @@ export const analyzeCandidate = asyncHandler(async (req: Request, res: Response)
     message: 'Phân tích AI thành công!'
   });
 });
-

@@ -46,5 +46,3 @@ export const errorHandler: ErrorRequestHandler = (
     message: err.message || defaultMessage,
   });
 };
-
-

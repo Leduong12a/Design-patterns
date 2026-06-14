@@ -1,4 +1,3 @@
-/* Interview Schedule List Styles */
 
 .interview-schedule-container {
   max-width: 1200px;
@@ -148,7 +147,6 @@
   transform: scale(1.1);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .interview-schedule-container {
     padding: 15px;

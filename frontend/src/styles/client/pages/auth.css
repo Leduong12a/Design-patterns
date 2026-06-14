@@ -1,4 +1,4 @@
-/* ===== Client Auth Page ===== */
+
 .client-auth {
   min-height: 100vh;
   display: flex;
@@ -21,7 +21,6 @@
   background: #fff;
 }
 
-/* ===== Left Branding ===== */
 .client-auth__branding {
   flex: 1;
   background: #CB1DC6;
@@ -96,7 +95,6 @@
   flex-shrink: 0;
 }
 
-/* ===== Right Form ===== */
 .client-auth__form-wrapper {
   flex: 1;
   padding: 48px 40px;
@@ -130,7 +128,6 @@
   line-height: 1.5;
 }
 
-/* ===== Form Fields ===== */
 .client-auth__field {
   display: flex;
   flex-direction: column;
@@ -221,7 +218,6 @@
   color: var(--color-text-primary);
 }
 
-/* ===== Options ===== */
 .client-auth__options {
   display: flex;
   justify-content: flex-end;
@@ -239,7 +235,6 @@
   color: #c2185b;
 }
 
-/* ===== Buttons ===== */
 .client-auth__submit {
   width: 100%;
   padding: 12px 16px;
@@ -283,7 +278,6 @@
   }
 }
 
-/* ===== Back Link ===== */
 .client-auth__back-link {
   background: none;
   border: none;
@@ -303,7 +297,6 @@
   color: #333;
 }
 
-/* ===== Resend OTP Button ===== */
 .client-auth__resend {
   width: 100%;
   padding: 10px 16px;
@@ -335,7 +328,6 @@
   color: #888;
 }
 
-/* ===== Mobile Responsive ===== */
 @media (max-width: 768px) {
   .client-auth__container {
     flex-direction: column;

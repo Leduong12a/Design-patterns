@@ -20,7 +20,6 @@ const mailService = new MailService();
 const loginUseCase = new LoginUseCase(authRepository, passwordService, tokenService, otpRepository);
 const logoutUseCase = new LogoutUseCase();
 
-// [POST] /auth/login
 export const login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email, strategy, ...payload } = req.body as { email: string; strategy?: string; [key: string]: any };
   

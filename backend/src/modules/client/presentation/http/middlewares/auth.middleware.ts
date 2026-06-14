@@ -4,7 +4,6 @@ import { TokenService } from '../../../infrastructure/external-service/token.ser
 import { asyncHandler } from '../../../../../shared/utils/asyncHandler';
 import { UnauthorizedError } from '../../../../../shared/utils/errors';
 
-
 const userRepository = new UserRepository();
 const tokenService = new TokenService();
 
@@ -29,4 +28,3 @@ export const authMiddleware = asyncHandler(async (req: Request, res: Response, n
   res.locals.user = user;
   next();
 });
-
