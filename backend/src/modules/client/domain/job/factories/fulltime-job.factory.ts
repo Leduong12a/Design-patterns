@@ -1,4 +1,4 @@
-import { JobAbstractFactory } from './job-factory.astract';
+import { JobAbstractFactory } from './job-factory.abstract';
 import { FullTimeJobEntity } from '../entities/fulltime-job.entity';
 
 export class FullTimeJobFactory extends JobAbstractFactory {

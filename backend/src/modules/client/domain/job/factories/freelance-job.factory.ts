@@ -1,5 +1,5 @@
-import { JobAbstractFactory } from './job-factory.astract';
-import { FreelanceJobEntity } from '../entities/freelence-job.entity';
+import { JobAbstractFactory } from './job-factory.abstract';
+import { FreelanceJobEntity } from '../entities/freelance-job.entity';
 
 export class FreelanceJobFactory extends JobAbstractFactory {
 
