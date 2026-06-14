@@ -20,7 +20,8 @@ export class UpdateJobUseCase {
     job.update(
       jobData.title ?? job.getTitle(),
       jobData.description ?? job.getDescription(),
-      jobData.requirements ?? job.getRequirements()
+      jobData.requirements ?? job.getRequirements(),
+      jobData
     )
 
     const jobUpdated = await this.jobRepo.update(job);

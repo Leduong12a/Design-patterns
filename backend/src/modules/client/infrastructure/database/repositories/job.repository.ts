@@ -1,5 +1,6 @@
 import Job from '../models/job.model';
-import { JobEntity } from '../../../domain/job/job.entity';
+import { JobEntity } from '../../../domain/job/entities/job.entity';
+import { JobFactoryRegistry } from '../../../domain/job/factories/job-factory.registry';
 import type { IJobReadRepo, IJobWriteRepo } from '../../../application/ports/repositories/job.interface';
 import type { IJobSummary } from '../../../domain/job/job.types';
 
@@ -7,7 +8,7 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
   private mapToEntity(doc: any | null): JobEntity | null {
     if (!doc) return null;
     const d = doc.toObject ? doc.toObject() : doc;
-    return JobEntity.restore({
+    return JobFactoryRegistry.restore(d.type, {
       id: d._id?.toString() || '',
       title: d.title,
       userID: d.userID?.toString() || '',
@@ -15,6 +16,11 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
       requirements: d.requirements,
       status: d.status,
       deleted: d.deleted,
+      type: d.type,
+      hourlyRate: d.hourlyRate,
+      projectDuration: d.projectDuration,
+      probationMonths: d.probationMonths,
+      hasInsurance: d.hasInsurance,
       createdAt: d.createdAt,
       updatedAt: d.updatedAt,
     });
