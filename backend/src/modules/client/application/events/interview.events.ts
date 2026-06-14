@@ -3,7 +3,7 @@ import type { ICandidateReadRepo, ICandidateWriteRepo } from '../ports/repositor
 import type { IInterviewScheduleRepository } from '../ports/repositories/interviewSchedule.interface';
 import type { IJobReadRepo } from '../ports/repositories/job.interface';
 import type { IUserReadRepo } from '../ports/repositories/user.interface';
-import type { IAIService } from '../ports/services/ai.service';
+import type { IInterviewEmailAgent } from '../ports/services/ai.service';
 import type { IMailService } from '../ports/services/mail.service';
 import type { IInterviewScheduleDetail } from '../../domain/interviewSchedule';
 
@@ -21,7 +21,7 @@ export type InterviewScheduledPayload = {
   aiAnalysisRepo: IAnalysisReadRepo;
   interviewScheduleRepo: IInterviewScheduleRepository;
   userRepo: IUserReadRepo;
-  geminiSvc: IAIService;
+  geminiSvc: IInterviewEmailAgent;
   mailSvc: IMailService;
 };
 

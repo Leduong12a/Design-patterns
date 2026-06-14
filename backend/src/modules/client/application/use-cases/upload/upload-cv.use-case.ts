@@ -1,7 +1,7 @@
 import type { ICandidateWriteRepo, ICandidateReadRepo } from '../../../application/ports/repositories/candidate.interface';
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
 import type { IUploadService } from '../../../application/ports/services/upload.service';
-import type { IAIService } from '../../../application/ports/services/ai.service';
+import type { ICVExtractorAgent } from '../../../application/ports/services/ai.service';
 import { CandidateEntity } from '../../../domain/candidate/candidate.entity';
 import type { ICandidateDetailProfile, ICandidateProps } from '../../../domain/candidate';
 
@@ -14,7 +14,7 @@ export class UploadCVUseCase {
     private readonly candidateRepo: ICandidateWriteRepo & ICandidateReadRepo,
     private readonly jobRepo: IJobReadRepo,
     private readonly uploadSvc: IUploadService,
-    private readonly geminiSvc: IAIService,
+    private readonly geminiSvc: ICVExtractorAgent,
   ) { }
 
   async execute(
