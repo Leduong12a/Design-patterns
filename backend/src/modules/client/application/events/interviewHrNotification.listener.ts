@@ -16,6 +16,12 @@ export class InterviewHrNotificationListener implements EventListener {
       return;
     }
 
+   
+    if (!hr.getInterviewNotificationSubscribed() && !hr.getTelegramNotificationSubscribed()) {
+      console.log(`[HrNotificationListener] HR (userId=${payload.userId}) đã HỦY ĐĂNG KÝ (Unsubscribed) nhận mọi thông báo.`);
+      return;
+    }
+
     const availableStrategies: IHrNotificationStrategy[] = [
       new EmailHrNotificationStrategy(),
       new TelegramHrNotificationStrategy(),

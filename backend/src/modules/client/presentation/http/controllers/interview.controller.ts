@@ -22,9 +22,13 @@ const interviewEmailService = InterviewEmailGeminiService.getInstance();
 const mailService = new MailService();
 const interviewEventManager = EventManager.getInstance();
 
-interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateNotificationListener());
-interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateStatusListener());
-interviewEventManager.subscribe('interview.scheduled', new InterviewHrNotificationListener());
+const candidateNotifListener = new InterviewCandidateNotificationListener();
+const statusListener = new InterviewCandidateStatusListener();
+const hrNotifListener = new InterviewHrNotificationListener();
+
+interviewEventManager.subscribe('interview.scheduled', candidateNotifListener);
+interviewEventManager.subscribe('interview.scheduled', statusListener);
+interviewEventManager.subscribe('interview.scheduled', hrNotifListener);
 
 const scheduleInterviewUseCase = new ScheduleInterviewUseCase(
   candidateRepository,
@@ -49,6 +53,20 @@ export const scheduleInterview = async (req: Request, res: Response): Promise<vo
       address: string;
       notes?: string;
     };
+
+   
+    const hr = await userRepository.findUserByID(userId);
+    if (hr) {
+      const wantsNotifications = hr.getInterviewNotificationSubscribed() || hr.getTelegramNotificationSubscribed();
+      if (wantsNotifications) {
+        
+        interviewEventManager.subscribe('interview.scheduled', hrNotifListener);
+      } else {
+       
+        interviewEventManager.unsubscribe('interview.scheduled', hrNotifListener);
+        console.log(`[Controller] Đã gọi EventManager.unsubscribe cho InterviewHrNotificationListener (HR tắt toàn bộ thông báo)`);
+      }
+    }
 
     const result = await scheduleInterviewUseCase.execute({
       userId,
