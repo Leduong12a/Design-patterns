@@ -13,7 +13,7 @@
 // ============================================================
 
 import type { IAuthStrategy, ILoginResult } from './auth-strategy.interface';
-import { AppError } from '../../../../../shared/utils/errors';
+import { AppError } from '../../../../../../shared/utils/errors';
 
 // Lưu trữ in-memory trạng thái lockout tạm thời
 interface ILockoutData {
