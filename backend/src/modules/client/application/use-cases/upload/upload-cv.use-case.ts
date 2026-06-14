@@ -14,7 +14,7 @@ export class UploadCVUseCase {
     private readonly candidateRepo: ICandidateWriteRepo & ICandidateReadRepo,
     private readonly jobRepo: IJobReadRepo,
     private readonly uploadSvc: IUploadService,
-    private readonly geminiSvc: ICVExtractorAgent,
+    private readonly cvExtractorAgent: ICVExtractorAgent,
   ) { }
 
   async execute(
@@ -39,11 +39,14 @@ export class UploadCVUseCase {
     const cvLink = fileUrls[0];
     const avatarLink = avatarFile && fileUrls[1] ? fileUrls[1] : undefined;
 
-    let extractedData: any = {};
+    let extractedData: any = null;
 
     if (cvFile.mimetype === 'application/pdf' || cvFile.mimetype.startsWith('image/')) {
-      console.log('Đang ném file cho Gemini làm OCR...');
-      extractedData = await this.geminiSvc.extractCV(cvFile.buffer, cvFile.mimetype);
+      extractedData = await this.cvExtractorAgent.execute(cvFile.buffer, cvFile.mimetype);
+    }
+
+    if (!extractedData) {
+      throw new Error('Không thể trích xuất dữ liệu từ CV.');
     }
 
     const personalData = extractedData.personal as Record<string, any>;

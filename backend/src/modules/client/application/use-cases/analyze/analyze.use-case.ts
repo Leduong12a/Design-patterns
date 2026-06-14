@@ -1,17 +1,17 @@
-import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../application/ports/repositories/candidate.interface';
-import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
-import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../application/ports/repositories/analysis.interface';
-import type { ICandidateAnalyzerAgent } from '../../../application/ports/services/ai.service';
+import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../ports/repositories/candidate.interface';
+import type { IJobReadRepo } from '../../ports/repositories/job.interface';
+import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../ports/repositories/analysis.interface';
+import type { ICandidateAnalyzerAgent } from '../../ports/services/ai.service';
 import { CandidateStatus } from '../../../domain/candidate';
 import { AnalysisEntity } from '../../../domain/analysis';
 import { AnalysisInputDto, AnalysisOutputDto } from '../../dtos/analysis/analysis.dto';
 
-export class AnalysisUseCase {
+export class AnalyzeUseCase {
   constructor(
     private readonly candidateRepo: ICandidateReadRepo & ICandidateWriteRepo,
     private readonly jobRepo: IJobReadRepo,
     private readonly aiAnalyzeRepo: IAnalysisReadRepo & IAnalysisWriteRepo,
-    private readonly geminiService: ICandidateAnalyzerAgent,
+    private readonly candidateAnalyzerAgent: ICandidateAnalyzerAgent,
   ) { }
 
   async execute(input: AnalysisInputDto): Promise<AnalysisOutputDto> {
@@ -28,7 +28,7 @@ export class AnalysisUseCase {
     const job = await this.jobRepo.getById(jobID);
     if (!job) throw new Error('Không tìm thấy thông tin công việc (Job).');
 
-    const analysisResult = await this.geminiService.analyzeCandidateWithJob(
+    const analysisResult = await this.candidateAnalyzerAgent.execute(
       candidate.getDetailProfile(),
       job.getDetailJob(),
     );

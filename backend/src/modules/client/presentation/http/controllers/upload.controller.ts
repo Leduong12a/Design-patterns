@@ -3,15 +3,21 @@ import { UploadCVUseCase } from '../../../application/use-cases/upload/upload-cv
 import { CandidateRepository } from '../../../infrastructure/database/repositories/candidate.repository';
 import { JobRepository } from '../../../infrastructure/database/repositories/job.repository';
 import { UploadService } from '../../../infrastructure/external-service/upload.service';
-import { GeminiService } from '../../../infrastructure/external-service/gemini.service';
+import { CVExtractorGeminiService } from '../../../infrastructure/external-service/gemini.service';
 import { asyncHandler } from '../../../../../shared/utils/asyncHandler';
 import { BadRequestError } from '../../../../../shared/utils/errors';
 
 const candidateRepository = new CandidateRepository();
 const jobRepository = new JobRepository();
 const uploadService = new UploadService();
-const geminiService = new GeminiService();
-const uploadCVUseCase = new UploadCVUseCase(candidateRepository, jobRepository, uploadService, geminiService);
+const cvExtractorService = CVExtractorGeminiService.getInstance();
+
+const uploadCVUseCase = new UploadCVUseCase(
+  candidateRepository,
+  jobRepository,
+  uploadService,
+  cvExtractorService,
+);
 
 export const uploadCV = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID = res.locals.user.id;
