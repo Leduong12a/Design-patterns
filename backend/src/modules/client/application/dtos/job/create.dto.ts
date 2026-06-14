@@ -5,10 +5,10 @@ export interface ICreateJobInputDto {
   description?: string;
   requirements?: string[];
   type: JobType;
-  // Freelance fields
+  
   hourlyRate?: number;
   projectDuration?: string;
-  // Full-Time fields
+  
   probationMonths?: number;
   hasInsurance?: boolean;
 }
@@ -18,11 +18,10 @@ export interface IUpdateJobInputDto {
   description?: string;
   requirements?: string[];
   status?: boolean;
-  // Freelance fields
+  
   hourlyRate?: number;
   projectDuration?: string;
-  // Full-Time fields
+  
   probationMonths?: number;
   hasInsurance?: boolean;
 }
-

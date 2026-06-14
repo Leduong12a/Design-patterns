@@ -28,7 +28,6 @@ export const createJob = asyncHandler(async (req: Request, res: Response): Promi
   res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
 });
 
-
 export const updateJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID = res.locals.user.id;
   const jobId = req.params['id'] as string;
