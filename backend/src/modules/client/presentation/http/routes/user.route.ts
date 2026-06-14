@@ -12,5 +12,4 @@ router.post('/password/reset', resetPasswordValidate, controller.resetPassword);
 
 router.post("/password/reset-not-otp", authMiddleware, resetPasswordValidate, controller.resetNotOTP);
 
-
 export const userRoute: express.Router = router;

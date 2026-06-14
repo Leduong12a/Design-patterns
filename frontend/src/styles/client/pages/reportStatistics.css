@@ -46,7 +46,6 @@
   max-width: calc(60% - 1.5rem);
 }
 
-/* Filters */
 .report-filters-card {
   background: white;
   border-radius: 12px;
@@ -85,12 +84,11 @@
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Stats Card */
 .report-stats-card {
   background: white;
-  border-radius: 1rem; /* rounded-xl approx */
+  border-radius: 1rem; 
   padding: 1.5rem;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); /* shadow-md */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); 
 }
 
 .stat-row {
@@ -117,7 +115,6 @@
   font-size: 1.1rem;
 }
 
-/* Chart Area */
 .report-chart-card {
   background: white;
   border-radius: 12px;
@@ -139,7 +136,6 @@
   min-height: 250px;
 }
 
-/* Footer Section */
 .report-footer {
   margin-top: 2rem;
   display: flex;
@@ -164,7 +160,6 @@
   transform: translateY(-1px);
 }
 
-/* Responsive Styles */
 @media (max-width: 991px) {
   .report-left-col {
     flex: 0 0 100%;
@@ -176,7 +171,6 @@
   }
 }
 
-/* --- EXPORT MODAL --- */
 .export-modal-overlay {
   position: fixed;
   top: 0;
@@ -211,9 +205,8 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Modal Header: Light blue background */
 .export-modal-header {
-  background-color: #e0f2fe; /* Light blue */
+  background-color: #e0f2fe; 
   padding: 1rem 1.25rem;
   display: flex;
   justify-content: space-between;
@@ -225,10 +218,9 @@
   margin: 0;
   font-size: 1.1rem;
   font-weight: 700;
-  color: #0369a1; /* Dark blue text */
+  color: #0369a1; 
 }
 
-/* Close Button: Red background */
 .export-modal-close {
   background-color: #fee2e2;
   color: #ef4444;
@@ -250,7 +242,6 @@
   color: #dc2626;
 }
 
-/* Modal Body: Light gray/white */
 .export-modal-body {
   padding: 1.5rem 1.25rem;
   background-color: #f8f9fa;
@@ -285,7 +276,6 @@
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
-/* Modal Footer */
 .export-modal-footer {
   padding: 1rem 1.25rem;
   background-color: #ffffff;
@@ -305,7 +295,6 @@
   font-size: 0.95rem;
 }
 
-/* Cancel Button: Red */
 .export-modal-btn--cancel {
   background-color: #fee2e2;
   color: #ef4444;
@@ -316,7 +305,6 @@
   color: #dc2626;
 }
 
-/* Download Button: Blue */
 .export-modal-btn--download {
   background-color: #0d6efd;
   color: #ffffff;

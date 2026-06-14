@@ -20,7 +20,6 @@ const deleteJobUseCase = new DeleteJobUseCase(jobRepository);
 const getJobByIdUseCase = new GetJobByIdUseCase(jobRepository);
 const getCandidateByJobUseCase = new GetCanidateByJobUseCase(candidateRepo);
 
-// [POST] /job/create
 export const createJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID = res.locals.user.id;
   const { title, description, requirements } = req.body as ICreateJobInputDto;
@@ -30,7 +29,6 @@ export const createJob = asyncHandler(async (req: Request, res: Response): Promi
   res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
 });
 
-// [PATCH] /job/update/:id
 export const updateJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID = res.locals.user.id;
   const jobId = req.params['id'] as string;
@@ -45,7 +43,6 @@ export const updateJob = asyncHandler(async (req: Request, res: Response): Promi
   });
 });
 
-// [GET] /job
 export const getAllJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID = res.locals.user.id;
 
@@ -54,7 +51,6 @@ export const getAllJob = asyncHandler(async (req: Request, res: Response): Promi
   res.status(200).json({ success: true, message: 'Thành công', jobs: jobs });
 });
 
-// [GET] /job/:id/candidates
 export const getCandidateByJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const jobID = req.params.id?.toString() || "";
 
@@ -70,7 +66,6 @@ export const getCandidateByJob = asyncHandler(async (req: Request, res: Response
   });
 });
 
-// [GET] /job/detail/:id
 export const getJobById = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const jobId = req.params['id'] as string;
 
@@ -83,7 +78,6 @@ export const getJobById = asyncHandler(async (req: Request, res: Response): Prom
   res.status(200).json({ success: true, message: 'Thành công', job: job });
 });
 
-// [DELETE] /job/delete/:id
 export const deleteJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID = res.locals.user.id;
   const jobId = req.params['id'] as string;
@@ -92,4 +86,3 @@ export const deleteJob = asyncHandler(async (req: Request, res: Response): Promi
 
   res.status(200).json({ success: true, message: 'Xóa công việc thành công!' });
 });
-

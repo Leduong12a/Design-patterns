@@ -7,7 +7,6 @@ const authService = {
     return res;
   },
 
-
   logout: async () => {
     const res = await API.post("/auth/logout");
     return res;

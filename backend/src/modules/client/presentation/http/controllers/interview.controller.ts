@@ -24,7 +24,6 @@ const scheduleInterviewUseCase = new ScheduleInterviewUseCase(
   mailService,
 );
 
-// [POST] /interview/schedule
 export const scheduleInterview = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userId = res.locals.user.id as string;
   const { candidateID, jobID, time, durationMinutes, address, notes } = req.body as {
@@ -53,5 +52,3 @@ export const scheduleInterview = asyncHandler(async (req: Request, res: Response
     emailSent: result.emailSent,
   });
 });
-
-

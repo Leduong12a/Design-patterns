@@ -18,7 +18,6 @@ function ClientLogin() {
     e.preventDefault();
     setErrors({});
 
-   
     let newErrors = {};
     if (!email) newErrors.email = "Vui lòng nhập email";
     if (!password) newErrors.password = "Vui lòng nhập mật khẩu";
@@ -46,7 +45,6 @@ function ClientLogin() {
       setLoading(false);
     }
   };
-
 
   return (
     <form

@@ -1,4 +1,4 @@
-/* ===== Schedule Interview Modal ===== */
+
 .sim-overlay {
   position: fixed;
   inset: 0;
@@ -78,7 +78,6 @@
   color: #f87171;
 }
 
-/* Form fields */
 .sim-form {
   display: flex;
   flex-direction: column;
@@ -138,7 +137,6 @@
   gap: 14px;
 }
 
-/* Footer */
 .sim-footer {
   display: flex;
   gap: 12px;
@@ -186,7 +184,6 @@
   cursor: not-allowed;
 }
 
-/* Conflict warning */
 .sim-conflict {
   display: flex;
   align-items: center;
@@ -199,7 +196,6 @@
   font-size: 0.85rem;
 }
 
-/* Success banner */
 .sim-success {
   display: flex;
   flex-direction: column;

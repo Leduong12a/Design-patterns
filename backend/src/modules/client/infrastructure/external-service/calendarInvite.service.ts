@@ -90,4 +90,3 @@ export const buildInterviewCalendarInvite = (input: IcsInviteInput): CalendarInv
     content: Buffer.from(ics, 'utf-8'),
   };
 };
-

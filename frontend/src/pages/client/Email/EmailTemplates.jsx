@@ -78,7 +78,7 @@ const EmailTemplates = () => {
   const [selectedCandidates, setSelectedCandidates] = useState([]);
 
   useEffect(() => {
-    // Lấy selectedCandidateIds từ React Router state
+    
     const state = location.state?.selectedCandidateIds;
     if (state && Array.isArray(state)) {
       setSelectedCandidates(state);
@@ -89,7 +89,7 @@ const EmailTemplates = () => {
   }, [navigate, location]);
 
   const handleSelectTemplate = (template) => {
-    // Truyền template + selectedCandidates qua React Router state
+    
     navigate(`/candidates/emails/${template.id}/detail`, {
       state: { 
         selectedTemplate: template,
@@ -128,7 +128,7 @@ const EmailTemplates = () => {
           ))}
         </div>
 
-        {/* Side Info */}
+        {}
         <div className="etp-side">
           <div className="etp-info-card">
             <h3>Thông tin</h3>

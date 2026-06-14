@@ -1,31 +1,24 @@
 
-// ============================================================
-
-// ─── Interface Prototype ────────────────────────────────────
 export interface Prototype<T> {
   clone(): T;
 }
 
-// ─── Dữ liệu ứng viên dùng để điền placeholder ──────────────
 export interface CandidateInfo {
   fullName?: string;
   email?: string;
   phone?: string;
 }
 
-// ─── Base Class: EmailTemplate ──────────────────────────────
 export class EmailTemplate implements Prototype<EmailTemplate> {
   constructor(
     public title: string,
     public content: string,
   ) {}
 
-  // Nhân bản prototype: tạo một bản sao độc lập của template
   clone(): EmailTemplate {
     return new EmailTemplate(this.title, this.content);
   }
 
-  // Điền thông tin ứng viên và vị trí công việc vào các placeholder
   replacePlaceholders(candidate: CandidateInfo, jobTitle?: string): this {
     const company = process.env.COMPANY_NAME || 'công ty chúng tôi';
 
@@ -56,7 +49,6 @@ export class EmailTemplate implements Prototype<EmailTemplate> {
     return this;
   }
 
-  // Render nội dung thành HTML email hoàn chỉnh
   toHtml(): string {
     const paragraphs = this.content
       .split('\n')
@@ -89,7 +81,6 @@ export class EmailTemplate implements Prototype<EmailTemplate> {
   }
 }
 
-// ─── Concrete Prototype 1: Thư mời phỏng vấn ───────────────
 export class InterviewInvitationTemplate extends EmailTemplate {
   constructor() {
     super(
@@ -120,7 +111,6 @@ Trân trọng,
   }
 }
 
-// ─── Concrete Prototype 2: Kết quả phỏng vấn ───────────────
 export class InterviewResultTemplate extends EmailTemplate {
   constructor() {
     super(
@@ -146,7 +136,6 @@ Trân trọng,
   }
 }
 
-// ─── Concrete Prototype 3: Thư từ chối ứng tuyển ───────────
 export class RejectionTemplate extends EmailTemplate {
   constructor() {
     super(
@@ -172,7 +161,6 @@ Trân trọng,
   }
 }
 
-// ─── Concrete Prototype 4: Cập nhật tiến độ hồ sơ ──────────
 export class ProgressUpdateTemplate extends EmailTemplate {
   constructor() {
     super(
@@ -198,7 +186,6 @@ Trân trọng,
   }
 }
 
-// ─── Concrete Prototype 5: Thư thông báo trúng tuyển (Offer) ─
 export class OfferEmailTemplate extends EmailTemplate {
   constructor() {
     super(

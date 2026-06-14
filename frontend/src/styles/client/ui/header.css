@@ -1,4 +1,4 @@
-/* ===== Client Header ===== */
+
 .client-header {
   display: flex;
   align-items: center;
@@ -12,7 +12,6 @@
   z-index: 50;
 }
 
-/* Left */
 .client-header__left {
   display: flex;
   align-items: center;
@@ -26,14 +25,12 @@
   letter-spacing: -0.3px;
 }
 
-/* Right */
 .client-header__right {
   display: flex;
   align-items: center;
   gap: 8px;
 }
 
-/* Icon Button */
 .client-header__icon-btn {
   position: relative;
   width: 40px;
@@ -66,7 +63,6 @@
   border: 2px solid #fff;
 }
 
-/* Divider */
 .client-header__divider {
   width: 1px;
   height: 28px;
@@ -74,7 +70,6 @@
   margin: 0 8px;
 }
 
-/* User */
 .client-header__user {
   position: relative;
   display: flex;
@@ -124,7 +119,6 @@
   color: var(--color-text-placeholder);
 }
 
-/* Chevron */
 .client-header__chevron {
   font-size: 18px;
   color: var(--color-text-placeholder);
@@ -136,12 +130,10 @@
   transform: rotate(180deg);
 }
 
-/* Open state highlight */
 .client-header__user--open {
   background: var(--color-hover-bg);
 }
 
-/* Dropdown */
 .client-header__dropdown {
   position: absolute;
   top: calc(100% + 10px);
@@ -157,7 +149,6 @@
   animation: clientHeaderFadeIn 0.15s ease;
 }
 
-/* Dropdown header block */
 .client-header__dropdown-header {
   display: flex;
   align-items: center;
@@ -195,7 +186,6 @@
   max-width: 140px;
 }
 
-/* Thin divider line */
 .client-header__dropdown-divider {
   height: 1px;
   background: var(--color-border);
@@ -241,8 +231,6 @@
   }
 }
 
-
-/* ===== Mobile ===== */
 @media (max-width: 768px) {
   .client-header {
     padding: 0 16px;

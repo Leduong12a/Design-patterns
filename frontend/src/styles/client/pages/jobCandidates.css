@@ -1,4 +1,4 @@
-/* jobCandidates.css */
+
 .jc-page {
   max-width: 1200px;
   margin: 0 auto;
@@ -94,14 +94,12 @@
   margin: 0;
 }
 
-/* List Layout for candidates */
 .jc-grid {
   display: flex;
   flex-direction: column;
   gap: 16px;
 }
 
-/* Candidate Card (Row Layout) */
 .jc-card {
   background: white;
   border-radius: 12px;

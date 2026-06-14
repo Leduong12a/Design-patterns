@@ -114,7 +114,6 @@ const ScheduleInterviewPage = () => {
               </div>
             </div>
 
-           
             <div className="sip-form-group">
               <label htmlFor="email" className="sip-form-label">Người tham gia:</label>
               <div className="sip-form-input-wrap">
@@ -128,7 +127,6 @@ const ScheduleInterviewPage = () => {
               </div>
             </div>
 
-        
             <div className="sip-form-group">
               <label htmlFor="address" className="sip-form-label">
                 Địa điểm/ Link:
@@ -146,7 +144,6 @@ const ScheduleInterviewPage = () => {
               </div>
             </div>
 
-         
             <div className="sip-form-actions">
               <button
                 type="button"

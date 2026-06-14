@@ -7,8 +7,6 @@ const interviewService = {
     return res;
   },
 
-
 };
-
 
 export default interviewService;

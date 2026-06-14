@@ -12,7 +12,6 @@ const tokenService = new TokenService();
 const loginUseCase = new LoginUseCase(authRepository, passwordService, tokenService);
 const logoutUseCase = new LogoutUseCase();
 
-// [POST] /auth/login
 export const login = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { email, password } = req.body as { email: string; password: string };
   const { token, user } = await loginUseCase.execute(email, password);
@@ -25,7 +24,6 @@ export const login = asyncHandler(async (req: Request, res: Response): Promise<v
   res.json({ success: true, code: 200, message: 'Đăng nhập thành công!', token, user });
 });
 
-// [POST] /auth/logout
 export const logout = asyncHandler(async (_req: Request, res: Response): Promise<void> => {
   const userID: string = res.locals.user.id.toString();
 
@@ -35,5 +33,3 @@ export const logout = asyncHandler(async (_req: Request, res: Response): Promise
 
   res.json({ code: 200, message: 'Đăng xuất thành công!' });
 });
-
-

@@ -15,7 +15,6 @@ const getUsersUseCase = new GetUsersUseCase(userRepo);
 const changeStatusUseCase = new ChangeStatusUseCase(userRepo);
 const updateUserUseCase = new UpdateUserUseCase(userRepo, passService);
 
-// [POST] /admin/users/create
 export const createUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = await createUserUseCase.execute(req.body as ICreateUserInput);
@@ -26,7 +25,6 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
   }
 };
 
-// [GET] /admin/users
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
   try {
     const users = await getUsersUseCase.execute();
@@ -37,7 +35,6 @@ export const getUsers = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
-// [POST] /admin/users/change-status
 export const changeStatus = async (req: Request, res: Response): Promise<void> => {
   try {
     const { id, status } = req.body as { id: string; status: string };
@@ -54,7 +51,6 @@ export const changeStatus = async (req: Request, res: Response): Promise<void> =
   }
 };
 
-// [PATCH] /admin/users/edit/:id
 export const edit = async (req: Request, res: Response): Promise<void> => {
   try {
     const id = req.params.id as string;

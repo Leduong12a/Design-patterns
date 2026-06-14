@@ -2,7 +2,6 @@ import jwt from "jsonwebtoken";
 import { ITokenService } from "../../application/ports/services/token.service";
 import { ITokenPayload } from "../../application/ports/services/token.service";
 
-
 export class TokenService implements ITokenService {
   public async generateToken(payload: ITokenPayload): Promise<string> {
     return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET as string, { expiresIn: "5d" });

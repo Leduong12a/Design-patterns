@@ -20,7 +20,6 @@ function Users() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [confirmDialog, setConfirmDialog] = useState({ isOpen: false, user: null });
 
-  // Fetch users
   const fetchUsers = useCallback(async () => {
     try {
       setLoading(true);
@@ -38,7 +37,6 @@ function Users() {
     fetchUsers();
   }, [fetchUsers]);
 
-  // Filter & search
   const filteredUsers = users.filter((user) => {
     const matchesSearch =
       user.fullName?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -48,9 +46,8 @@ function Users() {
     return matchesSearch && matchesStatus;
   });
 
-  // Toggle lock
   const handleChangeStatus = async (user) => {
-    // Only allow locking active accounts. Unlocking is disabled permanent.
+    
     if (user.status === "active") {
       setConfirmDialog({ isOpen: true, user });
     } else {
@@ -58,7 +55,6 @@ function Users() {
     }
   };
 
-  // Execute status change
   const executeChangeStatus = async (user) => {
     try {
       const newStatus = user.status === "active" ? "inactive" : "active";
@@ -79,7 +75,6 @@ function Users() {
     }
   };
 
-  // Get initials for avatar
   const getInitials = (name) => {
     if (!name) return "?";
     return name
@@ -90,7 +85,6 @@ function Users() {
       .slice(0, 2);
   };
 
-  // Format date
   const formatDate = (dateStr) => {
     if (!dateStr) return "—";
     return new Date(dateStr).toLocaleDateString("vi-VN", {
@@ -102,7 +96,7 @@ function Users() {
 
   return (
     <>
-      {/* Header */}
+      {}
       <div className="users-page__header">
         <h1 className="users-page__title">Quản lý người dùng</h1>
         <p className="users-page__subtitle">
@@ -110,7 +104,7 @@ function Users() {
         </p>
       </div>
 
-      {/* Toolbar */}
+      {}
       <div className="users-toolbar">
         <div className="users-toolbar__search">
           <MdSearch className="users-toolbar__search-icon" />
@@ -146,7 +140,7 @@ function Users() {
         </div>
       </div>
 
-      {/* Table */}
+      {}
       <div className="users-table-wrapper">
         <table className="users-table">
           <thead>
@@ -193,7 +187,7 @@ function Users() {
                       {formatDate(user.createdAt)}
                     </span>
                   </td>
-                  {/* action */}
+                  {}
                   <td>
                     <div className="users-table__actions">
                       <button
@@ -233,7 +227,7 @@ function Users() {
         </table>
       </div>
 
-      {/* Confirmation Dialog */}
+      {}
       {confirmDialog.isOpen && (
         <div className="users-dialog-overlay">
           <div className="users-dialog">
@@ -269,7 +263,6 @@ function Users() {
   );
 }
 
-// Skeleton loading component
 function SkeletonRows() {
   return Array.from({ length: 5 }).map((_, i) => (
     <tr key={i}>
@@ -287,7 +280,6 @@ function SkeletonRows() {
   ));
 }
 
-// Empty state component
 function EmptyState() {
   return (
     <div className="users-empty">

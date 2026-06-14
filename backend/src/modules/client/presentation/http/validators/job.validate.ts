@@ -8,7 +8,6 @@ export const createJobValidate: RequestHandler = (req, res, next) => {
     return;
   }
 
-  // requirements là array string từ frontend; nếu có thì phải là array
   if (requirements !== undefined && !Array.isArray(requirements)) {
     res.status(400).json({ success: false, message: 'Yêu cầu công việc không hợp lệ!' });
     return;

@@ -7,4 +7,3 @@ const router = express.Router();
 router.post('/schedule', validateScheduleInterview, controller.scheduleInterview);
 
 export const interviewRoute: express.Router = router;
-

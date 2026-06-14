@@ -14,7 +14,6 @@ const accountSchema = new mongoose.Schema(
   { timestamps: true },
 );
 
-
 const Account = mongoose.model('AccountAdmin', accountSchema, 'accountAdmins');
 
 export default Account;

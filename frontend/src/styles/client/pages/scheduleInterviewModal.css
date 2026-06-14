@@ -1,4 +1,4 @@
-/* ===== SCHEDULE INTERVIEW MODAL ===== */
+
 .sim-overlay {
   position: fixed;
   inset: 0;
@@ -30,7 +30,6 @@
   to   { transform: translateY(0);    opacity: 1; }
 }
 
-/* Header */
 .sim-header {
   padding: 24px 28px 0;
 }
@@ -42,7 +41,6 @@
   margin: 0 0 20px;
 }
 
-/* Body */
 .sim-body {
   padding: 0 28px;
   display: flex;
@@ -119,7 +117,6 @@ select.sim-input {
   margin-left: 8px;
 }
 
-/* Footer */
 .sim-footer {
   display: flex;
   justify-content: flex-end;

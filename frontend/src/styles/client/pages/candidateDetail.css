@@ -1,10 +1,9 @@
-/* ===== CANDIDATE DETAIL PAGE ===== */
+
 .cd-page {
   padding: 32px 40px;
   min-height: 100%;
 }
 
-/* Back */
 .cd-back {
   display: inline-flex;
   align-items: center;
@@ -20,7 +19,6 @@
 }
 .cd-back:hover { color: #0087f1; }
 
-/* Header */
 .cd-header { margin-bottom: 24px; }
 .cd-header h1 {
   font-size: 24px;
@@ -34,7 +32,6 @@
   margin: 0;
 }
 
-/* Card */
 .cd-card {
   background: #fff;
   border-radius: 14px;
@@ -43,7 +40,6 @@
   border: 1px solid #eee;
 }
 
-/* Field */
 .cd-field {
   margin-bottom: 20px;
 }
@@ -85,13 +81,11 @@
 }
 .cd-field__value a:hover { text-decoration: underline; }
 
-/* Status value */
 .cd-field__value.status-verified    { color: #007E00; font-weight: 600; }
 .cd-field__value.status-risk        { color: #E7A900; font-weight: 600; }
 .cd-field__value.status-unanalyzed  { color: #6b7280; font-weight: 600; }
 .cd-field__value.status-scheduled   { color: #007E00; font-weight: 600; }
 
-/* Select variant */
 .cd-field__row--select {
   padding-right: 10px;
 }
@@ -132,7 +126,6 @@
 
 .cd-field__value--empty { color: #bbb; font-style: italic; }
 
-/* Fields Row - Side by side layout */
 .cd-fields-row {
   display: flex;
   gap: 20px;
@@ -144,14 +137,12 @@
   margin-bottom: 0;
 }
 
-/* Section divider */
 .cd-divider {
   height: 1px;
   background: #f0f0f0;
   margin: 24px 0;
 }
 
-/* Actions */
 .cd-actions {
   display: flex;
   align-items: center;
@@ -199,7 +190,6 @@
 }
 .cd-btn--ai:hover { background: #006ed0; }
 
-/* Loading */
 .cd-loading, .cd-error {
   display: flex; flex-direction: column; align-items: center;
   justify-content: center; padding: 80px 40px;
@@ -207,7 +197,6 @@
 }
 .cd-error { color: #ef4444; }
 
-/* ===== AI ANALYSIS PANEL ===== */
 .cd-ai-panel {
   background: #fff;
   border-radius: 14px;
@@ -264,19 +253,16 @@
   margin: 0;
 }
 
-/* Điểm phù hợp */
 .cd-ai-score {
   font-size: 18px;
   font-weight: 700;
   color: #0087f1;
 }
 
-/* Red flags / cảnh báo */
 .cd-ai-label--red {
   color: #ef4444 !important;
 }
 
-/* Column layout cho list items */
 .cd-field__row--col {
   flex-direction: column;
   align-items: flex-start !important;
@@ -313,7 +299,6 @@
   min-width: 18px;
 }
 
-/* ===== MODAL ===== */
 .cd-modal-overlay {
   position: fixed;
   top: 0;

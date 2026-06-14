@@ -13,7 +13,6 @@ function ClientHeader() {
   const [showDropdown, setShowDropdown] = useState(false);
   const dropdownRef = useRef(null);
 
-
   useEffect(() => {
     const userData = localStorage.getItem("user");
     if (userData) {
@@ -25,7 +24,6 @@ function ClientHeader() {
     }
   }, []);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {

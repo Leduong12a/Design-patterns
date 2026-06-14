@@ -28,4 +28,3 @@ export const authMiddleware = asyncHandler(async (req: Request, res: Response, n
   res.locals.admin = admin;
   next();
 });
-

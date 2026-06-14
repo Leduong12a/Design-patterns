@@ -9,7 +9,6 @@ const candidateRepository = new CandidateRepository();
 const jobRepository = new JobRepository();
 const mailService = new MailService();
 
-// [POST] /email/send-bulk
 export const sendBulkEmail = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const { candidateIds, template, title, content } = req.body as {
     candidateIds: string[];
@@ -39,4 +38,3 @@ export const sendBulkEmail = asyncHandler(async (req: Request, res: Response): P
     failed: result.failed,
   });
 });
-

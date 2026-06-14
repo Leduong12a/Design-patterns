@@ -1,4 +1,4 @@
-/* ===== Client Layout ===== */
+
 .client-layout {
   display: flex;
   min-height: 100vh;
@@ -25,7 +25,6 @@
   overflow-y: auto;
 }
 
-/* ===== Mobile ===== */
 @media (max-width: 768px) {
   .client-layout__main {
     margin-left: 0;

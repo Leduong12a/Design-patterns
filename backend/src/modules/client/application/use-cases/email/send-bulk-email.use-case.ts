@@ -43,7 +43,6 @@ export class SendBulkEmailUseCase {
     }> = [];
     let totalSent = 0;
 
-    // Tải toàn bộ ứng viên song song
     const candidates = await Promise.all(
       input.candidateIds.map(id => this.candidateRepo.getById(id)),
     );
@@ -68,7 +67,6 @@ export class SendBulkEmailUseCase {
           continue;
         }
 
-        // Lấy tiêu đề công việc nếu có
         let jobTitle: string | undefined;
         const jobID = candidate.getJobID();
         if (jobID) {
@@ -80,23 +78,17 @@ export class SendBulkEmailUseCase {
           }
         }
 
-        // ── Prototype Pattern ────────────────────────────────────────
-        // Nếu template id được hỗ trợ trong registry → clone từ prototype gốc.
-        // Nếu không (template tùy chỉnh từ frontend) → dùng EmailTemplate
-        // với title/content do người dùng nhập, rồi điền placeholder.
-        // ────────────────────────────────────────────────────────────
         let emailTemplate;
 
         if (defaultEmailTemplateRegistry.hasId(input.template.id)) {
-          // Lấy bản clone từ Prototype Registry → đảm bảo không ảnh hưởng mẫu gốc
+          
           emailTemplate = defaultEmailTemplateRegistry.getById(input.template.id);
         } else {
-          // Template tùy chỉnh: vẫn dùng base EmailTemplate để tận dụng logic chung
+          
           const { EmailTemplate } = await import('../../../../../shared/templates/email/email-template.prototype');
           emailTemplate = new EmailTemplate(input.title, input.content);
         }
 
-        // Điền thông tin ứng viên và vị trí vào bản clone
         emailTemplate.replacePlaceholders(
           {
             fullName: personal.fullName,
@@ -106,7 +98,6 @@ export class SendBulkEmailUseCase {
           jobTitle,
         );
 
-        // Render ra HTML hoàn chỉnh từ bản clone đã cá nhân hóa
         const htmlContent = emailTemplate.toHtml();
 
         const sent = await this.mailSvc.sendEmail(
