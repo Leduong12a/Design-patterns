@@ -10,18 +10,12 @@ export class JobFactoryRegistry {
   };
 
   public static create(type: JobType, props: any): JobEntity {
-    const factory = this.factories[type];
-    if (!factory) {
-      throw new Error(`Domain Error: Loại công việc không hợp lệ: ${type}`);
-    }
+    const factory = this.factories[type] || this.factories[JobType.FULLTIME];
     return factory.create(props);
   }
 
   public static restore(type: JobType, props: any): JobEntity {
-    const factory = this.factories[type];
-    if (!factory) {
-      throw new Error(`Domain Error: Loại công việc không hợp lệ: ${type}`);
-    }
+    const factory = this.factories[type] || this.factories[JobType.FULLTIME];
     return factory.restore(props);
   }
 }

@@ -12,13 +12,14 @@ const InterviewScheduleList = () => {
   const [selectedSchedule, setSelectedSchedule] = useState(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
 
+  // Lấy danh sách lịch phỏng vấn
   const fetchSchedules = async () => {
     try {
       setLoading(true);
       const res = await interviewService.getSchedules();
       if (res.success) {
         setSchedules(res.data || []);
-        
+        // Lấy thông tin ứng viên từ các lịch
         const candidateIds = [...new Set((res.data || []).map((s) => s.candidateId))];
         if (candidateIds.length > 0) {
           await fetchCandidates(candidateIds);
@@ -33,6 +34,7 @@ const InterviewScheduleList = () => {
     }
   };
 
+  // Lấy thông tin ứng viên
   const fetchCandidates = async (candidateIds) => {
     try {
       const map = {};
@@ -52,6 +54,7 @@ const InterviewScheduleList = () => {
     fetchSchedules();
   }, []);
 
+  // Xóa lịch phỏng vấn
   const handleDelete = async (id) => {
     if (!window.confirm("Bạn chắc chắn muốn xóa lịch phỏng vấn này?")) return;
 
@@ -147,7 +150,7 @@ const InterviewScheduleList = () => {
         </div>
       )}
 
-      {}
+      {/* Modal Chi Tiết */}
       {showDetailModal && selectedSchedule && (
         <InterviewDetailModal
           schedule={selectedSchedule}

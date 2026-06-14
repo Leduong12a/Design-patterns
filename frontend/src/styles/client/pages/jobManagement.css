@@ -1,4 +1,9 @@
+/* ================================================================
+   JOB MANAGEMENT MODULE
+   Follows the design system defined in base.css
+   ================================================================ */
 
+/* ── Dashboard Two-Column Layout ─────────────────────────────── */
 .dashboard-container {
   display: flex;
   gap: 24px;
@@ -65,10 +70,12 @@
   }
 }
 
+/* ── Shared Page Shell ────────────────────────────────────────── */
 .job-page {
   width: 100%;
 }
 
+/* ── Job List: Page Header ───────────────────────────────────── */
 .job-page__header {
   display: flex;
   align-items: flex-start;
@@ -90,6 +97,7 @@
   color: var(--color-text-secondary);
 }
 
+/* ── Primary CTA Button ──────────────────────────────────────── */
 .job-page__btn-create {
   display: inline-flex;
   align-items: center;
@@ -118,6 +126,7 @@
   transform: translateY(0);
 }
 
+/* ── Search Bar ──────────────────────────────────────────────── */
 .job-page__search-wrap {
   margin-bottom: 24px;
 }
@@ -142,6 +151,7 @@
   box-shadow: 0 0 0 3px rgba(0, 135, 241, 0.15);
 }
 
+/* ── Loading / Empty States ──────────────────────────────────── */
 .job-page__loading {
   display: flex;
   align-items: center;
@@ -180,12 +190,14 @@
   color: var(--color-border);
 }
 
+/* ── Card Grid ───────────────────────────────────────────────── */
 .job-page__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
 }
 
+/* ── Individual Job Card ─────────────────────────────────────── */
 .job-card {
   background: #ffffff;
   border: 1.5px solid var(--color-border);
@@ -324,6 +336,7 @@
   color: var(--color-error);
 }
 
+/* Delete button – red tinted by default */
 .job-card__action-btn--delete {
   border-color: rgba(239, 68, 68, 0.35);
   color: #ef4444;
@@ -338,6 +351,9 @@
   transform: scale(1.05);
 }
 
+/* ================================================================
+   CREATE JOB PAGE
+   ================================================================ */
 .job-create-page {
   width: 100%;
 }
@@ -386,6 +402,7 @@
   margin-top: 6px;
 }
 
+/* ── Form Fields ─────────────────────────────────────────────── */
 .job-create__form {
   display: flex;
   flex-direction: column;
@@ -431,6 +448,7 @@
   color: var(--color-error);
 }
 
+/* Shared input styles */
 .form-input,
 .form-textarea {
   width: 100%;
@@ -459,6 +477,7 @@
   font-weight: 500;
 }
 
+/* ── Rich Text Editor Mock ───────────────────────────────────── */
 .rte-wrap {
   border: 1.5px solid var(--color-border);
   border-radius: var(--border-radius-md);
@@ -529,6 +548,7 @@
   box-shadow: none;
 }
 
+/* ── Tag Input ───────────────────────────────────────────────── */
 .tag-input-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -583,6 +603,11 @@
   color: var(--color-text-primary);
   background: transparent;
 }
+
+/* ================================================================
+   UPLOAD CV PANEL COMPONENT
+   Right-side panel for uploading CVs in Dashboard
+   ================================================================ */
 
 .upload-cv-panel {
   background: #ffffff;
@@ -778,6 +803,7 @@
   padding: 2px 0;
 }
 
+/* ── Status Toggle ───────────────────────────────────────────── */
 .status-toggle {
   display: flex;
   gap: 8px;
@@ -809,6 +835,7 @@
   font-weight: 600;
 }
 
+/* ── Action Buttons ──────────────────────────────────────────── */
 .job-create__actions {
   display: flex;
   align-items: center;
@@ -869,6 +896,9 @@
   cursor: not-allowed;
 }
 
+/* ================================================================
+   DASHBOARD OVERVIEW & STATS
+   ================================================================ */
 .stats-overview {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

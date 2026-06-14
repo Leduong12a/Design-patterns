@@ -51,7 +51,7 @@ const VerificationDetail = () => {
   };
 
   const handleConfirm = async (status) => {
-    
+    // Allow verification at both APPLIED and SCREENING stages
     if (candidateStatus !== "screening" && candidateStatus !== "applied") {
       toast.warning("Ứng viên chỉ có thể kiểm chứng ở giai đoạn Ứng tuyển hoặc Sàng lọc!");
       return;
@@ -64,6 +64,7 @@ const VerificationDetail = () => {
       const message = status === "verified" ? "Kiểm chứng ứng viên..." : "Gắn cờ rủi ro...";
       toast.info(message);
 
+     
       const response = await verificationService.confirmVerification(id, {
         status: status,
       });
@@ -146,6 +147,7 @@ const VerificationDetail = () => {
           <div className="vd-value">{verification.email || "—"}</div>
         </div>
 
+       
         <div className="vd-field">
           <label className="vd-label">Độ tin cậy</label>
           <div className="vd-value">
@@ -160,11 +162,13 @@ const VerificationDetail = () => {
           </div>
         </div>
 
+    
         <div className="vd-field">
           <label className="vd-label">Chi tiết phân tích</label>
           <div className="vd-value">{verification.aiReasoning || "—"}</div>
         </div>
 
+    
         <div className="vd-field">
           <label className="vd-label">GitHub</label>
           <div className="vd-links">

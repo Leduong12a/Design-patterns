@@ -23,12 +23,13 @@ import AdminStatisticsKPICard from './AdminStatisticsKPICard';
 import '../../../styles/admin/pages/statistics.css';
 
 const AdminStatistics = () => {
-  
+  // State quản lý filters
   const [filterCriteria, setFilterCriteria] = useState('Theo tháng');
   const [filterDate, setFilterDate] = useState('2026-03');
   const [selectedHr, setSelectedHr] = useState('all');
   const [hrList, setHrList] = useState([]);
 
+  // State quản lý dữ liệu
   const [loading, setLoading] = useState(false);
   const [stats, setStats] = useState({
     totalCVsReceived: 0,
@@ -38,15 +39,17 @@ const AdminStatistics = () => {
     chartData: []
   });
 
+  // Modal State
   const [showExportModal, setShowExportModal] = useState(false);
   const [exportFormat, setExportFormat] = useState('pdf');
 
+  // Fetch danh sách HR
   const fetchHRList = useCallback(async () => {
     try {
       const response = await adminReportService.getAllHRs();
       if (response && response.success) {
         const hrData = response.data || [];
-        
+        // Filter chỉ lấy HR có status active
         const activeHRs = hrData.filter(hr => hr.status === 'active');
         setHrList(activeHRs);
       } else {
@@ -58,6 +61,7 @@ const AdminStatistics = () => {
     }
   }, []);
 
+  // Fetch thống kê hệ thống
   const fetchStatistics = useCallback(async () => {
     try {
       setLoading(true);
@@ -69,7 +73,7 @@ const AdminStatistics = () => {
       );
 
       if (response && response.success && response.data) {
-        
+        // Sử dụng dữ liệu thực từ API
         setStats({
           totalCVsReceived: response.data.totalCVsReceived || 0,
           totalOpenJobs: response.data.totalOpenJobs || 0,
@@ -83,7 +87,7 @@ const AdminStatistics = () => {
     } catch (error) {
       console.error('❌ Lỗi khi tải thống kê:', error);
       toast.error('Không thể tải dữ liệu thống kê. ' + (error.message || ''));
-      
+      // Fallback to mock data để UI không bị trống
       setStats({
         totalCVsReceived: 0,
         totalOpenJobs: 0,
@@ -96,15 +100,18 @@ const AdminStatistics = () => {
     }
   }, [filterCriteria, filterDate, selectedHr]);
 
+  // Load initial data
   useEffect(() => {
     fetchHRList();
     fetchStatistics();
   }, []);
 
+  // Fetch khi filter thay đổi
   useEffect(() => {
     fetchStatistics();
   }, [filterCriteria, filterDate, selectedHr, fetchStatistics]);
 
+  // --- EXPORT LOGIC ---
   const exportToExcel = () => {
     const summaryData = [
       { 'Chỉ số': 'Tổng CV đã tiếp nhận (Hệ thống)', 'Giá trị': stats.totalCVsReceived },
@@ -167,7 +174,7 @@ const AdminStatistics = () => {
 
   return (
     <div className="admin-statistics-container">
-      {}
+      {/* Header */}
       <div className="admin-statistics-header">
         <h1 className="admin-statistics-title">Thống kê hệ thống</h1>
         <p className="admin-statistics-subtitle">
@@ -175,15 +182,15 @@ const AdminStatistics = () => {
         </p>
       </div>
 
-      {}
+      {/* Main Content */}
       <div id="admin-report-content" className="admin-statistics-content">
-        {}
+        {/* Left Column - Filters & KPI Cards */}
         <div className="admin-stats-left">
-          {}
+          {/* Filters Card */}
           <div className="admin-filters-card">
             <h3 className="admin-filters-title">Bộ lọc</h3>
 
-            {}
+            {/* Filter by HR */}
             <div className="admin-filter-row">
               <label className="admin-filter-label">Lọc theo HR:</label>
               <select
@@ -200,7 +207,7 @@ const AdminStatistics = () => {
               </select>
             </div>
 
-            {}
+            {/* Filter by Criteria */}
             <div className="admin-filter-row">
               <label className="admin-filter-label">Tiêu chí lọc:</label>
               <select
@@ -214,7 +221,7 @@ const AdminStatistics = () => {
               </select>
             </div>
 
-            {}
+            {/* Filter by Date */}
             <div className="admin-filter-row">
               <label className="admin-filter-label">Thời gian:</label>
               <input
@@ -226,7 +233,7 @@ const AdminStatistics = () => {
             </div>
           </div>
 
-          {}
+          {/* KPI Cards Grid */}
           <div className="admin-kpi-grid">
             {loading ? (
               <div className="admin-loading">Đang tải dữ liệu...</div>
@@ -268,7 +275,7 @@ const AdminStatistics = () => {
           </div>
         </div>
 
-        {}
+        {/* Right Column - Chart */}
         <div className="admin-stats-right">
           <div className="admin-chart-card">
             <h3 className="admin-chart-title">Biểu đồ thống kê - CV & Lịch phỏng vấn</h3>
@@ -300,7 +307,7 @@ const AdminStatistics = () => {
         </div>
       </div>
 
-      {}
+      {/* Footer - Export Button */}
       <div className="admin-statistics-footer">
         <button
           className="admin-btn-export"
@@ -312,7 +319,7 @@ const AdminStatistics = () => {
         </button>
       </div>
 
-      {}
+      {/* Export Modal */}
       {showExportModal && (
         <div className="admin-export-modal-overlay">
           <div className="admin-export-modal">

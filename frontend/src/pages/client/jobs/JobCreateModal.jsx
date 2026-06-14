@@ -4,6 +4,10 @@ import jobService from "../../../services/client/jobService";
 import TagInput from "./TagInput";
 import RichToolbar from "./RichToolbar";
 
+/**
+ * JobCreateModal Component
+ * Modal form to create a new job position.
+ */
 const JobCreateModal = ({ onClose, onJobCreated }) => {
   const descRef = useRef(null);
   const [form, setForm] = useState({
@@ -65,7 +69,7 @@ const JobCreateModal = ({ onClose, onJobCreated }) => {
         </div>
 
         <form className="job-modal__body custom-scrollbar" onSubmit={handleSubmit}>
-          {}
+          {/* Job Title */}
           <div className="form-field">
             <label className="form-label" htmlFor="title">
               Tiêu đề công việc <span className="required">*</span>
@@ -83,7 +87,7 @@ const JobCreateModal = ({ onClose, onJobCreated }) => {
             />
           </div>
 
-          {}
+          {/* Job Description */}
           <div className="form-field">
             <label className="form-label" htmlFor="description">
               Mô tả chi tiết
@@ -103,14 +107,14 @@ const JobCreateModal = ({ onClose, onJobCreated }) => {
             </div>
           </div>
 
-          {}
+          {/* Skills / Requirements */}
           <div className="form-field">
             <label className="form-label">Yêu cầu kỹ năng</label>
             <p className="form-hint">Nhấn Enter hoặc dấu phẩy để thêm kỹ năng</p>
             <TagInput tags={tags} setTags={setTags} />
           </div>
 
-          {}
+          {/* Status Toggle */}
           <div className="form-field form-field--row">
             <label className="form-label">Trạng thái ban đầu</label>
             <div className="status-toggle">

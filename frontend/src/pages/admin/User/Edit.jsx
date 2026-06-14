@@ -33,7 +33,7 @@ function EditUser() {
   const fetchUserData = async () => {
     try {
       setLoading(true);
-      
+      // Get all users and find by ID since single user endpoint may not exist
       const res = await userService.getUsers();
       const user = (res.users || []).find((u) => u.id === id);
       if (user) {
@@ -86,7 +86,7 @@ function EditUser() {
 
     try {
       setSaving(true);
-      
+      // Prepare data - only include password if it was changed
       const updateData = {
         fullName: formData.fullName,
         email: formData.email,
@@ -129,7 +129,7 @@ function EditUser() {
 
   return (
     <div className="user-create">
-      {}
+      {/* Header */}
       <div className="user-create__header">
         <button
           className="user-create__back"
@@ -146,10 +146,10 @@ function EditUser() {
         </div>
       </div>
 
-      {}
+      {/* Form Card */}
       <div className="user-create__card">
         <form onSubmit={handleSubmit} className="user-create__form">
-          {}
+          {/* Full Name */}
           <div className="user-create__field">
             <label className="user-create__label">
               <MdPerson className="user-create__label-icon" />
@@ -166,7 +166,7 @@ function EditUser() {
             />
           </div>
 
-          {}
+          {/* Email */}
           <div className="user-create__field">
             <label className="user-create__label">
               <MdEmail className="user-create__label-icon" />
@@ -182,7 +182,7 @@ function EditUser() {
             />
           </div>
 
-          {}
+          {/* Status */}
           <div className="user-create__field">
             <label className="user-create__label">Trạng thái</label>
             <select
@@ -196,7 +196,7 @@ function EditUser() {
             </select>
           </div>
 
-          {}
+          {/* Password */}
           <div className="user-create__field">
             <label className="user-create__label">
               <MdLock className="user-create__label-icon" />
@@ -226,10 +226,10 @@ function EditUser() {
             </div>
           </div>
 
-          {}
+          {/* Divider */}
           <div className="user-create__divider" />
 
-          {}
+          {/* Actions */}
           <div className="user-create__actions">
             <button
               type="button"

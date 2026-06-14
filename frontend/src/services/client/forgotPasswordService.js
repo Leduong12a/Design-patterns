@@ -8,11 +8,13 @@ const forgotPasswordService = {
     return res;
   },
 
+ 
   verifyOTP: async (email, otp) => {
  
     const res = await API.post("/user/password/otp", { email, otp });
     return res;
   },
+
 
   resetPassword: async (email, password, confirmPassword) => {
     const res = await API.post("/user/password/reset", {
@@ -23,6 +25,7 @@ const forgotPasswordService = {
     return res;
   },
 
+ 
   resetNotOTP: async (password, confirmPassword) => {
     const res = await API.post("/user/password/reset-not-otp", {
       password,

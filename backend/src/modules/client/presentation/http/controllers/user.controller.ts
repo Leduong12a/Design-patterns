@@ -1,13 +1,14 @@
 import { Request, Response } from 'express';
+
 import { ForgotPasswordUseCase } from '../../../application/use-cases/user/forgot-password.use-case';
 import { VerifyOtpUseCase } from '../../../application/use-cases/user/verify-otp.use-case';
 import { ResetPasswordUseCase } from '../../../application/use-cases/user/reset-password.use-case';
 import { ResetPassNotOTPUseCase } from '../../../application/use-cases/user/reset-pass-not-otp.use-case';
+
 import { UserRepository } from '../../../infrastructure/database/repositories/user.repository';
 import { OtpRepository } from '../../../infrastructure/database/repositories/otp.repository';
 import { MailService } from '../../../infrastructure/external-service/mail.service';
 import { PasswordService } from '../../../infrastructure/external-service/password.service';
-import { asyncHandler } from '../../../../../shared/utils/asyncHandler';
 
 const userRepository = new UserRepository();
 const otpRepository = new OtpRepository();
@@ -20,41 +21,118 @@ const verifyOtpUseCase = new VerifyOtpUseCase(userRepository, otpRepository);
 const resetPasswordUseCase = new ResetPasswordUseCase(userRepository, otpRepository, passwordService);
 const ressetPassNotOTPUseCase = new ResetPassNotOTPUseCase(userRepository, passwordService);
 
-export const forgotPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  const { email } = req.body as { email: string };
+// [GET] /user/interview-notification
+export const getInterviewNotificationSubscription = async (_req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = res.locals.user.id as string;
+    const user = await userRepository.findUserByID(userId);
 
-  const result = await forgotPasswordUseCase.execute(email);
+    if (!user) {
+      res.status(404).json({ success: false, message: 'Khong tim thay HR.' });
+      return;
+    }
 
-  res.status(200).json({ success: true, message: 'Mã OTP đã được gửi đến email của bạn!', email: result.email });
-});
+    res.status(200).json({
+      success: true,
+      subscribed: user.getInterviewNotificationSubscribed(),
+      user: user.getProfile(),
+    });
+  } catch (error: unknown) {
+    const e = error as { message?: string };
+    res.status(500).json({ success: false, message: e.message ?? 'Loi lay trang thai thong bao.' });
+  }
+};
 
-export const verifyOTP = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  const { email, otp } = req.body as { email: string; otp: string };
+// [PATCH] /user/interview-notification
+export const updateInterviewNotificationSubscription = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const userId = res.locals.user.id as string;
+    const { subscribed } = req.body as { subscribed?: boolean };
 
-  await verifyOtpUseCase.execute(email, otp);
+    if (typeof subscribed !== 'boolean') {
+      res.status(400).json({ success: false, message: 'subscribed must be boolean.' });
+      return;
+    }
 
-  res.status(200).json({ success: true, message: 'Xác thực OTP thành công!' });
-});
+    const user = await userRepository.updateInterviewNotificationSubscription(userId, subscribed);
+    if (!user) {
+      res.status(404).json({ success: false, message: 'Khong tim thay HR.' });
+      return;
+    }
 
-export const resetPassword = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  const { email, password, confirmPassword } = req.body as {
-    email: string;
-    password: string;
-    confirmPassword: string;
-  };
+    res.status(200).json({
+      success: true,
+      message: subscribed ? 'Da bat thong bao lich phong van.' : 'Da tat thong bao lich phong van.',
+      subscribed: user.getInterviewNotificationSubscribed(),
+      user: user.getProfile(),
+    });
+  } catch (error: unknown) {
+    const e = error as { message?: string };
+    res.status(500).json({ success: false, message: e.message ?? 'Loi cap nhat thong bao.' });
+  }
+};
 
-  await resetPasswordUseCase.execute(email, password, confirmPassword);
+// [POST] /user/password/forgot
+export const forgotPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email } = req.body as { email: string };
 
-  res.status(200).json({ success: true, message: 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.' });
-});
+    const result = await forgotPasswordUseCase.execute(email);
 
-export const resetNotOTP = asyncHandler(async (req: Request, res: Response): Promise<void> => {
-  const { email, password, confirmPassword } = req.body as {
-    email: string;
-    password: string;
-    confirmPassword: string;
-  };
-  await ressetPassNotOTPUseCase.execute(email, password, confirmPassword);
+    res.status(200).json({ success: true, message: 'Mã OTP đã được gửi đến email của bạn!', email: result.email });
+  } catch (error: unknown) {
+    const e = error as { statusCode?: number; message?: string };
+    res.status(e.statusCode ?? 500).json({ success: false, message: e.message ?? 'Lỗi gửi mail' });
+  }
+};
 
-  res.status(200).json({ success: true, message: 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.' });
-});
+// [POST] /user/password/otp
+export const verifyOTP = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, otp } = req.body as { email: string; otp: string };
+
+    await verifyOtpUseCase.execute(email, otp);
+
+    res.status(200).json({ success: true, message: 'Xác thực OTP thành công!' });
+  } catch (error: unknown) {
+    const e = error as { statusCode?: number; message?: string };
+    res.status(e.statusCode ?? 500).json({ success: false, message: e.message ?? 'Lỗi hệ thống' });
+  }
+};
+
+// [POST] /user/password/reset
+export const resetPassword = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password, confirmPassword } = req.body as {
+      email: string;
+      password: string;
+      confirmPassword: string;
+    };
+
+    await resetPasswordUseCase.execute(email, password, confirmPassword);
+
+    res.status(200).json({ success: true, message: 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.' });
+  } catch (error: unknown) {
+    const e = error as { statusCode?: number; message?: string };
+    res.status(e.statusCode ?? 500).json({ success: false, message: e.message ?? 'Lỗi đổi mật khẩu' });
+  }
+};
+
+// [post] /user/password/reset-not-otp
+export const resetNotOTP = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { email, password, confirmPassword } = req.body as {
+      email: string;
+      password: string;
+      confirmPassword: string;
+    };
+    await ressetPassNotOTPUseCase.execute(email, password, confirmPassword);
+
+    res.status(200).json({ success: true, message: 'Đổi mật khẩu thành công! Vui lòng đăng nhập lại.' });
+  } catch (error: any) {
+    res.status(400).json({
+      success: false,
+      message: error.message || 'Lỗi đổi mật khẩu'
+    });
+  }
+}

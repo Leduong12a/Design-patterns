@@ -3,7 +3,7 @@ import JobCard from './JobCard';
 import JobDetailModal from './JobDetailModal';
 import JobCreateModal from './JobCreateModal';
 import jobService from '../../../services/client/jobService';
-
+// Import CSS mình vừa tạo
 import '../../../styles/client/pages/jobList.css';
 
 const FILTER_ALL = 'ALL';

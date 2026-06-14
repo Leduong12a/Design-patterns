@@ -1,8 +1,9 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
-import { MdSearch } from "react-icons/md";
+import { MdSearch, MdNotificationsActive, MdNotificationsOff } from "react-icons/md";
 import candidateService from "../../../services/client/candidateService";
 import jobService from "../../../services/client/jobService";
+import userService from "../../../services/client/userService";
 import { toast } from "react-toastify";
 import "../../../styles/client/pages/candidateManagement.css";
 
@@ -13,11 +14,13 @@ const CandidateManagement = () => {
   const [candidates, setCandidates] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  
+  const [notificationSubscribed, setNotificationSubscribed] = useState(false);
+  const [notificationLoading, setNotificationLoading] = useState(false);
+  // Input values (before clicking search)
   const [searchSkillInput, setSearchSkillInput] = useState("");
   const [searchExpInput, setSearchExpInput] = useState("");
   const [filterStatusInput, setFilterStatusInput] = useState("all");
-  
+  // Applied filters (after clicking search)
   const [searchSkill, setSearchSkill] = useState("");
   const [searchExp, setSearchExp] = useState("");
   const [filterStatus, setFilterStatus] = useState("all");
@@ -30,6 +33,7 @@ const CandidateManagement = () => {
   useEffect(() => {
     fetchCandidates();
     fetchJobs();
+    fetchNotificationSubscription();
   }, []);
 
   const fetchCandidates = async () => {
@@ -54,21 +58,108 @@ const CandidateManagement = () => {
     }
   };
 
+  const syncLocalUser = (user) => {
+    if (!user) return;
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+
+  const addNotification = (title, message) => {
+    const notifications = JSON.parse(localStorage.getItem("notifications") || "[]");
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    notifications.unshift({
+      title,
+      message,
+      timestamp: timeStr,
+      read: false,
+    });
+
+    // Keep only last 20 notifications
+    if (notifications.length > 20) {
+      notifications.pop();
+    }
+
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+
+    // Trigger window event to update header
+    const event = new CustomEvent("notificationsUpdated", {
+      detail: { notifications },
+    });
+    window.dispatchEvent(event);
+  };
+
+  const fetchNotificationSubscription = async () => {
+    try {
+      const res = await userService.getInterviewNotificationSubscription();
+      setNotificationSubscribed(Boolean(res.subscribed));
+    } catch (err) {
+      console.error("Cannot load interview notification subscription", err);
+    }
+  };
+
+  const handleToggleNotification = async () => {
+    try {
+      setNotificationLoading(true);
+      const nextSubscribed = !notificationSubscribed;
+      const res = await userService.updateInterviewNotificationSubscription(nextSubscribed);
+
+      // Handle both res.success and res.subscribed
+      if (res.success !== false || res.subscribed !== undefined) {
+        const finalSubscribed = res.subscribed !== undefined ? Boolean(res.subscribed) : nextSubscribed;
+        setNotificationSubscribed(finalSubscribed);
+
+        if (res.user) {
+          syncLocalUser(res.user);
+        }
+
+        // Add notification to notification center
+        if (finalSubscribed) {
+          addNotification(
+            "✅ Bật thông báo lịch phỏng vấn",
+            "HR sẽ nhận email khi bạn đặt lịch phỏng vấn."
+          );
+          toast.success("✅ Bật thông báo - HR sẽ nhận email khi đặt lịch phỏng vấn");
+        } else {
+          addNotification(
+            "⚪ Tắt thông báo lịch phỏng vấn",
+            "HR sẽ không nhận email khi bạn đặt lịch phỏng vấn."
+          );
+          toast.info("⚪ Tắt thông báo - HR sẽ không nhận email");
+        }
+      } else {
+        toast.error("Không thể cập nhật thông báo.");
+      }
+    } catch (err) {
+      console.error("Toggle notification error:", err);
+      const msg = err?.response?.data?.message || "Lỗi khi cập nhật thông báo.";
+      toast.error(msg);
+    } finally {
+      setNotificationLoading(false);
+    }
+  };
+
+
   const matchesSkill = (candidate, searchTerm) => {
     if (!searchTerm) return true;
-    
+
     let skills = candidate.allSkills || [];
-    
+
+    // Xử lý nếu skills là string
     if (typeof skills === "string") {
       skills = skills.split(",").map(s => s.trim()).filter(s => s);
     }
-    
+
+    // Đảm bảo là mảng
     if (!Array.isArray(skills)) {
       skills = [];
     }
-    
+
     const trimmedSearchTerm = searchTerm.trim().toLowerCase();
-    
+
     return skills.some(skill => {
       if (!skill) return false;
       return skill.toLowerCase().trim().includes(trimmedSearchTerm);
@@ -82,33 +173,36 @@ const CandidateManagement = () => {
   };
 
   const matchesStatus = (candidate, status) => {
-    if (status === "all") return true; 
+    if (status === "all") return true;
     return candidate.status === status;
   };
+
 
   const filtered = useMemo(() => {
     return candidates.filter((candidate) => {
       const hasSkill = matchesSkill(candidate, searchSkill);
       const hasExp = matchesExperience(candidate, searchExp);
       const hasStatus = matchesStatus(candidate, filterStatus);
-      return hasSkill && hasExp && hasStatus; 
+      return hasSkill && hasExp && hasStatus;
     });
   }, [candidates, searchSkill, searchExp, filterStatus]);
 
+
   const totalPages = Math.max(1, Math.ceil(filtered.length / ITEMS_PER_PAGE));
-  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE; 
-  const endIndex = currentPage * ITEMS_PER_PAGE;         
+  const startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+  const endIndex = currentPage * ITEMS_PER_PAGE;
   const paginatedData = filtered.slice(startIndex, endIndex);
+
 
   const toggleSelect = (id) => {
     setSelectedIds((prev) => {
-     
+
       const isAlreadySelected = prev.includes(id);
       if (isAlreadySelected) {
-       
+
         return prev.filter((selectedId) => selectedId !== id);
       } else {
-    
+
         return [...prev, id];
       }
     });
@@ -158,6 +252,8 @@ const CandidateManagement = () => {
     return d.toLocaleDateString("vi-VN");
   };
 
+
+
   const getJobTitle = (jobID) => {
     if (!jobID) return "—";
     const job = jobs.find((j) => j.id === jobID || j._id === jobID);
@@ -188,7 +284,8 @@ const CandidateManagement = () => {
       y: rect.top,
     });
     setHoveredCandidateId(candidateId);
-    
+
+    // Fetch full candidate data để lấy githubLink
     try {
       const res = await candidateService.getById(candidateId);
       setHoveredCandidateData(res.candidate);
@@ -205,9 +302,24 @@ const CandidateManagement = () => {
   return (
     <div className="candidate-page">
       <div className="candidate-page__header">
-        <h1 className="candidate-page__title">Quản lý ứng viên</h1>
-        <p className="candidate-page__subtitle">Quản lý ứng viên</p>
+        <div className="candidate-page__header-content">
+          <div>
+            <h1 className="candidate-page__title">Quản lý ứng viên</h1>
+            <p className="candidate-page__subtitle">Quản lý ứng viên</p>
+          </div>
+          <button
+            type="button"
+            className={`candidate-page__notification-toggle ${notificationSubscribed ? "candidate-page__notification-toggle--on" : ""}`}
+            onClick={handleToggleNotification}
+            disabled={notificationLoading}
+            title={notificationSubscribed ? "Tắt thông báo lịch phỏng vấn" : "Bật thông báo lịch phỏng vấn"}
+          >
+            {notificationSubscribed ? <MdNotificationsActive size={20} /> : <MdNotificationsOff size={20} />}
+            <span>{notificationLoading ? "Đang lưu..." : notificationSubscribed ? "Bật" : "Tắt"}</span>
+          </button>
+        </div>
       </div>
+
 
       <div className="candidate-page__filters">
         <div className="candidate-page__filter-input">
@@ -240,7 +352,7 @@ const CandidateManagement = () => {
             <option value="interview">Phỏng vấn</option>
             <option value="offer">Đề nghị</option>
           </select>
-          <button 
+          <button
             className="candidate-page__btn-clear"
             onClick={handleClearFilters}
             title="Xóa bộ lọc"
@@ -252,6 +364,7 @@ const CandidateManagement = () => {
           Tìm kiếm
         </button>
       </div>
+
 
       <div className="candidate-page__table-wrapper">
         {loading ? (
@@ -285,12 +398,12 @@ const CandidateManagement = () => {
                         onChange={() => toggleSelect(c.id)}
                       />
                     </td>
-                    
+
                     <td
                       onClick={() => navigate(`/candidates/${c.id}`)}
                       style={{ cursor: "pointer" }}
                     >
-                      <div 
+                      <div
                         className="candidate-page__user-cell"
                         onMouseEnter={(e) => handleAvatarHover(e, c.id)}
                         onMouseLeave={handleAvatarLeave}
@@ -340,14 +453,14 @@ const CandidateManagement = () => {
         )}
       </div>
 
+
       <div className="candidate-page__footer">
         <div className="candidate-page__pagination">
           {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
             <button
               key={page}
-              className={`candidate-page__page-btn ${
-                page === currentPage ? "active" : ""
-              }`}
+              className={`candidate-page__page-btn ${page === currentPage ? "active" : ""
+                }`}
               onClick={() => setCurrentPage(page)}
             >
               {page}
@@ -355,25 +468,25 @@ const CandidateManagement = () => {
           ))}
         </div>
         <div className="candidate-page__actions">
-          <button 
+          <button
             className="candidate-page__btn-email"
             onClick={() => {
               if (selectedIds.length === 0) {
                 toast.warning("Vui lòng chọn ít nhất một ứng viên!");
                 return;
               }
-          
-              navigate("/candidates/emails", { 
-                state: { selectedCandidateIds: selectedIds } 
+
+              navigate("/candidates/emails", {
+                state: { selectedCandidateIds: selectedIds }
               });
             }}
           >
-           Gửi email
+            Gửi email
           </button>
         </div>
       </div>
 
-      {}
+      {/* Quick Preview Tooltip */}
       {hoveredCandidateId && hoveredCandidateData && (
         <div
           className="candidate-page__tooltip"
@@ -386,22 +499,22 @@ const CandidateManagement = () => {
           }}
         >
           <div className="candidate-page__tooltip-content">
-            {}
+            {/* Avatar */}
             <div className="candidate-page__tooltip-avatar">
               {hoveredCandidateData?.personal?.fullName.charAt(0)}
             </div>
 
-            {}
+            {/* Name */}
             <p className="candidate-page__tooltip-name">
               {hoveredCandidateData?.personal?.fullName}
             </p>
 
-            {}
+            {/* Job Title */}
             <p className="candidate-page__tooltip-title">
               {getJobTitle(hoveredCandidateData?.jobID)}
             </p>
 
-            {}
+            {/* GitHub Link */}
             <div className="candidate-page__tooltip-github">
               {hoveredCandidateData?.personal?.githubLink ? (
                 <a

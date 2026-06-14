@@ -1,8 +1,10 @@
+/* ===== Create User Page ===== */
 
 .user-create {
   max-width: 100%;
 }
 
+/* --- Header --- */
 .user-create__header {
   margin-bottom: 28px;
 }
@@ -40,6 +42,7 @@
   font-weight: 400;
 }
 
+/* --- Card --- */
 .user-create__card {
   background: #fff;
   border-radius: var(--border-radius-lg);
@@ -50,6 +53,7 @@
   padding: 32px;
 }
 
+/* --- Form --- */
 .user-create__form {
   display: flex;
   flex-direction: column;
@@ -96,6 +100,7 @@
   width: 100%;
 }
 
+/* --- Password toggle --- */
 .user-create__input-wrapper {
   position: relative;
   display: flex;
@@ -143,12 +148,14 @@
   cursor: pointer;
 }
 
+/* --- Divider --- */
 .user-create__divider {
   height: 1px;
   background: var(--color-border);
   margin: 4px 0;
 }
 
+/* --- Actions --- */
 .user-create__actions {
   display: flex;
   justify-content: flex-end;

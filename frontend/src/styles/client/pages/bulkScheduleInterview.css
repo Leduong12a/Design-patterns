@@ -1,3 +1,4 @@
+/* BulkScheduleInterview Page Styles */
 
 .bulk-schedule-interview-page {
   padding: 20px;
@@ -36,6 +37,7 @@
   }
 }
 
+/* Cards */
 .bsi-card {
   background: white;
   border-radius: 12px;
@@ -55,6 +57,7 @@
   color: #333;
 }
 
+/* Left Side - Candidates List */
 .bsi-left {
   display: flex;
   flex-direction: column;
@@ -141,6 +144,7 @@
   font-size: 14px;
 }
 
+/* Tips */
 .bsi-tips {
   background: #fffacd;
   border-left: 4px solid #f39c12;
@@ -170,6 +174,7 @@
   font-weight: bold;
 }
 
+/* Form */
 .bsi-form-card {
   grid-column: 2 / 3;
 }
@@ -305,6 +310,7 @@
   color: #27ae60;
 }
 
+/* Loading */
 .bsi-loading {
   display: flex;
   justify-content: center;

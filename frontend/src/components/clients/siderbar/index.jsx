@@ -30,11 +30,12 @@ const menuItems = [
 function ClientSidebar() {
   const navigate = useNavigate();
 
+  // Read user from localStorage once on mount using lazy initialiser
   const [user] = useState(() => {
     try {
       const raw = localStorage.getItem("user");
       return raw ? JSON.parse(raw) : null;
-      
+      // eslint-disable-next-line no-unused-vars
     } catch (e) {
       return null;
     }

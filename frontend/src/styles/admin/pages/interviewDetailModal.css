@@ -1,3 +1,4 @@
+/* Interview Detail Modal Styles */
 
 .idm-overlay {
   position: fixed;
@@ -186,6 +187,7 @@
   background: #2563eb;
 }
 
+/* Responsive */
 @media (max-width: 600px) {
   .idm-modal {
     max-width: 95vw;

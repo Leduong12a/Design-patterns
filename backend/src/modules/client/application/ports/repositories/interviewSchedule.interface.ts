@@ -1,5 +1,6 @@
 import type { InterviewScheduleEntity } from '../../../domain/interviewSchedule/interviewSchedule.entity';
 
+
 export interface IInterviewScheduleData {
   time: Date;
   address: string;

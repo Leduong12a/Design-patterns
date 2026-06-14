@@ -1,3 +1,4 @@
+/* ===== CANDIDATE AI ANALYSIS PAGE ===== */
 
 .caa-page {
   min-height: 100vh;
@@ -23,6 +24,7 @@
   border-color: #bbb;
 }
 
+/* Loading */
 .caa-loading {
   display: flex;
   flex-direction: column;
@@ -49,6 +51,7 @@
   to { transform: rotate(360deg); }
 }
 
+/* Container */
 .caa-container {
   max-width: 900px;
   margin: 0 auto;
@@ -75,6 +78,7 @@
   margin: 0;
 }
 
+/* Form Card */
 .caa-form-card {
   background: #fff;
   border-radius: 12px;
@@ -126,6 +130,7 @@
   border: none;
 }
 
+/* Score display */
 .caa-score-display {
   display: flex;
   align-items: center;
@@ -148,6 +153,7 @@
   color: #666;
 }
 
+/* Lists */
 .caa-list {
   list-style: none;
   padding: 0;
@@ -173,6 +179,7 @@
   color: #7f1d1d;
 }
 
+/* Actions */
 .caa-actions {
   display: flex;
   gap: 12px;
@@ -211,6 +218,7 @@
   color: #333;
 }
 
+/* Empty state */
 .caa-empty {
   background: #fff;
   border-radius: 12px;
