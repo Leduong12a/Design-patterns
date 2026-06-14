@@ -48,7 +48,7 @@ const generateWithRetry = async (contents: any, maxRetries = 3, delayMs = 25000)
 export class CVExtractorGeminiService implements ICVExtractorAgent {
   private static instance: CVExtractorGeminiService;
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): CVExtractorGeminiService {
     if (!CVExtractorGeminiService.instance) {
@@ -77,7 +77,7 @@ export class CVExtractorGeminiService implements ICVExtractorAgent {
 export class CandidateAnalyzerGeminiService implements ICandidateAnalyzerAgent {
   private static instance: CandidateAnalyzerGeminiService;
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): CandidateAnalyzerGeminiService {
     if (!CandidateAnalyzerGeminiService.instance) {
@@ -106,7 +106,7 @@ export class CandidateAnalyzerGeminiService implements ICandidateAnalyzerAgent {
 export class InterviewEmailGeminiService implements IInterviewEmailAgent {
   private static instance: InterviewEmailGeminiService;
 
-  private constructor() {}
+  private constructor() { }
 
   public static getInstance(): InterviewEmailGeminiService {
     if (!InterviewEmailGeminiService.instance) {

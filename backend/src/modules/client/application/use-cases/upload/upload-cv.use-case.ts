@@ -39,11 +39,14 @@ export class UploadCVUseCase {
     const cvLink = fileUrls[0];
     const avatarLink = avatarFile && fileUrls[1] ? fileUrls[1] : undefined;
 
-    let extractedData: any = {};
+    let extractedData: any = null;
 
     if (cvFile.mimetype === 'application/pdf' || cvFile.mimetype.startsWith('image/')) {
-      console.log('Đang ném file cho Gemini làm OCR...');
       extractedData = await this.cvExtractorAgent.execute(cvFile.buffer, cvFile.mimetype);
+    }
+
+    if (!extractedData) {
+      throw new Error('Không thể trích xuất dữ liệu từ CV.');
     }
 
     const personalData = extractedData.personal as Record<string, any>;
