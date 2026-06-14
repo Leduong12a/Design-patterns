@@ -18,7 +18,7 @@ const jobRepository = new JobRepository();
 const aiAnalysisRepository = new AiAnalysisRepository();
 const interviewScheduleRepository = new InterviewScheduleRepository();
 const userRepository = new UserRepository();
-const interviewEmailService = new InterviewEmailGeminiService();
+const interviewEmailService = InterviewEmailGeminiService.getInstance();
 const mailService = new MailService();
 const interviewEventManager = new EventManager<InterviewEventMap>();
 

@@ -46,6 +46,17 @@ const generateWithRetry = async (contents: any, maxRetries = 3, delayMs = 25000)
 };
 
 export class CVExtractorGeminiService implements ICVExtractorAgent {
+  private static instance: CVExtractorGeminiService;
+
+  private constructor() {}
+
+  public static getInstance(): CVExtractorGeminiService {
+    if (!CVExtractorGeminiService.instance) {
+      CVExtractorGeminiService.instance = new CVExtractorGeminiService();
+    }
+    return CVExtractorGeminiService.instance;
+  }
+
   public async execute(fileBuffer: any, mimeType: string): Promise<Record<string, any> | null> {
     try {
       const contents = [
@@ -64,6 +75,17 @@ export class CVExtractorGeminiService implements ICVExtractorAgent {
 }
 
 export class CandidateAnalyzerGeminiService implements ICandidateAnalyzerAgent {
+  private static instance: CandidateAnalyzerGeminiService;
+
+  private constructor() {}
+
+  public static getInstance(): CandidateAnalyzerGeminiService {
+    if (!CandidateAnalyzerGeminiService.instance) {
+      CandidateAnalyzerGeminiService.instance = new CandidateAnalyzerGeminiService();
+    }
+    return CandidateAnalyzerGeminiService.instance;
+  }
+
   public async execute(candidateData: any, jobData: any): Promise<Record<string, any> | null> {
     try {
       const contents = [
@@ -82,6 +104,17 @@ export class CandidateAnalyzerGeminiService implements ICandidateAnalyzerAgent {
 }
 
 export class InterviewEmailGeminiService implements IInterviewEmailAgent {
+  private static instance: InterviewEmailGeminiService;
+
+  private constructor() {}
+
+  public static getInstance(): InterviewEmailGeminiService {
+    if (!InterviewEmailGeminiService.instance) {
+      InterviewEmailGeminiService.instance = new InterviewEmailGeminiService();
+    }
+    return InterviewEmailGeminiService.instance;
+  }
+
   public async execute(
     input: Record<string, any>,
   ): Promise<{ subject: string; html: string } | null> {

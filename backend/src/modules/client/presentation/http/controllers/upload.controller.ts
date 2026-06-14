@@ -10,7 +10,7 @@ import { BadRequestError } from '../../../../../shared/utils/errors';
 const candidateRepository = new CandidateRepository();
 const jobRepository = new JobRepository();
 const uploadService = new UploadService();
-const cvExtractorService = new CVExtractorGeminiService();
+const cvExtractorService = CVExtractorGeminiService.getInstance();
 const uploadCVUseCase = new UploadCVUseCase(candidateRepository, jobRepository, uploadService, cvExtractorService);
 
 export const uploadCV = asyncHandler(async (req: Request, res: Response): Promise<void> => {

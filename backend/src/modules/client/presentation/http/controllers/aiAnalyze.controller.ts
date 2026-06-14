@@ -10,7 +10,7 @@ import { asyncHandler } from '../../../../../shared/utils/asyncHandler';
 const candidateRepository = new CandidateRepository();
 const jobRepository = new JobRepository();
 const aiAnalyzeRepository = new AiAnalysisRepository();
-const candidateAnalyzerService = new CandidateAnalyzerGeminiService();
+const candidateAnalyzerService = CandidateAnalyzerGeminiService.getInstance();
 
 export const analyzeCandidate = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const input = req.body as AnalysisInputDto;
