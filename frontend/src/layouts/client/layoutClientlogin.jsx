@@ -1,4 +1,3 @@
-
 import { Outlet } from "react-router-dom";
 import "../../styles/client/pages/auth.css";
 
