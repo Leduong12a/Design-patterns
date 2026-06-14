@@ -2,23 +2,15 @@ import axios from 'axios';
 import { ITelegramService } from '../../application/ports/services/telegram.service';
 
 export class TelegramService implements ITelegramService {
-  private static instance: TelegramService;
   private readonly token: string;
   private readonly defaultChatId: string;
 
-  private constructor() {
+  constructor() {
     this.token = process.env.TELEGRAM_BOT_TOKEN || '';
     this.defaultChatId = process.env.TELEGRAM_CHAT_ID || '';
     if (!this.token) {
       console.warn('[TelegramService] Thiếu cấu hình TELEGRAM_BOT_TOKEN trong .env. Tin nhắn Telegram sẽ được ghi ra console.');
     }
-  }
-
-  public static getInstance(): TelegramService {
-    if (!TelegramService.instance) {
-      TelegramService.instance = new TelegramService();
-    }
-    return TelegramService.instance;
   }
 
   public async sendMessage(chatId: string, message: string): Promise<boolean> {

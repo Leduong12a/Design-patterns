@@ -3,10 +3,22 @@ export interface EventListener {
 }
 
 export class EventManager {
+  private static instance: EventManager;
   private readonly listeners = new Map<string, EventListener[]>();
+
+  private constructor() {}
+
+  public static getInstance(): EventManager {
+    if (!EventManager.instance) {
+      EventManager.instance = new EventManager();
+    }
+    return EventManager.instance;
+  }
 
   subscribe(eventName: string, listener: EventListener): void {
     const eventListeners = this.listeners.get(eventName) ?? [];
+    console.log("lắng nghe sự kiện nghe");
+    console.log(eventListeners);
     eventListeners.push(listener);
     this.listeners.set(eventName, eventListeners);
   }

@@ -20,7 +20,7 @@ const interviewScheduleRepository = new InterviewScheduleRepository();
 const userRepository = new UserRepository();
 const geminiService = new GeminiService();
 const mailService = new MailService();
-const interviewEventManager = new EventManager();
+const interviewEventManager = EventManager.getInstance();
 
 interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateNotificationListener());
 interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateStatusListener());
