@@ -1,39 +1,39 @@
 import type { EventListener } from './EventManager';
 import type { InterviewScheduledPayload } from './interview.events';
+import { IHrNotificationStrategy, EmailHrNotificationStrategy, TelegramHrNotificationStrategy } from './hrNotification.strategy';
 
 export class InterviewHrNotificationListener implements EventListener {
+  private strategy?: IHrNotificationStrategy;
+
+  public setStrategy(strategy: IHrNotificationStrategy): void {
+    this.strategy = strategy;
+  }
+
   async update(payload: InterviewScheduledPayload): Promise<void> {
     const hr = await payload.userRepo.findUserByID(payload.userId);
-    console.log(`[HR Notification] userId=${payload.userId}, subscribed=${hr?.getInterviewNotificationSubscribed()}`);
-    if (!hr || !hr.getInterviewNotificationSubscribed()) return;
+    if (!hr) {
+      console.error(`[HrNotificationListener] Không tìm thấy thông tin HR với userId=${payload.userId}.`);
+      return;
+    }
 
-    const candidate = await payload.candidateRepo.getById(payload.candidateID);
-    const job = payload.jobID ? await payload.jobRepo.getById(payload.jobID) : null;
+    const availableStrategies: IHrNotificationStrategy[] = [
+      new EmailHrNotificationStrategy(),
+      new TelegramHrNotificationStrategy(),
+    ];
 
-    const candidateName = candidate?.getPersonal().fullName || 'ung vien';
-    const jobTitle = job?.getTitle() || 'vi tri tuyen dung';
-    const interviewTime = payload.time.toLocaleString('vi-VN', {
-      timeZone: 'Asia/Ho_Chi_Minh',
-      hour: '2-digit',
-      minute: '2-digit',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
+    console.log(`BẮT ĐẦU XỬ LÝ GỬI THÔNG BÁO CHO HR`);
+    console.log(`HR: ${hr.getFullName() || 'HR'}`);
 
-    await payload.mailSvc.sendEmail(
-      hr.getEmail(),
-      `Thong bao lich phong van - ${candidateName}`,
-      `
-        <p>Xin chao ${hr.getFullName() || 'HR'},</p>
-        <p>Lich phong van moi da duoc dat thanh cong.</p>
-        <ul>
-          <li>Ung vien: <b>${candidateName}</b></li>
-          <li>Vi tri: <b>${jobTitle}</b></li>
-          <li>Thoi gian: <b>${interviewTime}</b></li>
-          <li>Dia diem / link: <b>${payload.address}</b></li>
-        </ul>
-      `,
-    );
+    for (const strategy of availableStrategies) {
+      this.setStrategy(strategy);
+
+      if (this.strategy && this.strategy.supports(hr)) {
+        try {
+          await this.strategy.send(payload, hr);
+        } catch (error) {
+          console.error(`[HrNotificationListener] Gặp lỗi khi gửi thông báo qua strategy ${strategy.constructor.name}:`, error);
+        }
+      }
+    }
   }
 }

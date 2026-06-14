@@ -1,12 +1,11 @@
 import type { EventListener } from './EventManager';
 import type { InterviewScheduledPayload } from './interview.events';
-import { INotificationStrategy, EmailNotificationStrategy, TelegramNotificationStrategy } from './notification.strategy';
+import { ICandidateNotificationStrategy, EmailCandidateNotificationStrategy } from './notification.strategy';
 
 export class InterviewCandidateNotificationListener implements EventListener {
-  private strategy?: INotificationStrategy;
+  private strategy?: ICandidateNotificationStrategy;
 
-  // Setter chuẩn mực của Strategy Pattern
-  public setStrategy(strategy: INotificationStrategy): void {
+  public setStrategy(strategy: ICandidateNotificationStrategy): void {
     this.strategy = strategy;
   }
 
@@ -17,21 +16,16 @@ export class InterviewCandidateNotificationListener implements EventListener {
       return;
     }
 
-    const availableStrategies = [
-      new EmailNotificationStrategy(),
-      new TelegramNotificationStrategy(),
+    const availableStrategies: ICandidateNotificationStrategy[] = [
+      new EmailCandidateNotificationStrategy(),
     ];
 
-    console.log('\n========================================================================');
-    console.log(`[NotificationListener] 🔔 BẮT ĐẦU XỬ LÝ GỬI THÔNG BÁO LỊCH HẸN`);
-    console.log(`👤 Ứng viên: ${candidate.getPersonal().fullName}`);
-    console.log('========================================================================\n');
+    console.log(`BẮT ĐẦU XỬ LÝ GỬI THÔNG BÁO CHO ỨNG VIÊN`);
+    console.log(`Ứng viên: ${candidate.getPersonal().fullName}`);
 
     for (const strategy of availableStrategies) {
-      // 1. Thiết lập Strategy chuẩn SGK (setStrategy)
       this.setStrategy(strategy);
 
-      // 2. Thực thi Strategy (execute)
       if (this.strategy && this.strategy.supports(candidate)) {
         try {
           await this.strategy.send(payload, candidate);

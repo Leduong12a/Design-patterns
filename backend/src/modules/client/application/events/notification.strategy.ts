@@ -1,28 +1,42 @@
 import type { InterviewScheduledPayload } from './interview.events';
-import { TelegramService } from '../../infrastructure/external-service/telegram.service';
 
-export interface INotificationStrategy {
+export interface ICandidateNotificationStrategy {
+  /**
+   * Xác định xem ứng viên có hỗ trợ nhận thông báo qua kênh này hay không.
+   */
   supports(candidate: any): boolean;
+
+  /**
+   * Thực hiện gửi thông điệp chi tiết đến ứng viên.
+   */
   send(payload: InterviewScheduledPayload, candidate: any): Promise<void>;
 }
 
-export class EmailNotificationStrategy implements INotificationStrategy {
+export class EmailCandidateNotificationStrategy implements ICandidateNotificationStrategy {
   supports(candidate: any): boolean {
     const personal = candidate.getPersonal();
-    return !!(personal && personal.email);
+    if (personal === null || personal === undefined) {
+      return false; 
+    }
+    
+    if (personal.email === null || personal.email === undefined || personal.email === '') {
+      return false; 
+    }
+    
+    return true; 
   }
 
   async send(payload: InterviewScheduledPayload, candidate: any): Promise<void> {
     const personal = candidate.getPersonal();
     const email = personal.email;
     
-    console.log(`[EmailStrategy] 📧 Đang tạo và gửi email mời phỏng vấn đến: ${email}...`);
+    console.log(`[EmailCandidateStrategy] Đang tạo và gửi email mời phỏng vấn đến: ${email}...`);
     const job = payload.jobID ? await payload.jobRepo.getById(payload.jobID) : null;
     const jobTitle = job ? job.getTitle() : 'Vị trí ứng tuyển';
 
     const analysis = await payload.aiAnalysisRepo.getAnalysisByCandidateId(payload.candidateID);
     if (!analysis) {
-      console.warn(`[EmailStrategy] Ứng viên ${payload.candidateID} chưa được AI phân tích.`);
+      console.warn(`[EmailCandidateStrategy] Ứng viên ${payload.candidateID} chưa được AI phân tích.`);
     }
 
     const { buildInterviewCalendarInvite } = await import('../../infrastructure/external-service/calendarInvite.service');
@@ -64,7 +78,7 @@ export class EmailNotificationStrategy implements INotificationStrategy {
       if (generated?.subject) subject = generated.subject.trim();
       if (generated?.html) html = generated.html;
     } catch (err) {
-      console.error('[EmailStrategy] Lỗi khi tạo template email bằng AI, sử dụng email mặc định:', err);
+      console.error('[EmailCandidateStrategy] Lỗi khi tạo template email bằng AI, sử dụng email mặc định:', err);
     }
 
     await payload.mailSvc.sendEmail(email, subject, html, [
@@ -74,46 +88,6 @@ export class EmailNotificationStrategy implements INotificationStrategy {
         contentType: invite.contentType,
       },
     ]);
-    console.log(`[EmailStrategy] ✅ Đã gửi email mời phỏng vấn thành công đến: ${email}`);
-  }
-}
-
-export class TelegramNotificationStrategy implements INotificationStrategy {
-  private readonly telegramService = new TelegramService();
-
-  supports(candidate: any): boolean {
-    return true;
-  }
-
-  async send(payload: InterviewScheduledPayload, candidate: any): Promise<void> {
-    const hr = await payload.userRepo.findUserByID(payload.userId);
-    if (!hr || !hr.getTelegramNotificationSubscribed()) {
-      console.log(`[TelegramStrategy] 🔇 HR (userId=${payload.userId}) đã TẮT nhận thông báo Telegram.`);
-      return;
-    }
-
-    const personal = candidate.getPersonal();
-    const job = payload.jobID ? await payload.jobRepo.getById(payload.jobID) : null;
-    const jobTitle = job ? job.getTitle() : 'Vị trí ứng tuyển';
-    const timeString = payload.time.toLocaleString('vi-VN', {
-      timeZone: 'Asia/Ho_Chi_Minh',
-      hour: '2-digit',
-      minute: '2-digit',
-      day: '2-digit',
-      month: '2-digit',
-      year: 'numeric',
-    });
-
-    const targetChatId = process.env.TELEGRAM_CHAT_ID || 'Chưa cấu hình';
-    console.log(`[TelegramStrategy] ✈️ Đang gửi thông báo Telegram đến Chat ID: ${targetChatId}...`);
-
-    const message = `🔔 <b>LỊCH HẸN PHỎNG VẤN MỚI</b>\n\n` +
-      `👤 <b>Ứng viên:</b> ${personal.fullName}\n` +
-      `💼 <b>Vị trí:</b> ${jobTitle}\n` +
-      `📅 <b>Thời gian:</b> ${timeString}\n` +
-      `📍 <b>Địa điểm:</b> ${payload.address}\n` +
-      `📝 <b>Ghi chú:</b> ${payload.notes ?? 'Không có'}`;
-    
-    await this.telegramService.sendMessage('', message);
+    console.log(`[EmailCandidateStrategy] Đã gửi email mời phỏng vấn thành công đến: ${email}`);
   }
 }
