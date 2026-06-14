@@ -1,16 +1,42 @@
 import { RequestHandler } from 'express';
 
 export const loginValidate: RequestHandler = (req, res, next) => {
-  const { email, password } = req.body as { email?: string; password?: string };
+  const { email, strategy } = req.body as { email?: string; strategy?: string };
+  const activeStrategy = strategy || 'email';
 
   if (!email) {
     res.status(400).json({ code: 400, message: 'Vui lòng nhập Email!' });
     return;
   }
 
-  if (!password) {
-    res.status(400).json({ code: 400, message: 'Vui lòng nhập mật khẩu!' });
-    return;
+  if (activeStrategy === 'email') {
+    const { password } = req.body as { password?: string };
+    if (!password) {
+      res.status(400).json({ code: 400, message: 'Vui lòng nhập mật khẩu!' });
+      return;
+    }
+  } else if (activeStrategy === 'otp') {
+    const { otp } = req.body as { otp?: string };
+    if (!otp) {
+      res.status(400).json({ code: 400, message: 'Vui lòng nhập mã OTP!' });
+      return;
+    }
+  } else if (activeStrategy === 'oauth') {
+    const { provider, token } = req.body as { provider?: string; token?: string };
+    if (!provider) {
+      res.status(400).json({ code: 400, message: 'Thiếu thông tin nhà cung cấp OAuth!' });
+      return;
+    }
+    if (!token) {
+      res.status(400).json({ code: 400, message: 'Thiếu mã xác thực OAuth!' });
+      return;
+    }
+  } else if (activeStrategy === 'passkey') {
+    const { credentialId } = req.body as { credentialId?: string };
+    if (!credentialId) {
+      res.status(400).json({ code: 400, message: 'Thiếu thông tin định danh Passkey!' });
+      return;
+    }
   }
 
   next();

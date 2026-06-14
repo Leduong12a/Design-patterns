@@ -1,7 +1,9 @@
 import type { IAuth } from '../../ports/repositories/auth.interface';
+import type { IOTPReadRepo, IOTPWriteRepo } from '../../ports/repositories/otp.interface';
 import type { IPasswordService } from '../../ports/services/password.service';
-import type { ITokenService, ITokenPayload } from '../../ports/services/token.service';
+import type { ITokenService } from '../../ports/services/token.service';
 import type { IUserProfile } from '../../../domain/user';
+import { AuthStrategyFactory } from './strategies/auth-strategy.factory';
 
 export interface ILoginResult {
   token: string;
@@ -13,24 +15,17 @@ export class LoginUseCase {
     private readonly authRepo: IAuth,
     private readonly passService: IPasswordService,
     private readonly tokService: ITokenService,
+    private readonly otpRepo?: IOTPReadRepo & IOTPWriteRepo,
   ) { }
 
-  async execute(email: string, password: string): Promise<ILoginResult> {
-    const user = await this.authRepo.findUserByEmail(email);
+  async execute(email: string, payload: any, strategy: string = 'email'): Promise<ILoginResult> {
+    const strategyInstance = AuthStrategyFactory.create(strategy, {
+      authRepo: this.authRepo,
+      passService: this.passService,
+      tokService: this.tokService,
+      otpRepo: this.otpRepo,
+    });
 
-    if (!user) throw new Error('Email không tồn tại!');
-
-    if (!user.isActive()) throw new Error('Tài khoản đã bị khóa! Vui lòng liên hệ Admin.');
-
-    const passwordMatch = await user.verifyPassword(password, this.passService);
-    if (!passwordMatch) throw new Error('Mật khẩu không chính xác!');
-
-    const payload: ITokenPayload = {
-      userID: user.getId() ?? '',
-    };
-
-    const token = await this.tokService.generateToken(payload);
-
-    return { token, user: user.getProfile() };
+    return strategyInstance.authenticate({ email, ...payload });
   }
 }

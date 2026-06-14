@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { MdEmail, MdLock, MdVisibility, MdVisibilityOff } from "react-icons/md";
 import { toast } from "react-toastify";
-import authService from "../../../services/client/authService";
+import authManager from "../../../services/client/authManager";
 import "../../../styles/client/pages/auth.css";
 
 function ClientLogin() {
@@ -18,7 +18,6 @@ function ClientLogin() {
     e.preventDefault();
     setErrors({});
 
-   
     let newErrors = {};
     if (!email) newErrors.email = "Vui lòng nhập email";
     if (!password) newErrors.password = "Vui lòng nhập mật khẩu";
@@ -30,12 +29,11 @@ function ClientLogin() {
 
     setLoading(true);
     try {
-      const res = await authService.login(email, password);
+      // Dùng Singleton authManager. Nó sẽ tự động gọi Strategy Factory và thực thi chiến lược EmailPasswordStrategy.
+      const res = await authManager.login("email", { email, password });
 
       if (res.code === 200) {
         toast.success("Đăng nhập thành công!");
-        localStorage.setItem("token", res.token);
-        localStorage.setItem("user", JSON.stringify(res.user));
         navigate("/dashboard");
       }
     } catch (error) {
@@ -46,7 +44,6 @@ function ClientLogin() {
       setLoading(false);
     }
   };
-
 
   return (
     <form
