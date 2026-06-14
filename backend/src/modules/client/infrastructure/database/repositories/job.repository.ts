@@ -1,5 +1,6 @@
 import Job from '../models/job.model';
-import { JobEntity, JobFactoryRegistry } from '../../../domain/job';
+import { JobEntity } from '../../../domain/job/entities/job.entity';
+import { JobFactoryRegistry } from '../../../domain/job/factories/job-factory.registry';
 import type { IJobReadRepo, IJobWriteRepo } from '../../../application/ports/repositories/job.interface';
 import type { IJobSummary } from '../../../domain/job/job.types';
 
@@ -24,7 +25,6 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
       updatedAt: d.updatedAt,
     });
   }
-
 
   public async create(job: JobEntity): Promise<JobEntity | null> {
     const { id, ...data } = job.getDetailJob();

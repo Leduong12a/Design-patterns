@@ -1,4 +1,4 @@
-import { JobType } from '../../../domain/job';
+import { JobType } from '../../../domain/job/job.types';
 
 export interface ICreateJobInputDto {
   title: string;

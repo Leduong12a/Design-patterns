@@ -1,9 +1,9 @@
 import { Request, Response } from 'express';
-import { CreateJobUseCase } from '../../../application/use-cases/job/create-job.use-case';
-import { UpdateJobUseCase } from '../../../application/use-cases/job/update-job.use-case';
-import { GetAllJobUseCase } from '../../../application/use-cases/job/get-all-job.use-case';
-import { DeleteJobUseCase } from '../../../application/use-cases/job/delete-job.use-case';
-import { GetJobByIdUseCase } from '../../../application/use-cases/job/get-job-by-id.use-case';
+import { CreateJobUseCase } from '../../../application/use-cases/job/create.use-case';
+import { UpdateJobUseCase } from '../../../application/use-cases/job/update.use-case';
+import { GetAllJobUseCase } from '../../../application/use-cases/job/get-all.use-case';
+import { DeleteJobUseCase } from '../../../application/use-cases/job/delete.use-case';
+import { GetJobByIdUseCase } from '../../../application/use-cases/job/get-by-id.use-case';
 import { GetCanidateByJobUseCase } from '../../../application/use-cases/candidate/get-candidate-by-job.use-case';
 import { ICreateJobInputDto, IUpdateJobInputDto } from '../../../application/dtos/job/create.dto';
 import { JobRepository } from '../../../infrastructure/database/repositories/job.repository';

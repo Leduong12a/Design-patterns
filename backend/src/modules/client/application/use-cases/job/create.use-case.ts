@@ -1,5 +1,5 @@
 import type { IJobWriteRepo } from '../../../application/ports/repositories/job.interface';
-import { JobFactoryRegistry } from '../../../domain/job';
+import { JobFactoryRegistry } from '../../../domain/job/factories/job-factory.registry';
 import { ICreateJobInputDto } from '../../dtos/job/create.dto';
 import { IJobOutputDto } from '../../dtos/job/get.dto';
 
@@ -8,7 +8,7 @@ export class CreateJobUseCase {
 
   async execute(userID: string, jobData: ICreateJobInputDto): Promise<IJobOutputDto | null> {
 
-    if (!userID || !jobData.title) {
+    if (!jobData.title) {
       throw new Error("UserID và Tiêu đề là bắt buộc!");
     }
 
