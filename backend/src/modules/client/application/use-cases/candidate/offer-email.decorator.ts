@@ -48,8 +48,7 @@ export class OfferEmailDecorator implements IUpdateStatusUseCase {
       let jobTitle: string | undefined;
       const jobID = candidate.getJobID();
       if (jobID) {
-        
-        jobTitle = (candidate as any).jobTitle ?? undefined;
+        jobTitle = candidate.getJobTitle() || undefined;
       }
 
       const emailTemplate = defaultEmailTemplateRegistry.getByKey(
