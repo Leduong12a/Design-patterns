@@ -40,7 +40,7 @@ function Auth() {
   return (
     <div className="auth">
       <div className="auth__container">
-        {}
+        {/* Left - Branding */}
         <div className="auth__branding">
           <div className="auth__branding-content">
             <div className="auth__branding-logo">
@@ -67,7 +67,7 @@ function Auth() {
           </div>
         </div>
 
-        {}
+        {/* Right - Login Form */}
         <div className="auth__form-wrapper">
           <form className="auth__form" onSubmit={handleSubmit} noValidate>
             <div className="auth__form-header">
@@ -77,7 +77,7 @@ function Auth() {
               </p>
             </div>
 
-            {}
+            {/* Email */}
             <div
               className={`auth__field ${errors.email ? "auth__field--error" : ""}`}
             >
@@ -102,7 +102,7 @@ function Auth() {
               )}
             </div>
 
-            {}
+            {/* Password */}
             <div
               className={`auth__field ${errors.password ? "auth__field--error" : ""}`}
             >

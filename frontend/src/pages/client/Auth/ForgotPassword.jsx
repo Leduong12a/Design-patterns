@@ -29,8 +29,9 @@ function ClientForgotPassword() {
     return saved ? saved : null;
   });
   const MAX_OTP_ATTEMPTS = 5;
-  const LOCKOUT_DURATION = 30 * 60 * 1000; 
+  const LOCKOUT_DURATION = 30 * 60 * 1000; // 30 minutes in milliseconds
 
+  // Persist lockout state to localStorage
   useEffect(() => {
     if (lockoutTime !== null) {
       localStorage.setItem('otp_lockoutTime', lockoutTime.toString());
@@ -47,6 +48,7 @@ function ClientForgotPassword() {
     }
   }, [lockedEmail]);
 
+  // Check if lockout has expired on mount
   useEffect(() => {
     if (lockoutTime !== null) {
       const now = Date.now();
@@ -60,6 +62,7 @@ function ClientForgotPassword() {
     }
   }, []);
 
+  // Countdown timer for resend button
   useEffect(() => {
     let interval;
     if (resendCountdown > 0) {
@@ -70,6 +73,7 @@ function ClientForgotPassword() {
     return () => clearInterval(interval);
   }, [resendCountdown]);
 
+  // Lockout timer check
   useEffect(() => {
     if (lockoutTime) {
       const interval = setInterval(() => {
@@ -87,6 +91,7 @@ function ClientForgotPassword() {
     }
   }, [lockoutTime]);
 
+  
   const handleRequestForgotPassword = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -96,6 +101,7 @@ function ClientForgotPassword() {
       return;
     }
 
+    // Check if email is locked
     if (lockedEmail === email && lockoutTime !== null) {
       const timeRemaining = lockoutTime + LOCKOUT_DURATION - Date.now();
       const minutesRemaining = Math.ceil(timeRemaining / 1000 / 60);
@@ -110,7 +116,7 @@ function ClientForgotPassword() {
         toast.success("Mã OTP đã được gửi đến email của bạn!");
         setStep(2);
         setOtpAttempts(0);
-        
+        // Only reset lockout if it's a different email
         if (lockedEmail !== email) {
           setLockoutTime(null);
         }
@@ -125,6 +131,7 @@ function ClientForgotPassword() {
     }
   };
 
+  // Handle resend OTP
   const handleResendOTP = async () => {
     setResendLoading(true);
     try {
@@ -145,6 +152,7 @@ function ClientForgotPassword() {
     }
   };
 
+  
   const handleVerifyOTP = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -187,6 +195,7 @@ function ClientForgotPassword() {
     }
   };
 
+  
   const handleResetPassword = async (e) => {
     e.preventDefault();
     setErrors({});
@@ -239,6 +248,7 @@ function ClientForgotPassword() {
     }
   };
 
+
   return (
     <>
          
@@ -255,6 +265,7 @@ function ClientForgotPassword() {
                 </p>
               </div>
 
+       
               <div
                 className={`client-auth__field ${errors.email ? "client-auth__field--error" : ""
                   }`}
@@ -303,6 +314,7 @@ function ClientForgotPassword() {
             </form>
           )}
 
+       
           {step === 2 && (
             <form
               className="client-auth__form"
@@ -316,6 +328,7 @@ function ClientForgotPassword() {
                 </p>
               </div>
 
+        
               <div
                 className={`client-auth__field ${errors.otp ? "client-auth__field--error" : ""
                   }`}
@@ -381,6 +394,7 @@ function ClientForgotPassword() {
             </form>
           )}
 
+         
           {step === 3 && (
             <form
               className="client-auth__form"
@@ -394,6 +408,7 @@ function ClientForgotPassword() {
                 </p>
               </div>
 
+         
               <div
                 className={`client-auth__field ${errors.password ? "client-auth__field--error" : ""
                   }`}
@@ -428,6 +443,7 @@ function ClientForgotPassword() {
                 )}
               </div>
 
+             
               <div
                 className={`client-auth__field ${errors.confirmPassword ? "client-auth__field--error" : ""
                   }`}

@@ -23,6 +23,7 @@ const UploadCV = () => {
   const [jobList, setJobList] = useState([]);
   const [showUserDropdown, setShowUserDropdown] = useState(false);
 
+  // Load job list for dropdown from API
   useEffect(() => {
     const fetchJobs = async () => {
       try {
@@ -42,6 +43,7 @@ const UploadCV = () => {
     };
     fetchJobs();
   }, []);
+
 
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -67,6 +69,7 @@ const UploadCV = () => {
     }
   })();
 
+ 
   const avatarLetter = userName.charAt(0).toUpperCase();
 
   const handleLogout = () => {
@@ -172,7 +175,7 @@ const UploadCV = () => {
       const file = e.dataTransfer.files[0];
       handleFileSelect(file);
     },
-    
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [],
   );
 
@@ -231,6 +234,7 @@ const UploadCV = () => {
 
       const baseURL = import.meta.env.VITE_API_BASE_URL || "http://localhost:5050";
 
+      // call api upload .
       const uploadRes = await axios.post(`${baseURL}/upload/cv`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -291,14 +295,14 @@ const UploadCV = () => {
 
   return (
     <div className="upload-cv-page">
-      {}
+      {/* ── Header ── */}
       <header className="upload-cv-header">
         <div className="header-spacer"></div>
       </header>
 
-      {}
+      {/* ── Main Content ── */}
       <main className="upload-cv-content">
-        {}
+        {/* ── Hero Section ── */}
         <div className="hero-section">
 
           <h1 className="upload-cv-title">Upload CV của bạn</h1>
@@ -307,9 +311,9 @@ const UploadCV = () => {
           </p>
         </div>
 
-        {}
+        {/* ── Main Card ── */}
         <div className="upload-card">
-          {}
+          {/* ── Job Selection ── */}
           <div className="job-section">
             <label className="job-label">
 
@@ -344,10 +348,10 @@ const UploadCV = () => {
             </div>
           </div>
 
-          {}
+          {/* ── Divider ── */}
           <div className="card-divider"></div>
 
-          {}
+          {/* ── Drop Zone ── */}
           <div
             className={`upload-dropzone ${isDragging ? "dragging" : ""}`}
             onDragOver={handleDragOver}
@@ -389,12 +393,51 @@ const UploadCV = () => {
             />
           </div>
 
-          {}
-          {
+          {/* ── Avatar Upload Section ── */}
+          {/* <div className="avatar-section">
+            <label className="avatar-label">
+              <span className="label-icon"></span>
+              <span className="label-text">Tải ảnh đại diện (tùy chọn)</span>
+            </label>
+            <div
+              className={`upload-avatar-zone ${isDraggingImage ? "dragging" : ""}`}
+              onDragOver={handleImageDragOver}
+              onDragLeave={handleImageDragLeave}
+              onDrop={handleImageDrop}
+              onClick={() => imageInputRef.current?.click()}
+            >
+              <div className="avatar-content">
+                {selectedImage ? (
+                  <>
+                    <div className="avatar-preview-icon">🖼️</div>
+                    <p className="avatar-preview-name">{selectedImage.name}</p>
+                  </>
+                ) : (
+                  <>
+                    <div className="avatar-icon">📸</div>
+                    <p className="avatar-text">Kéo thả ảnh vào đây</p>
+                    <p className="avatar-hint">hoặc <button className="browse-btn" onClick={(e) => {
+                      e.stopPropagation();
+                      imageInputRef.current?.click();
+                    }}>chọn ảnh</button></p>
+                  </>
+                )}
+              </div>
+              <input
+                type="file"
+                ref={imageInputRef}
+                accept=".jpg,.jpeg,.png,.gif,.webp"
+                onChange={handleImageInputChange}
+              />
+            </div>
+            {selectedImage && (
+              <button className="avatar-remove" onClick={handleRemoveImage} title="Xóa ảnh">
+                ✕ Xóa ảnh
+              </button>
+            )}
+          </div> */}
 
-}
-
-          {}
+          {/* ── File Preview ── */}
           {selectedFile && (
             <div className="file-preview">
               <div className="preview-content">
@@ -430,7 +473,7 @@ const UploadCV = () => {
             </div>
           )}
 
-          {}
+          {/* ── Upload Button ── */}
           <button
             className={`btn-upload ${uploading ? "loading" : ""}`}
             disabled={!selectedFile || uploading || !jobId.trim()}
@@ -442,13 +485,13 @@ const UploadCV = () => {
             </span>
           </button>
 
-          {}
+          {/* ── Form Help Text ── */}
           <p className="form-helptext">
             CV sẽ được lưu vào cột "Ứng tuyển" để bạn quản lý
           </p>
         </div>
 
-        {}
+        {/* ── Uploaded Files Section ── */}
         {uploadedFiles.length > 0 && (
           <div className="uploaded-section">
             <h2 className="section-title">CV Của Bạn</h2>
@@ -485,7 +528,7 @@ const UploadCV = () => {
           </div>
         )}
 
-        {}
+        {/* ── AI Analysis Result ── */}
         {analyzing && (
           <div className="analysis-section">
             <div className="analyzing-card">

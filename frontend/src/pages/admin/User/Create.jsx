@@ -89,7 +89,7 @@ function CreateUser() {
 
   return (
     <div className="user-create">
-      {}
+      {/* Header */}
       <div className="user-create__header">
         <button
           className="user-create__back"
@@ -106,10 +106,10 @@ function CreateUser() {
         </div>
       </div>
 
-      {}
+      {/* Form Card */}
       <div className="user-create__card">
         <form onSubmit={handleSubmit} className="user-create__form">
-          {}
+          {/* Full Name */}
           <div className="user-create__field">
             <label className="user-create__label">
               <MdPerson className="user-create__label-icon" />
@@ -126,7 +126,7 @@ function CreateUser() {
             />
           </div>
 
-          {}
+          {/* Email */}
           <div className="user-create__field">
             <label className="user-create__label">
               <MdEmail className="user-create__label-icon" />
@@ -142,7 +142,7 @@ function CreateUser() {
             />
           </div>
 
-          {}
+          {/* Password */}
           <div className="user-create__field">
             <label className="user-create__label">
               <MdLock className="user-create__label-icon" />
@@ -172,7 +172,7 @@ function CreateUser() {
             </div>
           </div>
 
-          {}
+          {/* Confirm Password */}
           <div className="user-create__field">
             <label className="user-create__label">
               <MdLock className="user-create__label-icon" />
@@ -202,10 +202,10 @@ function CreateUser() {
             </div>
           </div>
 
-          {}
+          {/* Divider */}
           <div className="user-create__divider" />
 
-          {}
+          {/* Actions */}
           <div className="user-create__actions">
             <button
               type="button"

@@ -1,3 +1,4 @@
+/* ===== UPLOAD CV PAGE – MODERN DESIGN ===== */
 
 * {
     box-sizing: border-box;
@@ -10,6 +11,7 @@
     flex-direction: column;
 }
 
+/* ===== HEADER ===== */
 .upload-cv-header {
     display: flex;
     justify-content: space-between;
@@ -52,6 +54,7 @@
     flex: 1;
 }
 
+/* ===== MAIN CONTENT ===== */
 .upload-cv-content {
     flex: 1;
     display: flex;
@@ -61,6 +64,7 @@
     padding: 60px 20px 40px;
 }
 
+/* ===== HERO SECTION ===== */
 .hero-section {
     text-align: center;
     margin-bottom: 40px;
@@ -97,6 +101,7 @@
     line-height: 1.6;
 }
 
+/* ===== UPLOAD CARD ===== */
 .upload-card {
     width: 100%;
     max-width: 600px;
@@ -115,6 +120,7 @@
     box-shadow: 0 30px 80px rgba(102, 126, 234, 0.2);
 }
 
+/* ===== JOB SECTION ===== */
 .job-section {
     margin-bottom: 24px;
 }
@@ -188,12 +194,14 @@
     color: rgba(102, 126, 234, 0.8);
 }
 
+/* ===== CARD DIVIDER ===== */
 .card-divider {
     height: 1px;
     background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.2), transparent);
     margin: 28px 0;
 }
 
+/* ===== DROP ZONE ===== */
 .upload-dropzone {
     width: 100%;
     border: 2px dashed rgba(102, 126, 234, 0.4);
@@ -295,6 +303,7 @@
     display: none;
 }
 
+/* ===== AVATAR UPLOAD SECTION ===== */
 .avatar-section {
     margin-top: 24px;
 }
@@ -391,6 +400,7 @@
     border-color: rgba(239, 68, 68, 0.3);
 }
 
+/* ===== FILE PREVIEW ===== */
 .file-preview {
     width: 100%;
     margin-top: 24px;
@@ -475,6 +485,7 @@
     color: #22c55e;
 }
 
+/* ===== UPLOAD BUTTON ===== */
 .btn-upload {
     margin-top: 24px;
     width: 100%;
@@ -533,6 +544,7 @@
     to { left: 100%; }
 }
 
+/* ===== FORM HELP TEXT ===== */
 .form-helptext {
     margin-top: 16px;
     font-size: 13px;
@@ -540,6 +552,7 @@
     text-align: center;
 }
 
+/* ===== UPLOADED SECTION ===== */
 .uploaded-section {
     width: 100%;
     max-width: 600px;
@@ -631,6 +644,7 @@
     text-decoration: underline;
 }
 
+/* ===== ANALYSIS SECTION ===== */
 .analysis-section {
     width: 100%;
     max-width: 600px;
@@ -786,6 +800,7 @@
     left: 0;
 }
 
+/* ===== RESPONSIVE ===== */
 @media (max-width: 768px) {
     .upload-cv-header {
         padding: 16px 20px;

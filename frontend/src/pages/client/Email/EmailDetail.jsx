@@ -15,7 +15,7 @@ const EmailDetail = () => {
   const [sending, setSending] = useState(false);
 
   useEffect(() => {
-    
+    // Lấy template + selectedCandidateIds từ React Router state
     const state = location.state;
     
     if (state?.selectedTemplate) {
@@ -65,7 +65,7 @@ const EmailDetail = () => {
         toast.success(
           `✅ Gửi email thành công tới ${selectedCandidates.length} ứng viên!`
         );
-        
+        // Redirect về applications
         setTimeout(() => {
           navigate("/candidates");
         }, 1500);
@@ -96,7 +96,7 @@ const EmailDetail = () => {
       </div>
 
       <div className="ed-container">
-        {}
+        {/* Main Content */}
         <div className="ed-main">
           <div className="ed-section">
             <label className="ed-label">Tiêu đề Email</label>
@@ -124,7 +124,7 @@ const EmailDetail = () => {
           </div>
         </div>
 
-        {}
+        {/* Side Panel */}
         <div className="ed-side">
           <div className="ed-card">
             <h3>📋 Thông tin gửi</h3>

@@ -34,6 +34,7 @@ const routes = [
     children: [routeClientAuth],
   },
 
+
   {
     element: <ClientProtectedRoute />,
     children: [
@@ -73,11 +74,13 @@ const routes = [
     ],
   },
 
+  // Admin public route
   {
     path: "/admin",
     children: [routeAuth],
   },
 
+  // Admin private route
   {
     element: <ProtectedRoute />,
     children: [

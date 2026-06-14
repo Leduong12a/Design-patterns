@@ -9,8 +9,8 @@ export const validateScheduleInterview: RequestHandler = (req, res, next) => {
     durationMinutes?: number;
   };
 
-  if (!candidateID || !jobID) {
-    res.status(400).json({ success: false, message: 'candidateID and jobID are required.' });
+  if (!candidateID) {
+    res.status(400).json({ success: false, message: 'candidateID is required.' });
     return;
   }
 
@@ -34,3 +34,4 @@ export const validateScheduleInterview: RequestHandler = (req, res, next) => {
 
   next();
 };
+

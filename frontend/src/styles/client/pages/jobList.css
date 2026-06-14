@@ -1,4 +1,4 @@
-
+/* jobList.css */
 .job-list-page {
   max-width: 1200px;
   margin: 0 auto;
@@ -41,6 +41,7 @@
   transform: translateY(0);
 }
 
+
 .job-list__title {
   font-size: 2rem;
   font-weight: 800;
@@ -53,6 +54,7 @@
   font-size: 1.125rem;
 }
 
+/* Filters & Search */
 .job-list__controls {
   display: flex;
   flex-direction: column;
@@ -167,6 +169,7 @@
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
 }
 
+/* Metadata */
 .job-list__meta {
   display: flex;
   justify-content: space-between;
@@ -196,6 +199,7 @@
   font-weight: 700;
 }
 
+/* List Layout & States */
 .job-list__grid {
   display: flex;
   flex-direction: column;
@@ -273,6 +277,7 @@
   background: #f8fafc;
 }
 
+/* Job Card (List View) */
 .job-card {
   background: white;
   border-radius: 12px;
@@ -441,6 +446,7 @@
   border-bottom: 1px solid #2563eb;
 }
 
+/* Modal */
 .job-modal-overlay {
   position: fixed;
   inset: 0;
@@ -698,6 +704,7 @@
   to { opacity: 1; transform: scale(1); }
 }
 
+/* Modal Form Styles */
 .job-modal--create {
   max-width: 720px;
 }
@@ -828,6 +835,7 @@
   box-sizing: border-box;
 }
 
+/* Tag Input Styles */
 .tag-input-wrap {
   display: flex;
   flex-wrap: wrap;
@@ -884,6 +892,7 @@
   padding: 4px;
 }
 
+/* Status Toggle Styles */
 .status-toggle {
   display: flex;
   background: #f1f5f9;
@@ -943,3 +952,4 @@
     padding: 16px 20px;
   }
 }
+

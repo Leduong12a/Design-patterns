@@ -1,4 +1,6 @@
+/* ===== Users Page ===== */
 
+/* --- Page Header --- */
 .users-page__header {
   margin-bottom: 28px;
 }
@@ -17,6 +19,7 @@
   font-weight: 400;
 }
 
+/* --- Toolbar --- */
 .users-toolbar {
   display: flex;
   align-items: center;
@@ -133,6 +136,7 @@
   border-color: var(--color-text-placeholder);
 }
 
+/* --- Data Table --- */
 .users-table-wrapper {
   background: #fff;
   border-radius: var(--border-radius-lg);
@@ -181,6 +185,7 @@
   border-bottom: none;
 }
 
+/* User Info Cell */
 .users-table__user {
   display: flex;
   align-items: center;
@@ -220,6 +225,7 @@
   margin-top: 2px;
 }
 
+/* Status Badge */
 .users-badge {
   display: inline-flex;
   align-items: center;
@@ -257,11 +263,13 @@
   background: #d97706;
 }
 
+/* Date */
 .users-table__date {
   font-size: 13px;
   color: var(--color-text-secondary);
 }
 
+/* Actions */
 .users-table__actions {
   display: flex;
   align-items: center;
@@ -298,6 +306,7 @@
   color: #d97706;
 }
 
+/* --- Pagination --- */
 .users-pagination {
   display: flex;
   align-items: center;
@@ -353,6 +362,7 @@
   cursor: not-allowed;
 }
 
+/* --- Empty State --- */
 .users-empty {
   display: flex;
   flex-direction: column;
@@ -380,6 +390,7 @@
   color: var(--color-text-secondary);
 }
 
+/* --- Skeleton Loading --- */
 .users-skeleton__row {
   display: flex;
   align-items: center;
@@ -437,6 +448,7 @@
   }
 }
 
+/* --- Confirmation Dialog --- */
 .users-dialog-overlay {
   position: fixed;
   inset: 0;
@@ -551,6 +563,7 @@
   transform: translateY(-1px);
 }
 
+/* --- Modal Overlay --- */
 .users-modal-overlay {
   position: fixed;
   inset: 0;

@@ -1,6 +1,10 @@
 import "../../../styles/client/pages/jobManagement.css";
 import StatsOverview from "./StatsOverview";
 
+/**
+ * Dashboard Component
+ * Manages the high-level system overview.
+ */
 const Dashboard = () => {
   return (
     <div className="dashboard-wrapper" style={{ padding: "24px", minHeight: "100vh", background: "#f8f9fa" }}>

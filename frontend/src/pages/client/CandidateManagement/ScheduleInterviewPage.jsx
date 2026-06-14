@@ -3,6 +3,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import interviewService from "../../../services/client/interviewService";
 import candidateService from "../../../services/client/candidateService";
+import userService from "../../../services/client/userService";
 import "../../../styles/client/pages/scheduleInterviewPage.css";
 
 const ScheduleInterviewPage = () => {
@@ -13,9 +14,12 @@ const ScheduleInterviewPage = () => {
   const [address, setAddress] = useState("");
   const [loading, setLoading] = useState(false);
   const [pageLoading, setPageLoading] = useState(true);
+  const [notificationSubscribed, setNotificationSubscribed] = useState(false);
+  const [notificationLoading, setNotificationLoading] = useState(false);
 
   useEffect(() => {
     fetchCandidate();
+    fetchNotificationSubscription();
   }, [id]);
 
   const fetchCandidate = async () => {
@@ -32,6 +36,90 @@ const ScheduleInterviewPage = () => {
       navigate(-1);
     } finally {
       setPageLoading(false);
+    }
+  };
+
+  const fetchNotificationSubscription = async () => {
+    try {
+      const res = await userService.getInterviewNotificationSubscription();
+      setNotificationSubscribed(Boolean(res.subscribed));
+    } catch (err) {
+      console.error("Cannot load interview notification subscription", err);
+    }
+  };
+
+  const syncLocalUser = (user) => {
+    if (!user) return;
+    localStorage.setItem("user", JSON.stringify(user));
+  };
+
+  const addNotification = (title, message) => {
+    const notifications = JSON.parse(localStorage.getItem("notifications") || "[]");
+    const now = new Date();
+    const timeStr = now.toLocaleTimeString("vi-VN", {
+      hour: "2-digit",
+      minute: "2-digit",
+    });
+
+    notifications.unshift({
+      title,
+      message,
+      timestamp: timeStr,
+      read: false,
+    });
+
+    // Keep only last 20 notifications
+    if (notifications.length > 20) {
+      notifications.pop();
+    }
+
+    localStorage.setItem("notifications", JSON.stringify(notifications));
+
+    // Trigger window event to update header - use proper CustomEvent
+    const event = new CustomEvent("notificationsUpdated", {
+      detail: { notifications },
+    });
+    window.dispatchEvent(event);
+  };
+
+  const handleToggleNotification = async () => {
+    try {
+      setNotificationLoading(true);
+      const nextSubscribed = !notificationSubscribed;
+      const res = await userService.updateInterviewNotificationSubscription(nextSubscribed);
+
+      // Handle both res.success and res.subscribed
+      if (res.success !== false || res.subscribed !== undefined) {
+        const finalSubscribed = res.subscribed !== undefined ? Boolean(res.subscribed) : nextSubscribed;
+        setNotificationSubscribed(finalSubscribed);
+
+        if (res.user) {
+          syncLocalUser(res.user);
+        }
+
+        // Add notification to notification center
+        if (finalSubscribed) {
+          addNotification(
+            "✅ Bật thông báo lịch phỏng vấn",
+            "HR sẽ nhận email khi bạn đặt lịch phỏng vấn."
+          );
+          toast.success("✅ Bật thông báo - HR sẽ nhận email khi đặt lịch phỏng vấn");
+        } else {
+          addNotification(
+            "⚪ Tắt thông báo lịch phỏng vấn",
+            "HR sẽ không nhận email khi bạn đặt lịch phỏng vấn."
+          );
+          toast.info("⚪ Tắt thông báo - HR sẽ không nhận email");
+        }
+      } else {
+        toast.error("Không thể cập nhật thông báo.");
+      }
+    } catch (err) {
+      console.error("Toggle notification error:", err);
+      const msg = err?.response?.data?.message || "Lỗi khi cập nhật thông báo.";
+      toast.error(msg);
+    } finally {
+      setNotificationLoading(false);
     }
   };
 
@@ -57,6 +145,24 @@ const ScheduleInterviewPage = () => {
       });
 
       if (res.success) {
+        // Format thời gian đẹp
+        const interviewDate = new Date(time);
+        const formattedTime = interviewDate.toLocaleString("vi-VN", {
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+
+        // Chỉ thêm vào chuông thông báo nếu đang bật thông báo
+        if (notificationSubscribed) {
+          addNotification(
+            `Đặt lịch phỏng vấn với ${candidate?.personal?.fullName}`,
+            `Thời gian: ${formattedTime}\nĐịa điểm: ${address}`
+          );
+        }
+
         toast.success("Đặt lịch và gửi lời mời phỏng vấn thành công!");
         setTimeout(() => {
           navigate(`/candidates/${id}`);
@@ -97,7 +203,7 @@ const ScheduleInterviewPage = () => {
           </h1>
 
           <form onSubmit={handleSubmit} className="sip-form">
-           
+
             <div className="sip-form-group">
               <label htmlFor="time" className="sip-form-label">
                 Thời gian đề xuất:
@@ -114,6 +220,7 @@ const ScheduleInterviewPage = () => {
               </div>
             </div>
 
+
             <div className="sip-form-group">
               <label htmlFor="email" className="sip-form-label">Người tham gia:</label>
               <div className="sip-form-input-wrap">
@@ -126,6 +233,7 @@ const ScheduleInterviewPage = () => {
                 />
               </div>
             </div>
+
 
             <div className="sip-form-group">
               <label htmlFor="address" className="sip-form-label">
@@ -143,6 +251,7 @@ const ScheduleInterviewPage = () => {
                 />
               </div>
             </div>
+
 
             <div className="sip-form-actions">
               <button

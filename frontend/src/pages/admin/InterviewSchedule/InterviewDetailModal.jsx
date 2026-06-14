@@ -46,7 +46,7 @@ const InterviewDetailModal = ({ schedule, candidate, onClose, onUpdate }) => {
   return (
     <div className="idm-overlay" onClick={onClose}>
       <div className="idm-modal" onClick={(e) => e.stopPropagation()}>
-        {}
+        {/* Header */}
         <div className="idm-header">
           <h2 className="idm-title">
             Phỏng vấn : {candidate?.personal?.fullName || "Ứng viên"}
@@ -54,11 +54,11 @@ const InterviewDetailModal = ({ schedule, candidate, onClose, onUpdate }) => {
           <button className="idm-close-btn" onClick={onClose}>✕</button>
         </div>
 
-        {}
+        {/* Body */}
         <div className="idm-body">
           {isEditing ? (
             <>
-              {}
+              {/* Editing Mode */}
               <div className="idm-field">
                 <label className="idm-label">Thời gian đề xuất :</label>
                 <div className="idm-input-wrap">
@@ -112,7 +112,7 @@ const InterviewDetailModal = ({ schedule, candidate, onClose, onUpdate }) => {
             </>
           ) : (
             <>
-              {}
+              {/* View Mode */}
               <div className="idm-field">
                 <label className="idm-label">Thời gian đề xuất :</label>
                 <div className="idm-input-wrap idm-input-wrap--readonly">
@@ -177,7 +177,7 @@ const InterviewDetailModal = ({ schedule, candidate, onClose, onUpdate }) => {
           )}
         </div>
 
-        {}
+        {/* Footer */}
         <div className="idm-footer">
           {isEditing ? (
             <>

@@ -1,4 +1,4 @@
-
+/* ===== Header ===== */
 .header {
   display: flex;
   align-items: center;
@@ -12,6 +12,7 @@
   z-index: 50;
 }
 
+/* Actions */
 .header__actions {
   display: flex;
   align-items: center;
@@ -51,6 +52,7 @@
   border: 2px solid #fff;
 }
 
+/* Divider */
 .header__divider {
   width: 1px;
   height: 28px;
@@ -58,6 +60,7 @@
   margin: 0 8px;
 }
 
+/* User */
 .header__user {
   display: flex;
   align-items: center;
@@ -102,6 +105,7 @@
   color: var(--color-text-placeholder);
 }
 
+/* Chevron icon */
 .header__chevron {
   color: var(--color-text-placeholder);
   transition: transform 0.2s ease;
@@ -112,18 +116,20 @@
   transform: rotate(180deg);
 }
 
+/* User Dropdown */
 .header__user {
   position: relative;
   user-select: none;
 }
 
+/* Ensure the hover area extends to the dropdown */
 .header__user::after {
   content: "";
   position: absolute;
   top: 100%;
   left: 0;
   width: 100%;
-  height: 20px; 
+  height: 20px; /* Safe area for mouse movement to dropdown */
   background: transparent;
 }
 
@@ -165,6 +171,7 @@
   background: #fef2f2;
 }
 
+/* Logout Modal */
 .logout-modal-overlay {
   position: fixed;
   top: 0;

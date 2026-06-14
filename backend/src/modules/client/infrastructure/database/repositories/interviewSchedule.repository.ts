@@ -30,7 +30,7 @@ export class InterviewScheduleRepository implements IInterviewScheduleRepository
   }
 
   public async checkOverlap(userId: string, startTime: Date, durationMinutes: number): Promise<boolean> {
-    
+    // Check if there's any active interview that overlaps with [startTime - duration, startTime + duration]
     const startWindow = new Date(startTime.getTime() - (durationMinutes - 1) * 60000);
     const endWindow = new Date(startTime.getTime() + (durationMinutes - 1) * 60000);
 
@@ -62,3 +62,4 @@ export class InterviewScheduleRepository implements IInterviewScheduleRepository
     return docs as { time: Date }[];
   }
 }
+

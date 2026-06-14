@@ -1,4 +1,4 @@
-
+/* ===== Sidebar ===== */
 .sider {
   position: fixed;
   top: 0;
@@ -12,6 +12,7 @@
   overflow-y: auto;
 }
 
+/* Logo */
 .sider__logo {
   display: flex;
   align-items: center;
@@ -39,6 +40,7 @@
   letter-spacing: -0.3px;
 }
 
+/* Menu */
 .sider__menu {
   flex: 1;
   padding: 0 12px;
@@ -90,6 +92,7 @@
   justify-content: center;
 }
 
+/* Footer */
 .sider__footer {
   padding: 20px 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);

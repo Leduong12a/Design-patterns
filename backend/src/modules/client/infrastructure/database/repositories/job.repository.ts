@@ -8,7 +8,13 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
   private mapToEntity(doc: any | null): JobEntity | null {
     if (!doc) return null;
     const d = doc.toObject ? doc.toObject() : doc;
-    return JobFactoryRegistry.restore(d.type, {
+    
+    let jobType = d.type;
+    if (jobType !== 'FULLTIME' && jobType !== 'FREELANCE') {
+      jobType = 'FULLTIME';
+    }
+
+    return JobFactoryRegistry.restore(jobType, {
       id: d._id?.toString() || '',
       title: d.title,
       userID: d.userID?.toString() || '',
@@ -16,7 +22,7 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
       requirements: d.requirements,
       status: d.status,
       deleted: d.deleted,
-      type: d.type,
+      type: jobType,
       hourlyRate: d.hourlyRate,
       projectDuration: d.projectDuration,
       probationMonths: d.probationMonths,

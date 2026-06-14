@@ -35,6 +35,7 @@ const CandidateAIAnalysis = () => {
         return;
       }
 
+      // Ưu tiên sử dụng jobId từ URL params, nếu không có thì dùng candidate.jobID
       const jobIdToUse = jobIdFromUrl || cand.jobID;
 
       if (!jobIdToUse) {
@@ -42,6 +43,7 @@ const CandidateAIAnalysis = () => {
         return;
       }
 
+      // Fetch job details
       try {
         const allJobsRes = await jobService.getAll();
         const jobs = allJobsRes.jobs || [];
@@ -99,6 +101,7 @@ const CandidateAIAnalysis = () => {
         </div>
       )}
 
+     
       {!isLoading && aiResult && candidate && (
         <div className="caa-container">
           <div className="caa-header">
@@ -122,6 +125,7 @@ const CandidateAIAnalysis = () => {
               </div>
             </div>
 
+         
             <div className="caa-form-group">
               <label className="caa-form-label">Điểm phủ hợp</label>
               <div className="caa-score-display">
@@ -136,6 +140,7 @@ const CandidateAIAnalysis = () => {
               </div>
             </div>
 
+          
             <div className="caa-form-group">
               <label className="caa-form-label">Tóm tắt năng lực</label>
               <div className="caa-form-value caa-form-value--textarea">
@@ -156,6 +161,7 @@ const CandidateAIAnalysis = () => {
               </div>
             )}
 
+         
             {aiResult.suggestedQuestions && aiResult.suggestedQuestions.length > 0 && (
               <div className="caa-form-group">
                 <label className="caa-form-label">Câu hỏi phỏng vấn gợi !</label>
@@ -169,6 +175,7 @@ const CandidateAIAnalysis = () => {
               </div>
             )}
 
+          
             <div className="caa-actions">
               <button className="caa-btn caa-btn--secondary" onClick={handlePrint}>
                 In
@@ -184,6 +191,7 @@ const CandidateAIAnalysis = () => {
         </div>
       )}
 
+   
       {!isLoading && !aiResult && candidate && !candidate.jobID && (
         <div className="caa-empty">
           <div className="caa-empty-text">

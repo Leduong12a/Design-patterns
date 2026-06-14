@@ -14,6 +14,7 @@ const verificationService = {
     }
   },
 
+  
   verifyCandidate: async (candidateID, verificationData) => {
     try {
       const cleanData =
@@ -21,6 +22,7 @@ const verificationService = {
           ? JSON.parse(verificationData)
           : verificationData;
 
+     
       const payload = {
         candidateID,
         data: cleanData,
@@ -34,14 +36,16 @@ const verificationService = {
     }
   },
 
+
   confirmVerification: async (candidateID, confirmData) => {
     try {
-      
+      // Keep status as-is: "verified" or "risky"
       const payload = {
         candidateID,
-        status: confirmData.status, 
+        status: confirmData.status, // "verified" or "risky"
       };
 
+  
       try {
         const response = await API.post(`${API_BASE}/confirm`, payload);
         return response;
