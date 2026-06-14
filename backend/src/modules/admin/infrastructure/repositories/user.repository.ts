@@ -43,7 +43,7 @@ export class UserRepository implements IReadUserRepository, IWriteUserRepository
 
   async update(user: UserEntity): Promise<UserEntity | null> {
     const data = user.getDetail();
-    const updatedDoc = await User.findOneAndUpdate({ _id: user.getId(), deleted: false }, data, { new: true }).lean();
+    const updatedDoc = await User.findOneAndUpdate({ _id: user.getId(), deleted: false }, data, { returnDocument: 'after' }).lean();
     return mapToEntity(updatedDoc);
   }
 }

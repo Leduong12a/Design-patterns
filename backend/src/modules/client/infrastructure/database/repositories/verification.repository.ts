@@ -31,7 +31,7 @@ export class VerificationRepository implements IVerificationRepository {
     const saved = await Verification.findOneAndUpdate(
       { candidateId: objectId },
       { ...data, candidateId: objectId },
-      { new: true, upsert: true, setDefaultsOnInsert: true }
+      { returnDocument: 'after', upsert: true, setDefaultsOnInsert: true }
     );
 
     return this.mapToEntity(saved);

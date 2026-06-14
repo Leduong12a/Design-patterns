@@ -141,7 +141,7 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
       id,
       { $set: data },
       {
-        new: true,
+        returnDocument: 'after',
         runValidators: true
       });
     return this.mapToEntity(updatedCandidate);

@@ -51,7 +51,7 @@ export class UserRepository implements IUserReadRepo, IUserWriteRepo {
         interviewNotificationSubscribed: subscribedEmail,
         telegramNotificationSubscribed: subscribedTelegram,
       },
-      { new: true },
+      { returnDocument: 'after' },
     ).lean();
     return this.mapToEntity(updatedDoc as any | null);
   }

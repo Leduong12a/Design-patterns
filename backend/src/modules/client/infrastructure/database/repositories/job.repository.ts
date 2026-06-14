@@ -67,7 +67,7 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
     const updatedDoc = await Job.findOneAndUpdate(
       { _id: id, deleted: false },
       data,
-      { new: true }
+      { returnDocument: 'after' }
     ).lean();
 
     return this.mapToEntity(updatedDoc);
