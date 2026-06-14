@@ -304,18 +304,6 @@ const CandidateManagement = () => {
             <p className="candidate-page__subtitle">Quản lý ứng viên</p>
           </div>
           <div style={{ display: "flex", gap: "12px", alignItems: "center", position: "relative" }}>
-            {import.meta.env.VITE_TELEGRAM_BOT_USERNAME && (
-              <a
-                href={`https://t.me/${import.meta.env.VITE_TELEGRAM_BOT_USERNAME}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="candidate-page__telegram-btn"
-                title="Kích hoạt Bot Telegram nhận thông báo"
-              >
-                <FaTelegram size={18} />
-                <span>Kết nối Telegram</span>
-              </a>
-            )}
             
             <div className="candidate-page__settings-wrapper">
               <button
