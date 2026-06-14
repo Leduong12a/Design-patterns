@@ -37,7 +37,9 @@ export class CandidateRepository implements ICandidateReadRepo, ICandidateWriteR
     const objectId = new mongoose.Types.ObjectId(id);
     const candidate = await Candidate.findOne({
       _id: objectId
-    }).lean();
+    })
+      .populate('jobID')
+      .lean();
     return this.mapToEntity(candidate);
   }
 
