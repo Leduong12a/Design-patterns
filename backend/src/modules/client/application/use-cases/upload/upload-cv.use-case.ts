@@ -14,7 +14,7 @@ export class UploadCVUseCase {
     private readonly candidateRepo: ICandidateWriteRepo & ICandidateReadRepo,
     private readonly jobRepo: IJobReadRepo,
     private readonly uploadSvc: IUploadService,
-    private readonly geminiSvc: ICVExtractorAgent,
+    private readonly cvExtractorAgent: ICVExtractorAgent,
   ) { }
 
   async execute(
@@ -43,7 +43,7 @@ export class UploadCVUseCase {
 
     if (cvFile.mimetype === 'application/pdf' || cvFile.mimetype.startsWith('image/')) {
       console.log('Đang ném file cho Gemini làm OCR...');
-      extractedData = await this.geminiSvc.extractCV(cvFile.buffer, cvFile.mimetype);
+      extractedData = await this.cvExtractorAgent.execute(cvFile.buffer, cvFile.mimetype);
     }
 
     const personalData = extractedData.personal as Record<string, any>;

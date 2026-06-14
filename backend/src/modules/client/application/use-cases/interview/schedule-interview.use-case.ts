@@ -31,7 +31,7 @@ export class ScheduleInterviewUseCase {
     private readonly aiAnalysisRepo: IAnalysisReadRepo,
     private readonly interviewScheduleRepo: IInterviewScheduleRepository,
     private readonly userRepo: IUserReadRepo,
-    private readonly geminiSvc: IInterviewEmailAgent,
+    private readonly interviewEmailAgent: IInterviewEmailAgent,
     private readonly mailSvc: IMailService,
     private readonly eventManager: EventManager<InterviewEventMap>,
   ) { }
@@ -68,7 +68,7 @@ export class ScheduleInterviewUseCase {
       aiAnalysisRepo: this.aiAnalysisRepo,
       interviewScheduleRepo: this.interviewScheduleRepo,
       userRepo: this.userRepo,
-      geminiSvc: this.geminiSvc,
+      geminiSvc: this.interviewEmailAgent,
       mailSvc: this.mailSvc,
     });
 

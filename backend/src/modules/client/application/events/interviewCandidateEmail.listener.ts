@@ -43,7 +43,7 @@ export class InterviewCandidateEmailListener implements EventListener<InterviewS
       notes: payload.notes ?? '',
     };
 
-    const generated = await payload.geminiSvc.generateInterviewEmail(emailPayload);
+    const generated = await payload.geminiSvc.execute(emailPayload);
     const subject = generated?.subject?.trim() || `Thu moi phong van - ${jobTitle}`;
     const html = generated?.html || `<p>Xin chao ${candidate.getPersonal().fullName || 'ban'},</p><p>Chung toi xin moi ban tham gia phong van cho vi tri <b>${jobTitle}</b>.</p>`;
 
