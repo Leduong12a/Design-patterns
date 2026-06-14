@@ -2,7 +2,7 @@ import type { EventListener } from './EventManager';
 import type { InterviewScheduledPayload } from './interview.events';
 import { buildInterviewCalendarInvite } from '../../infrastructure/external-service/calendarInvite.service';
 
-export class InterviewCandidateEmailListener implements EventListener<InterviewScheduledPayload> {
+export class InterviewCandidateEmailListener implements EventListener {
   async update(payload: InterviewScheduledPayload): Promise<void> {
     const candidate = await payload.candidateRepo.getById(payload.candidateID);
     if (!candidate) throw new Error('Khong tim thay thong tin ung vien.');

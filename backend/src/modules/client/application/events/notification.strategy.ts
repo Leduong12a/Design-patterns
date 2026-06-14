@@ -60,7 +60,7 @@ export class EmailNotificationStrategy implements INotificationStrategy {
     let html = `<p>Xin chao ${personal.fullName || 'ban'},</p><p>Chung toi xin moi ban tham gia phong van cho vi tri <b>${jobTitle}</b>.</p>`;
 
     try {
-      const generated = await payload.geminiSvc.generateInterviewEmail(emailPayload);
+      const generated = await payload.geminiSvc.execute(emailPayload);
       if (generated?.subject) subject = generated.subject.trim();
       if (generated?.html) html = generated.html;
     } catch (err) {
