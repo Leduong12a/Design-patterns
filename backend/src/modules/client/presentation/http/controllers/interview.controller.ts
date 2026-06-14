@@ -5,7 +5,7 @@ import { CandidateRepository } from '../../../infrastructure/database/repositori
 import { InterviewScheduleRepository } from '../../../infrastructure/database/repositories/interviewSchedule.repository';
 import { JobRepository } from '../../../infrastructure/database/repositories/job.repository';
 import { UserRepository } from '../../../infrastructure/database/repositories/user.repository';
-import { GeminiService } from '../../../infrastructure/external-service/gemini.service';
+import { InterviewEmailGeminiService } from '../../../infrastructure/external-service/gemini.service';
 import { MailService } from '../../../infrastructure/external-service/mail.service';
 import { EventManager } from '../../../application/events/EventManager';
 import type { InterviewEventMap } from '../../../application/events/interview.events';
@@ -18,7 +18,7 @@ const jobRepository = new JobRepository();
 const aiAnalysisRepository = new AiAnalysisRepository();
 const interviewScheduleRepository = new InterviewScheduleRepository();
 const userRepository = new UserRepository();
-const geminiService = new GeminiService();
+const interviewEmailService = InterviewEmailGeminiService.getInstance();
 const mailService = new MailService();
 const interviewEventManager = new EventManager();
 
@@ -32,7 +32,7 @@ const scheduleInterviewUseCase = new ScheduleInterviewUseCase(
   aiAnalysisRepository,
   interviewScheduleRepository,
   userRepository,
-  geminiService,
+  interviewEmailService,
   mailService,
   interviewEventManager,
 );
@@ -71,4 +71,3 @@ export const scheduleInterview = async (req: Request, res: Response): Promise<vo
     res.status(400).json({ success: false, message: e.message ?? 'Đã xảy ra lỗi khi đặt lịch phỏng vấn.' });
   }
 };
-
