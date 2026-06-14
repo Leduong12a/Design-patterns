@@ -1,8 +1,8 @@
 import type { ICandidateDetailProfile } from '../../../domain/candidate';
-import type { ICandidateReadRepo } from '../../../application/ports/repositories/candidate.interface';
+import type { ICandidateRepository } from '../../../application/ports/repositories/candidate.interface';
 
 export class GetCandidateDetailUseCase {
-  constructor(private readonly candidateRepo: ICandidateReadRepo) { }
+  constructor(private readonly candidateRepo: ICandidateRepository) { }
 
   async execute(candidateID: string): Promise<ICandidateDetailProfile | null> {
     const candidate = await this.candidateRepo.getById(candidateID);

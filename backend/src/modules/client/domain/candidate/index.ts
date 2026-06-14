@@ -9,4 +9,6 @@ export {
   type ICandidateSummaryProfile,
   type ICandidateDetailProfile,
   type ICandidateProps,
+  type ICandidate,
 } from './candidate.types';
+export { CandidateCreator, NewCandidateCreator, RestoredCandidateCreator } from './candidate.creator';

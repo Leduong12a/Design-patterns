@@ -6,10 +6,11 @@ import type {
   ICandidateSummaryProfile,
   ICandidateDetailProfile,
   ICandidateProps,
+  ICandidate,
 } from './candidate.types';
 import { CandidateStatus, VerificationStatus } from './candidate.types';
 
-export class CandidateEntity {
+export class CandidateEntity implements ICandidate {
   private id?: string | null;
   private jobID: string | null;
   private jobTitle: string;

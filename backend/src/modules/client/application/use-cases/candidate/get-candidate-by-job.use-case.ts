@@ -1,9 +1,8 @@
-import { ICandidateReadRepo } from "../../../application/ports/repositories/candidate.interface";
-import { ICanidateWithScore } from "../../../application/ports/repositories/candidate.interface";
+import { ICandidateRepository, ICanidateWithScore } from "../../../application/ports/repositories/candidate.interface";
 
 export class GetCanidateByJobUseCase {
   constructor(
-    private readonly candidateRepo: ICandidateReadRepo
+    private readonly candidateRepo: ICandidateRepository
   ) { }
 
   async execute(jobID: string): Promise<ICanidateWithScore[]> {

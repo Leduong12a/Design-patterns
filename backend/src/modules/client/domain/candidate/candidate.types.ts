@@ -94,3 +94,10 @@ export interface ICandidateProps {
   createdAt?: Date;
   updatedAt?: Date;
 }
+
+// Product Interface — dùng cho Factory Method Pattern
+export interface ICandidate {
+  getSummaryProfile(): ICandidateSummaryProfile;
+  getDetailProfile(): ICandidateDetailProfile;
+  getFulltextContent(): string;
+}
