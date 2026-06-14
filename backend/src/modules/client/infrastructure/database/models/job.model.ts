@@ -8,6 +8,13 @@ const jobSchema = new mongoose.Schema(
     requirements: { type: [String], default: [] },
     status: { type: Boolean, default: false },
     deleted: { type: Boolean, default: false },
+    type: { type: String, enum: ['FULLTIME', 'FREELANCE'], required: true },
+    // Freelance fields
+    hourlyRate: { type: Number },
+    projectDuration: { type: String },
+    // Full-Time fields
+    probationMonths: { type: Number },
+    hasInsurance: { type: Boolean },
   },
   { timestamps: true },
 );
@@ -15,3 +22,4 @@ const jobSchema = new mongoose.Schema(
 const Job = mongoose.model('Job', jobSchema, 'jobs');
 
 export default Job;
+

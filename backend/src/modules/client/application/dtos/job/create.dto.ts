@@ -1,13 +1,28 @@
+import { JobType } from '../../../domain/job';
+
 export interface ICreateJobInputDto {
   title: string;
-  userID: string;
-  description?: string | undefined;
-  requirements?: string[] | undefined;
+  description?: string;
+  requirements?: string[];
+  type: JobType;
+  // Freelance fields
+  hourlyRate?: number;
+  projectDuration?: string;
+  // Full-Time fields
+  probationMonths?: number;
+  hasInsurance?: boolean;
 }
 
 export interface IUpdateJobInputDto {
-  title?: string | undefined;
-  description?: string | undefined;
-  requirements?: string[] | undefined;
-  status?: boolean | undefined;
+  title?: string;
+  description?: string;
+  requirements?: string[];
+  status?: boolean;
+  // Freelance fields
+  hourlyRate?: number;
+  projectDuration?: string;
+  // Full-Time fields
+  probationMonths?: number;
+  hasInsurance?: boolean;
 }
+

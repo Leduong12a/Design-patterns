@@ -23,12 +23,12 @@ const getCandidateByJobUseCase = new GetCanidateByJobUseCase(candidateRepo);
 // [POST] /job/create
 export const createJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
   const userID = res.locals.user.id;
-  const { title, description, requirements } = req.body as ICreateJobInputDto;
 
-  const newJob = await createJobUseCase.execute({ title, userID, description, requirements });
+  const newJob = await createJobUseCase.execute(userID, req.body as ICreateJobInputDto);
 
   res.status(201).json({ success: true, message: 'Tạo công việc thành công!', newJob: newJob });
 });
+
 
 // [PATCH] /job/update/:id
 export const updateJob = asyncHandler(async (req: Request, res: Response): Promise<void> => {
