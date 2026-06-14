@@ -79,7 +79,7 @@ export class EmailNotificationStrategy implements INotificationStrategy {
 }
 
 export class TelegramNotificationStrategy implements INotificationStrategy {
-  private readonly telegramService = new TelegramService();
+  private readonly telegramService = TelegramService.getInstance();
 
   supports(candidate: any): boolean {
     return true;
