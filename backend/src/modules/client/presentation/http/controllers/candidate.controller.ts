@@ -6,7 +6,7 @@ import { UpdateStatusUseCase } from '../../../application/use-cases/candidate/up
 import { CandidateRepository } from '../../../infrastructure/database/repositories/candidate.repository';
 import { CandidateStatus } from '../../../domain/candidate';
 
-const candidateRepository = new CandidateRepository();
+const candidateRepository = CandidateRepository.getInstance();
 
 // [GET] /candidates
 export const getCandidates = async (req: Request, res: Response): Promise<void> => {

@@ -47,3 +47,6 @@ export interface ICandidateWriteRepo {
 
   update(candidate: CandidateEntity): Promise<CandidateEntity | null>;
 }
+
+// Client Interface — dùng trong Adapter Pattern cho candidate module
+export interface ICandidateRepository extends ICandidateReadRepo, ICandidateWriteRepo {}

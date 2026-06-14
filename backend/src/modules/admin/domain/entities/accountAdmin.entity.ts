@@ -16,6 +16,8 @@ export interface IAdminProfile {
   status: string | undefined;
 }
 
+import bcrypt from 'bcryptjs';
+
 export class AdminEntity {
   private id: string ;
   private fullName: string;
@@ -69,7 +71,7 @@ export class AdminEntity {
   }
 
   verifyPassword(password: string): boolean {
-    return this.password === password;
+    return bcrypt.compareSync(password, this.password);
   }
 
   getProfile(): IAdminProfile {

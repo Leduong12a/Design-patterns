@@ -1,9 +1,9 @@
-import type { ICandidateReadRepo, ICandidateWriteRepo, IStatus } from "../../../application/ports/repositories/candidate.interface";
+import type { ICandidateRepository, IStatus } from "../../../application/ports/repositories/candidate.interface";
 
 export class UpdateStatusUseCase {
 
   constructor(
-    private readonly candidateRepo: ICandidateReadRepo & ICandidateWriteRepo
+    private readonly candidateRepo: ICandidateRepository
   ) { }
 
   async execute(candidateID: string, status: IStatus): Promise<void> {
