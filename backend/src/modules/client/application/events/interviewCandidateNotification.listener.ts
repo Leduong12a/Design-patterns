@@ -2,7 +2,7 @@ import type { EventListener } from './EventManager';
 import type { InterviewScheduledPayload } from './interview.events';
 import { INotificationStrategy, EmailNotificationStrategy, TelegramNotificationStrategy } from './notification.strategy';
 
-export class InterviewCandidateNotificationListener implements EventListener<InterviewScheduledPayload> {
+export class InterviewCandidateNotificationListener implements EventListener {
   private readonly strategies: INotificationStrategy[];
 
   constructor() {

@@ -1,7 +1,7 @@
 import type { EventListener } from './EventManager';
 import type { InterviewScheduledPayload } from './interview.events';
 
-export class InterviewHrNotificationListener implements EventListener<InterviewScheduledPayload> {
+export class InterviewHrNotificationListener implements EventListener {
   async update(payload: InterviewScheduledPayload): Promise<void> {
     const hr = await payload.userRepo.findUserByID(payload.userId);
     console.log(`[HR Notification] userId=${payload.userId}, subscribed=${hr?.getInterviewNotificationSubscribed()}`);

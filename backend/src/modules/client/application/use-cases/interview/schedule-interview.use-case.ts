@@ -33,7 +33,7 @@ export class ScheduleInterviewUseCase {
     private readonly userRepo: IUserReadRepo,
     private readonly geminiSvc: IInterviewEmailAgent,
     private readonly mailSvc: IMailService,
-    private readonly eventManager: EventManager<InterviewEventMap>,
+    private readonly eventManager: EventManager,
   ) { }
 
   async execute(input: ScheduleInterviewInput): Promise<ScheduleInterviewResult> {

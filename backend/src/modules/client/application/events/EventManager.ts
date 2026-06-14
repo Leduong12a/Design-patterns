@@ -1,23 +1,17 @@
-export interface EventListener<TPayload> {
-  update(payload: TPayload): Promise<void>;
+export interface EventListener {
+  update(payload: any): Promise<void>;
 }
 
-export class EventManager<TEventMap extends Record<string, unknown>> {
-  private readonly listeners = new Map<keyof TEventMap, EventListener<TEventMap[keyof TEventMap]>[]>();
+export class EventManager {
+  private readonly listeners = new Map<string, EventListener[]>();
 
-  subscribe<TEventName extends keyof TEventMap>(
-    eventName: TEventName,
-    listener: EventListener<TEventMap[TEventName]>,
-  ): void {
+  subscribe(eventName: string, listener: EventListener): void {
     const eventListeners = this.listeners.get(eventName) ?? [];
-    eventListeners.push(listener as EventListener<TEventMap[keyof TEventMap]>);
+    eventListeners.push(listener);
     this.listeners.set(eventName, eventListeners);
   }
 
-  unsubscribe<TEventName extends keyof TEventMap>(
-    eventName: TEventName,
-    listener: EventListener<TEventMap[TEventName]>,
-  ): void {
+  unsubscribe(eventName: string, listener: EventListener): void {
     const eventListeners = this.listeners.get(eventName) ?? [];
     this.listeners.set(
       eventName,
@@ -25,14 +19,11 @@ export class EventManager<TEventMap extends Record<string, unknown>> {
     );
   }
 
-  async notify<TEventName extends keyof TEventMap>(
-    eventName: TEventName,
-    payload: TEventMap[TEventName],
-  ): Promise<void> {
+  async notify(eventName: string, payload: any): Promise<void> {
     const eventListeners = this.listeners.get(eventName) ?? [];
 
     for (const listener of eventListeners) {
-      await (listener as EventListener<TEventMap[TEventName]>).update(payload);
+      await listener.update(payload);
     }
   }
 }
