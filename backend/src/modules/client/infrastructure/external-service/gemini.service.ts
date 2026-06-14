@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 import { candidatePrompt } from '../../../../shared/prompts/candiate.prompt';
 import { aiAnalyzePrompt } from '../../../../shared/prompts/aiAnalyze.prompt';
 import { interviewEmailPrompt } from '../../../../shared/prompts/interviewEmail.prompt';
-import { IAIService } from '../../application/ports/services/ai.service';
+import { ICVExtractorAgent, ICandidateAnalyzerAgent, IInterviewEmailAgent } from '../../application/ports/services/ai.service';
 
 dotenv.config();
 
@@ -45,7 +45,7 @@ const generateWithRetry = async (contents: any, maxRetries = 3, delayMs = 25000)
   throw new Error('[Gemini] Đã thử hết các Model và số lần Retry nhưng vẫn thất bại toàn tập.');
 };
 
-export class GeminiService implements IAIService {
+export class GeminiService implements ICVExtractorAgent, ICandidateAnalyzerAgent, IInterviewEmailAgent {
   public async extractCV(fileBuffer: any, mimeType: string): Promise<Record<string, any> | null> {
     try {
       const contents = [

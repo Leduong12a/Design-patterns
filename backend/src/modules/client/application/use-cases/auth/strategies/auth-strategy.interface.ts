@@ -1,4 +1,4 @@
-import type { IUserProfile } from '../../../../domain/user';
+import type { IUserProfile } from '../../../../domain/user/user.types';
 
 export interface ILoginResult {
   token: string;

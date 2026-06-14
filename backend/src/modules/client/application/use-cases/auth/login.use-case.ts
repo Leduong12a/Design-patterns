@@ -2,7 +2,7 @@ import type { IAuth } from '../../ports/repositories/auth.interface';
 import type { IOTPReadRepo, IOTPWriteRepo } from '../../ports/repositories/otp.interface';
 import type { IPasswordService } from '../../ports/services/password.service';
 import type { ITokenService } from '../../ports/services/token.service';
-import type { IUserProfile } from '../../../domain/user';
+import type { IUserProfile } from '../../../domain/user/user.types';
 import { AuthStrategyFactory } from './strategies/auth-strategy.factory';
 
 export interface ILoginResult {

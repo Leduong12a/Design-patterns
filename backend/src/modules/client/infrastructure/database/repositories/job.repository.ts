@@ -42,8 +42,14 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
   public async getAll(userID: string): Promise<IJobSummary[]> {
     const data = await Job.find({ userID, deleted: false }).lean();
 
-    const jobs = data.map(job => this.mapToEntity(job)?.getSummary()).filter(job => job !== undefined) as IJobSummary[];
-    return jobs;
+    return data.map((d: any) => ({
+      id: d._id?.toString() || '',
+      title: d.title,
+      status: d.status,
+      requirements: d.requirements,
+      type: d.type,
+      createdAt: d.createdAt,
+    }));
   }
 
   public async getById(id: string): Promise<JobEntity | null> {

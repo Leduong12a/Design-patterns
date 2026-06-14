@@ -4,7 +4,7 @@ import type { IInterviewScheduleRepository } from '../../../application/ports/re
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
 import type { IUserReadRepo } from '../../../application/ports/repositories/user.interface';
 import type { IInterviewScheduleDetail } from '../../../domain/interviewSchedule';
-import type { IAIService } from '../../../application/ports/services/ai.service';
+import type { IInterviewEmailAgent } from '../../../application/ports/services/ai.service';
 import type { IMailService } from '../../../application/ports/services/mail.service';
 import type { EventManager } from '../../events/EventManager';
 import type { InterviewEventMap } from '../../events/interview.events';
@@ -31,7 +31,7 @@ export class ScheduleInterviewUseCase {
     private readonly aiAnalysisRepo: IAnalysisReadRepo,
     private readonly interviewScheduleRepo: IInterviewScheduleRepository,
     private readonly userRepo: IUserReadRepo,
-    private readonly geminiSvc: IAIService,
+    private readonly geminiSvc: IInterviewEmailAgent,
     private readonly mailSvc: IMailService,
     private readonly eventManager: EventManager<InterviewEventMap>,
   ) { }

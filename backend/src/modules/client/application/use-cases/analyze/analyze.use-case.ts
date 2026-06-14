@@ -1,7 +1,7 @@
 import type { ICandidateReadRepo, ICandidateWriteRepo } from '../../../application/ports/repositories/candidate.interface';
 import type { IJobReadRepo } from '../../../application/ports/repositories/job.interface';
 import type { IAnalysisReadRepo, IAnalysisWriteRepo } from '../../../application/ports/repositories/analysis.interface';
-import type { IAIService } from '../../../application/ports/services/ai.service';
+import type { ICandidateAnalyzerAgent } from '../../../application/ports/services/ai.service';
 import { CandidateStatus } from '../../../domain/candidate';
 import { AnalysisEntity } from '../../../domain/analysis';
 import { AnalysisInputDto, AnalysisOutputDto } from '../../dtos/analysis/analysis.dto';
@@ -11,7 +11,7 @@ export class AnalysisUseCase {
     private readonly candidateRepo: ICandidateReadRepo & ICandidateWriteRepo,
     private readonly jobRepo: IJobReadRepo,
     private readonly aiAnalyzeRepo: IAnalysisReadRepo & IAnalysisWriteRepo,
-    private readonly geminiService: IAIService,
+    private readonly geminiService: ICandidateAnalyzerAgent,
   ) { }
 
   async execute(input: AnalysisInputDto): Promise<AnalysisOutputDto> {
