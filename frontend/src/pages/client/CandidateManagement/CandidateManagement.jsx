@@ -39,6 +39,19 @@ const CandidateManagement = () => {
     fetchNotificationSubscription();
   }, []);
 
+  // Đóng popover cài đặt khi click ra ngoài
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (showNotificationSettings && !event.target.closest(".candidate-page__settings-wrapper")) {
+        setShowNotificationSettings(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showNotificationSettings]);
+
   const fetchCandidates = async () => {
     try {
       setLoading(true);
