@@ -72,6 +72,30 @@
   cursor: not-allowed;
 }
 
+/* Telegram Button */
+.candidate-page__telegram-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  background: #e8f4fa;
+  border: 1px solid #24a1de;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #24a1de;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.candidate-page__telegram-btn:hover {
+  background: #24a1de;
+  color: #fff;
+  box-shadow: 0 4px 12px rgba(36, 161, 222, 0.2);
+}
+
 /* Filters */
 .candidate-page__filters {
   display: flex;
@@ -592,4 +616,75 @@
   border-color: #0087f1;
   color: #fff;
   box-shadow: 0 2px 6px rgba(0, 135, 241, 0.2);
+}
+
+/* Settings Popover */
+.candidate-page__settings-wrapper {
+  position: relative;
+}
+
+.candidate-page__settings-popover {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 280px;
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  padding: 16px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.candidate-page__settings-popover h4 {
+  font-size: 14px;
+  font-weight: 700;
+  color: #1a1a2e;
+  margin: 0 0 4px;
+}
+
+.popover-checkbox-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  color: #444;
+  cursor: pointer;
+  padding: 4px 0;
+}
+
+.popover-checkbox-label input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #0087f1;
+  cursor: pointer;
+}
+
+.popover-close-btn {
+  text-align: right;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0087f1;
+  cursor: pointer;
+  margin-top: 4px;
+  text-decoration: underline;
+}
+
+.popover-close-btn:hover {
+  color: #006ed0;
 }

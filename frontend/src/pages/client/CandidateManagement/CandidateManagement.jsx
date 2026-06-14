@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { MdSearch, MdNotificationsActive, MdNotificationsOff } from "react-icons/md";
+import { FaTelegram } from "react-icons/fa";
 import candidateService from "../../../services/client/candidateService";
 import jobService from "../../../services/client/jobService";
 import userService from "../../../services/client/userService";
@@ -14,7 +15,9 @@ const CandidateManagement = () => {
   const [candidates, setCandidates] = useState([]);
   const [jobs, setJobs] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [notificationSubscribed, setNotificationSubscribed] = useState(false);
+  const [subscribedEmail, setSubscribedEmail] = useState(false);
+  const [subscribedTelegram, setSubscribedTelegram] = useState(false);
+  const [showNotificationSettings, setShowNotificationSettings] = useState(false);
   const [notificationLoading, setNotificationLoading] = useState(false);
   // Input values (before clicking search)
   const [searchSkillInput, setSearchSkillInput] = useState("");
@@ -95,46 +98,39 @@ const CandidateManagement = () => {
   const fetchNotificationSubscription = async () => {
     try {
       const res = await userService.getInterviewNotificationSubscription();
-      setNotificationSubscribed(Boolean(res.subscribed));
+      setSubscribedEmail(Boolean(res.subscribedEmail));
+      setSubscribedTelegram(Boolean(res.subscribedTelegram));
     } catch (err) {
       console.error("Cannot load interview notification subscription", err);
     }
   };
 
-  const handleToggleNotification = async () => {
+  const handleUpdateSubscription = async (emailVal, telegramVal) => {
     try {
       setNotificationLoading(true);
-      const nextSubscribed = !notificationSubscribed;
-      const res = await userService.updateInterviewNotificationSubscription(nextSubscribed);
+      const res = await userService.updateInterviewNotificationSubscription({
+        subscribedEmail: emailVal,
+        subscribedTelegram: telegramVal,
+      });
 
-      // Handle both res.success and res.subscribed
-      if (res.success !== false || res.subscribed !== undefined) {
-        const finalSubscribed = res.subscribed !== undefined ? Boolean(res.subscribed) : nextSubscribed;
-        setNotificationSubscribed(finalSubscribed);
+      if (res.success !== false) {
+        setSubscribedEmail(Boolean(res.subscribedEmail));
+        setSubscribedTelegram(Boolean(res.subscribedTelegram));
 
         if (res.user) {
           syncLocalUser(res.user);
         }
 
-        // Add notification to notification center
-        if (finalSubscribed) {
-          addNotification(
-            "✅ Bật thông báo lịch phỏng vấn",
-            "HR sẽ nhận email khi bạn đặt lịch phỏng vấn."
-          );
-          toast.success("✅ Bật thông báo - HR sẽ nhận email khi đặt lịch phỏng vấn");
-        } else {
-          addNotification(
-            "⚪ Tắt thông báo lịch phỏng vấn",
-            "HR sẽ không nhận email khi bạn đặt lịch phỏng vấn."
-          );
-          toast.info("⚪ Tắt thông báo - HR sẽ không nhận email");
-        }
+        addNotification(
+          "⚙️ Cập nhật cài đặt thông báo",
+          `Email: ${emailVal ? "Bật" : "Tắt"}, Telegram: ${telegramVal ? "Bật" : "Tắt"}`
+        );
+        toast.success("✅ Cập nhật cài đặt thông báo thành công!");
       } else {
         toast.error("Không thể cập nhật thông báo.");
       }
     } catch (err) {
-      console.error("Toggle notification error:", err);
+      console.error("Update notification error:", err);
       const msg = err?.response?.data?.message || "Lỗi khi cập nhật thông báo.";
       toast.error(msg);
     } finally {
@@ -307,16 +303,62 @@ const CandidateManagement = () => {
             <h1 className="candidate-page__title">Quản lý ứng viên</h1>
             <p className="candidate-page__subtitle">Quản lý ứng viên</p>
           </div>
-          <button
-            type="button"
-            className={`candidate-page__notification-toggle ${notificationSubscribed ? "candidate-page__notification-toggle--on" : ""}`}
-            onClick={handleToggleNotification}
-            disabled={notificationLoading}
-            title={notificationSubscribed ? "Tắt thông báo lịch phỏng vấn" : "Bật thông báo lịch phỏng vấn"}
-          >
-            {notificationSubscribed ? <MdNotificationsActive size={20} /> : <MdNotificationsOff size={20} />}
-            <span>{notificationLoading ? "Đang lưu..." : notificationSubscribed ? "Bật" : "Tắt"}</span>
-          </button>
+          <div style={{ display: "flex", gap: "12px", alignItems: "center", position: "relative" }}>
+            {import.meta.env.VITE_TELEGRAM_BOT_USERNAME && (
+              <a
+                href={`https://t.me/${import.meta.env.VITE_TELEGRAM_BOT_USERNAME}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="candidate-page__telegram-btn"
+                title="Kích hoạt Bot Telegram nhận thông báo"
+              >
+                <FaTelegram size={18} />
+                <span>Kết nối Telegram</span>
+              </a>
+            )}
+            
+            <div className="candidate-page__settings-wrapper">
+              <button
+                type="button"
+                className={`candidate-page__notification-toggle ${(subscribedEmail || subscribedTelegram) ? "candidate-page__notification-toggle--on" : ""}`}
+                onClick={() => setShowNotificationSettings(!showNotificationSettings)}
+                title="Cấu hình nhận thông báo"
+              >
+                {(subscribedEmail || subscribedTelegram) ? <MdNotificationsActive size={20} /> : <MdNotificationsOff size={20} />}
+                <span>{notificationLoading ? "Đang lưu..." : "Thông báo"}</span>
+              </button>
+
+              {showNotificationSettings && (
+                <div className="candidate-page__settings-popover">
+                  <h4>Cấu hình nhận thông báo</h4>
+                  
+                  <label className="popover-checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={subscribedEmail}
+                      disabled={notificationLoading}
+                      onChange={(e) => handleUpdateSubscription(e.target.checked, subscribedTelegram)}
+                    />
+                    <span>Nhận qua Email (Ứng viên & HR)</span>
+                  </label>
+
+                  <label className="popover-checkbox-label">
+                    <input
+                      type="checkbox"
+                      checked={subscribedTelegram}
+                      disabled={notificationLoading}
+                      onChange={(e) => handleUpdateSubscription(subscribedEmail, e.target.checked)}
+                    />
+                    <span>Nhận qua Telegram (HR)</span>
+                  </label>
+                  
+                  <div className="popover-close-btn" onClick={() => setShowNotificationSettings(false)}>
+                    Đóng cài đặt
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
       </div>
 

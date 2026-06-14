@@ -13,6 +13,7 @@ export class UserRepository implements IUserReadRepo, IUserWriteRepo {
       avatar: doc.avatar,
       status: doc.status,
       interviewNotificationSubscribed: doc.interviewNotificationSubscribed ?? false,
+      telegramNotificationSubscribed: doc.telegramNotificationSubscribed ?? false,
       deleted: doc.deleted,
       deletedAt: doc.deletedAt,
       createdAt: doc.createdAt,
@@ -39,10 +40,17 @@ export class UserRepository implements IUserReadRepo, IUserWriteRepo {
     return this.mapToEntity(updatedDoc as any | null);
   }
 
-  public async updateInterviewNotificationSubscription(userID: string, subscribed: boolean): Promise<UserEntity | null> {
+  public async updateInterviewNotificationSubscription(
+    userID: string,
+    subscribedEmail: boolean,
+    subscribedTelegram: boolean,
+  ): Promise<UserEntity | null> {
     const updatedDoc = await User.findOneAndUpdate(
       { _id: userID, deleted: false, status: 'active' },
-      { interviewNotificationSubscribed: subscribed },
+      { 
+        interviewNotificationSubscribed: subscribedEmail,
+        telegramNotificationSubscribed: subscribedTelegram,
+      },
       { new: true },
     ).lean();
     return this.mapToEntity(updatedDoc as any | null);

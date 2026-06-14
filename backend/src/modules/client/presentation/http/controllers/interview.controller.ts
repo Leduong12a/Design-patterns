@@ -9,7 +9,7 @@ import { GeminiService } from '../../../infrastructure/external-service/gemini.s
 import { MailService } from '../../../infrastructure/external-service/mail.service';
 import { EventManager } from '../../../application/events/EventManager';
 import type { InterviewEventMap } from '../../../application/events/interview.events';
-import { InterviewCandidateEmailListener } from '../../../application/events/interviewCandidateEmail.listener';
+import { InterviewCandidateNotificationListener } from '../../../application/events/interviewCandidateNotification.listener';
 import { InterviewCandidateStatusListener } from '../../../application/events/interviewCandidateStatus.listener';
 import { InterviewHrNotificationListener } from '../../../application/events/interviewHrNotification.listener';
 
@@ -22,7 +22,7 @@ const geminiService = new GeminiService();
 const mailService = new MailService();
 const interviewEventManager = new EventManager<InterviewEventMap>();
 
-interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateEmailListener());
+interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateNotificationListener());
 interviewEventManager.subscribe('interview.scheduled', new InterviewCandidateStatusListener());
 interviewEventManager.subscribe('interview.scheduled', new InterviewHrNotificationListener());
 

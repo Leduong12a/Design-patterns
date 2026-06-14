@@ -9,6 +9,7 @@ export interface IUserProfile {
   avatar: string;
   status: string;
   interviewNotificationSubscribed: boolean;
+  telegramNotificationSubscribed: boolean;
   createdAt: Date | undefined;
 }
 
@@ -20,6 +21,7 @@ export interface IUserProps {
   avatar?: string;
   status?: string;
   interviewNotificationSubscribed?: boolean;
+  telegramNotificationSubscribed?: boolean;
   deleted?: boolean;
   deletedAt?: Date | null;
   createdAt?: Date;

@@ -8,6 +8,7 @@ export class UserEntity {
   private avatar: string;
   private status: string;
   private interviewNotificationSubscribed: boolean;
+  private telegramNotificationSubscribed: boolean;
   private deleted: boolean;
   private deletedAt: Date | null;
   private createdAt: Date | undefined;
@@ -21,6 +22,7 @@ export class UserEntity {
     avatar = '',
     status = 'active',
     interviewNotificationSubscribed = false,
+    telegramNotificationSubscribed = false,
     deleted = false,
     deletedAt = null,
     createdAt,
@@ -33,6 +35,7 @@ export class UserEntity {
     this.avatar = avatar;
     this.status = status;
     this.interviewNotificationSubscribed = interviewNotificationSubscribed;
+    this.telegramNotificationSubscribed = telegramNotificationSubscribed;
     this.deleted = deleted;
     this.deletedAt = deletedAt;
     this.createdAt = createdAt;
@@ -59,6 +62,9 @@ export class UserEntity {
 
   public getInterviewNotificationSubscribed(): boolean { return this.interviewNotificationSubscribed; }
   public setInterviewNotificationSubscribed(value: boolean): void { this.interviewNotificationSubscribed = value; }
+
+  public getTelegramNotificationSubscribed(): boolean { return this.telegramNotificationSubscribed; }
+  public setTelegramNotificationSubscribed(value: boolean): void { this.telegramNotificationSubscribed = value; }
 
   public getDeleted(): boolean { return this.deleted; }
   public setDeleted(value: boolean): void { this.deleted = value; }
@@ -88,6 +94,7 @@ export class UserEntity {
       avatar: this.avatar,
       status: this.status,
       interviewNotificationSubscribed: this.interviewNotificationSubscribed,
+      telegramNotificationSubscribed: this.telegramNotificationSubscribed,
       createdAt: this.createdAt,
     };
   }

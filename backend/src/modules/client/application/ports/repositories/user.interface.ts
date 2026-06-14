@@ -9,5 +9,9 @@ export interface IUserReadRepo {
 export interface IUserWriteRepo {
   updateUserPassword(email: string, password: string): Promise<UserEntity | null>;
 
-  updateInterviewNotificationSubscription(userID: string, subscribed: boolean): Promise<UserEntity | null>;
+  updateInterviewNotificationSubscription(
+    userID: string,
+    subscribedEmail: boolean,
+    subscribedTelegram: boolean,
+  ): Promise<UserEntity | null>;
 }

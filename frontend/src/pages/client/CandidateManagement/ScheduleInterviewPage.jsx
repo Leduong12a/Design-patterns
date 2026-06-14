@@ -101,15 +101,15 @@ const ScheduleInterviewPage = () => {
         if (finalSubscribed) {
           addNotification(
             "✅ Bật thông báo lịch phỏng vấn",
-            "HR sẽ nhận email khi bạn đặt lịch phỏng vấn."
+            "HR sẽ nhận email và Telegram khi bạn đặt lịch phỏng vấn."
           );
-          toast.success("✅ Bật thông báo - HR sẽ nhận email khi đặt lịch phỏng vấn");
+          toast.success("✅ Bật thông báo - HR sẽ nhận email và Telegram");
         } else {
           addNotification(
             "⚪ Tắt thông báo lịch phỏng vấn",
-            "HR sẽ không nhận email khi bạn đặt lịch phỏng vấn."
+            "HR sẽ không nhận email và Telegram khi bạn đặt lịch phỏng vấn."
           );
-          toast.info("⚪ Tắt thông báo - HR sẽ không nhận email");
+          toast.info("⚪ Tắt thông báo - HR sẽ không nhận email và Telegram");
         }
       } else {
         toast.error("Không thể cập nhật thông báo.");

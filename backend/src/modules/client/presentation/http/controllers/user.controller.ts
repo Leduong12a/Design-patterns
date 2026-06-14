@@ -35,6 +35,8 @@ export const getInterviewNotificationSubscription = async (_req: Request, res: R
     res.status(200).json({
       success: true,
       subscribed: user.getInterviewNotificationSubscribed(),
+      subscribedEmail: user.getInterviewNotificationSubscribed(),
+      subscribedTelegram: user.getTelegramNotificationSubscribed(),
       user: user.getProfile(),
     });
   } catch (error: unknown) {
@@ -47,24 +49,39 @@ export const getInterviewNotificationSubscription = async (_req: Request, res: R
 export const updateInterviewNotificationSubscription = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = res.locals.user.id as string;
-    const { subscribed } = req.body as { subscribed?: boolean };
+    const { subscribedEmail, subscribedTelegram } = req.body as { 
+      subscribedEmail?: boolean; 
+      subscribedTelegram?: boolean;
+    };
 
-    if (typeof subscribed !== 'boolean') {
-      res.status(400).json({ success: false, message: 'subscribed must be boolean.' });
+    const oldSubscribed = req.body.subscribed as boolean | undefined;
+
+    const user = await userRepository.findUserByID(userId);
+    if (!user) {
+      res.status(404).json({ success: false, message: 'Khong tim thay HR.' });
       return;
     }
 
-    const user = await userRepository.updateInterviewNotificationSubscription(userId, subscribed);
-    if (!user) {
+    const finalEmail = typeof subscribedEmail === 'boolean' 
+      ? subscribedEmail 
+      : (typeof oldSubscribed === 'boolean' ? oldSubscribed : user.getInterviewNotificationSubscribed());
+    
+    const finalTelegram = typeof subscribedTelegram === 'boolean' 
+      ? subscribedTelegram 
+      : (typeof oldSubscribed === 'boolean' ? oldSubscribed : user.getTelegramNotificationSubscribed());
+
+    const updatedUser = await userRepository.updateInterviewNotificationSubscription(userId, finalEmail, finalTelegram);
+    if (!updatedUser) {
       res.status(404).json({ success: false, message: 'Khong tim thay HR.' });
       return;
     }
 
     res.status(200).json({
       success: true,
-      message: subscribed ? 'Da bat thong bao lich phong van.' : 'Da tat thong bao lich phong van.',
-      subscribed: user.getInterviewNotificationSubscribed(),
-      user: user.getProfile(),
+      message: 'Cập nhật trạng thái thông báo thành công.',
+      subscribedEmail: updatedUser.getInterviewNotificationSubscribed(),
+      subscribedTelegram: updatedUser.getTelegramNotificationSubscribed(),
+      user: updatedUser.getProfile(),
     });
   } catch (error: unknown) {
     const e = error as { message?: string };

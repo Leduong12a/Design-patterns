@@ -7,8 +7,8 @@ const userService = {
     return res;
   },
 
-  updateInterviewNotificationSubscription: async (subscribed) => {
-    const res = await API.patch("/user/interview-notification", { subscribed });
+  updateInterviewNotificationSubscription: async (payload) => {
+    const res = await API.patch("/user/interview-notification", payload);
     return res;
   },
 };

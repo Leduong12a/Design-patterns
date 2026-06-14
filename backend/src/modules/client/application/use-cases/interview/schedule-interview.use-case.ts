@@ -39,12 +39,12 @@ export class ScheduleInterviewUseCase {
   async execute(input: ScheduleInterviewInput): Promise<ScheduleInterviewResult> {
     const candidate = await this.candidateRepo.getById(input.candidateID);
     if (!candidate) throw new Error('Khong tim thay thong tin ung vien.');
-    if (!candidate.getPersonal().email) throw new Error('Ung vien chua co email de gui thu moi.');
+    const personal = candidate.getPersonal();
+    if (!personal.email && !personal.phone) {
+      throw new Error('Ứng viên phải có ít nhất Email hoặc Số điện thoại để nhận thông báo.');
+    }
 
     const job = input.jobID ? await this.jobRepo.getById(input.jobID) : null;
-
-    const analysis = await this.aiAnalysisRepo.getAnalysisByCandidateId(input.candidateID);
-    if (!analysis) throw new Error('Ung vien chua duoc AI phan tich. Vui long chay phan tich truoc khi dat lich.');
 
     const isOverlap = await this.interviewScheduleRepo.checkOverlap(input.userId, input.time, input.durationMinutes);
     if (isOverlap) {
