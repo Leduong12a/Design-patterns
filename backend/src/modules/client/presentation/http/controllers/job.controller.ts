@@ -11,6 +11,14 @@ import { CandidateRepository } from '../../../infrastructure/database/repositori
 import { asyncHandler } from '../../../../../shared/utils/asyncHandler';
 import { NotFoundError, BadRequestError } from '../../../../../shared/utils/errors';
 
+import { JobFactoryRegistry } from '../../../domain/job/factories/job-factory.registry';
+import { JobType } from '../../../domain/job/job.types';
+import { FullTimeJobFactory } from '../../../domain/job/factories/fulltime-job.factory';
+import { FreelanceJobFactory } from '../../../domain/job/factories/freelance-job.factory';
+
+JobFactoryRegistry.register(JobType.FULLTIME, new FullTimeJobFactory());
+JobFactoryRegistry.register(JobType.FREELANCE, new FreelanceJobFactory());
+
 const jobRepository = new JobRepository();
 const candidateRepo = new CandidateRepository();
 const createJobUseCase = new CreateJobUseCase(jobRepository);

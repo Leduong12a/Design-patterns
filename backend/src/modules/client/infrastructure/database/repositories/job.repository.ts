@@ -8,7 +8,7 @@ export class JobRepository implements IJobReadRepo, IJobWriteRepo {
   private mapToEntity(doc: any | null): JobEntity | null {
     if (!doc) return null;
     const d = doc.toObject ? doc.toObject() : doc;
-    
+
     let jobType = d.type;
     if (jobType !== 'FULLTIME' && jobType !== 'FREELANCE') {
       jobType = 'FULLTIME';
