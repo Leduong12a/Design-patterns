@@ -1,13 +1,13 @@
 
+import {
+  defaultEmailTemplateRegistry,
+  EMAIL_TEMPLATE_KEYS,
+} from '../../../../../shared/templates/email/email-template-registry';
 import type { IStatus } from '../../../application/ports/repositories/candidate.interface';
 import type { ICandidateReadRepo } from '../../../application/ports/repositories/candidate.interface';
 import type { IMailService } from '../../../application/ports/services/mail.service';
 import type { IUpdateStatusUseCase } from './update-status.use-case';
 import { CandidateStatus } from '../../../domain/candidate';
-import {
-  defaultEmailTemplateRegistry,
-  EMAIL_TEMPLATE_KEYS,
-} from '../../../../../shared/templates/email/email-template-registry';
 
 export class OfferEmailDecorator implements IUpdateStatusUseCase {
   constructor(
