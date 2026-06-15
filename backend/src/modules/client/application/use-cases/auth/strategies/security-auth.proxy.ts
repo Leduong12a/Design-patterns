@@ -1,16 +1,3 @@
-// ============================================================
-// Proxy Design Pattern — SecurityAuthProxy
-// ============================================================
-// Lớp Proxy này bọc ngoài đối tượng IAuthStrategy thực tế để:
-//   1. Kiểm soát quyền truy cập: Triển khai cơ chế brute-force protection
-//      (khóa email tạm thời nếu nhập sai quá 3 lần).
-//   2. Kiểm toán (Audit Logging): Ghi nhật ký bảo mật trước và sau khi
-//      thực hiện xác thực thực tế mà không can thiệp vào logic nghiệp vụ gốc.
-//
-// Ưu điểm:
-//   - Hoàn toàn trong suốt (Transparent) với client do cùng implement IAuthStrategy.
-//   - Tuân thủ nguyên tắc Open-Closed Principle (OCP).
-// ============================================================
 
 import type { IAuthStrategy, ILoginResult } from './auth-strategy.interface';
 import { AppError } from '../../../../../../shared/utils/errors';
@@ -28,7 +15,7 @@ export class SecurityAuthProxy implements IAuthStrategy {
     // Giữ tham chiếu đến "Subject" thực tế (Real Subject)
     private readonly realStrategy: IAuthStrategy,
     private readonly strategyName: string
-  ) {}
+  ) { }
 
   async authenticate(payload: any): Promise<ILoginResult> {
     const email = payload.email || 'unknown';
@@ -40,7 +27,7 @@ export class SecurityAuthProxy implements IAuthStrategy {
     // ── Bước 1: Kiểm soát truy cập (Brute-force checking) ──
     if (lockoutData && lockoutData.lockoutUntil && lockoutData.lockoutUntil > now) {
       const remainingSeconds = Math.ceil((lockoutData.lockoutUntil.getTime() - now.getTime()) / 1000);
-      console.warn(`[SecurityAuthProxy] 🛑 [BÌ CHẶN] Email "${email}" bị chặn do nhập sai nhiều lần. Thử lại sau: ${remainingSeconds}s`);
+      console.warn(`[SecurityAuthProxy] [BÌ CHẶN] Email "${email}" bị chặn do nhập sai nhiều lần. Thử lại sau: ${remainingSeconds}s`);
       throw new AppError(429, `Tài khoản tạm thời bị khóa do nhập sai nhiều lần. Vui lòng thử lại sau ${remainingSeconds} giây.`);
     }
 
@@ -53,7 +40,7 @@ export class SecurityAuthProxy implements IAuthStrategy {
         lockoutMap.delete(email);
       }
 
-      console.log(`[SecurityAuthProxy] ✅ [THÀNH CÔNG] Xác thực thành công cho email: "${email}"`);
+      console.log(`[SecurityAuthProxy] [THÀNH CÔNG] Xác thực thành công cho email: "${email}"`);
       return result;
     } catch (error: any) {
       // ── Bước 3: Đánh giá & xử lý lỗi bảo mật ──
@@ -63,7 +50,7 @@ export class SecurityAuthProxy implements IAuthStrategy {
       if (attempts >= 3) {
         // Tạm khóa tài khoản 30 giây
         lockoutTime = new Date(Date.now() + 30 * 1000);
-        console.warn(`[SecurityAuthProxy] ⚠️ [KÍCH HOẠT KHÓA] Email "${email}" nhập sai ${attempts} lần. Khóa 30 giây.`);
+        console.warn(`[SecurityAuthProxy] KÍCH HOẠT KHÓA] Email "${email}" nhập sai ${attempts} lần. Khóa 30 giây.`);
       }
 
       lockoutMap.set(email, {
@@ -71,7 +58,7 @@ export class SecurityAuthProxy implements IAuthStrategy {
         lockoutUntil: lockoutTime
       });
 
-      console.error(`[SecurityAuthProxy] ❌ [THẤT BẠI] Xác thực thất bại cho email: "${email}". Lý do: ${error.message}. Lần thử: ${attempts}/3`);
+      console.error(`[SecurityAuthProxy] [THẤT BẠI] Xác thực thất bại cho email: "${email}". Lý do: ${error.message}. Lần thử: ${attempts}/3`);
       throw error;
     }
   }
