@@ -323,37 +323,58 @@ const CandidateManagement = () => {
                 type="button"
                 className={`candidate-page__notification-toggle ${(subscribedEmail || subscribedTelegram) ? "candidate-page__notification-toggle--on" : ""}`}
                 onClick={() => setShowNotificationSettings(!showNotificationSettings)}
-                title="Cấu hình nhận thông báo"
+                title="Cài đặt hệ thống"
               >
                 {(subscribedEmail || subscribedTelegram) ? <MdNotificationsActive size={20} /> : <MdNotificationsOff size={20} />}
-                <span>{notificationLoading ? "Đang lưu..." : "Thông báo"}</span>
+                <span>{notificationLoading ? "Đang lưu..." : "Setting"}</span>
               </button>
 
               {showNotificationSettings && (
                 <div className="candidate-page__settings-popover">
-                  <h4>Cấu hình nhận thông báo</h4>
+                  <h4 style={{ marginBottom: "12px" }}>Cài đặt nhận thông báo</h4>
                   
-                  <label className="popover-checkbox-label">
+                  <label className="popover-checkbox-label" style={{ fontWeight: "bold", borderBottom: "1px solid #eee", paddingBottom: "10px", marginBottom: "10px" }}>
                     <input
                       type="checkbox"
-                      checked={subscribedEmail}
+                      checked={subscribedEmail || subscribedTelegram}
                       disabled={notificationLoading}
-                      onChange={(e) => handleUpdateSubscription(e.target.checked, subscribedTelegram)}
+                      onChange={(e) => {
+                        const isChecked = e.target.checked;
+                        if (isChecked) {
+                          // Khi bật công tắc tổng: Bật cả 2 kênh mặc định
+                          handleUpdateSubscription(true, true);
+                        } else {
+                          // Khi tắt công tắc tổng (Unsubscribe): Tắt cả 2 kênh
+                          handleUpdateSubscription(false, false);
+                        }
+                      }}
                     />
-                    <span>Nhận qua Email (Ứng viên & HR)</span>
+                    <span>Gửi email và tele cho HR</span>
                   </label>
 
-                  <label className="popover-checkbox-label">
-                    <input
-                      type="checkbox"
-                      checked={subscribedTelegram}
-                      disabled={notificationLoading}
-                      onChange={(e) => handleUpdateSubscription(subscribedEmail, e.target.checked)}
-                    />
-                    <span>Nhận qua Telegram (HR)</span>
-                  </label>
+                  <div style={{ paddingLeft: "16px", display: "flex", flexDirection: "column", gap: "8px" }}>
+                    <label className="popover-checkbox-label" style={{ opacity: (subscribedEmail || subscribedTelegram) ? 1 : 0.5 }}>
+                      <input
+                        type="checkbox"
+                        checked={subscribedEmail}
+                        disabled={!(subscribedEmail || subscribedTelegram) || notificationLoading}
+                        onChange={(e) => handleUpdateSubscription(e.target.checked, subscribedTelegram)}
+                      />
+                      <span>Nhận qua Email (Ứng viên & HR)</span>
+                    </label>
+
+                    <label className="popover-checkbox-label" style={{ opacity: (subscribedEmail || subscribedTelegram) ? 1 : 0.5 }}>
+                      <input
+                        type="checkbox"
+                        checked={subscribedTelegram}
+                        disabled={!(subscribedEmail || subscribedTelegram) || notificationLoading}
+                        onChange={(e) => handleUpdateSubscription(subscribedEmail, e.target.checked)}
+                      />
+                      <span>Nhận qua Telegram (HR)</span>
+                    </label>
+                  </div>
                   
-                  <div className="popover-close-btn" onClick={() => setShowNotificationSettings(false)}>
+                  <div className="popover-close-btn" style={{ marginTop: "12px" }} onClick={() => setShowNotificationSettings(false)}>
                     Đóng cài đặt
                   </div>
                 </div>
