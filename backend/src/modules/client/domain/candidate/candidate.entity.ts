@@ -8,6 +8,7 @@ import type {
   ICandidateProps,
 } from './candidate.types';
 import { CandidateStatus, VerificationStatus } from './candidate.types';
+import { ICandidateVerificationState, CandidateStateFactory } from './candidate-verification-state';
 
 export class CandidateEntity {
   private id?: string | null;
@@ -25,6 +26,7 @@ export class CandidateEntity {
   private projects: IProject[];
   private createdAt: Date | undefined;
   private updatedAt: Date | undefined;
+  private verificationState!: ICandidateVerificationState;
 
   constructor({
     id,
@@ -49,6 +51,7 @@ export class CandidateEntity {
     this.addedBy = addedBy ? addedBy.toString() : null;
     this.status = status;
     this.verificationStatus = verificationStatus;
+    this.verificationState = CandidateStateFactory.create(this.verificationStatus);
     this.objective = objective;
     this.fullTextContent = fullTextContent;
     this.isVerify = isVerify;
@@ -264,6 +267,18 @@ export class CandidateEntity {
   public updateVerificationStatus(status: VerificationStatus): void {
     this.verificationStatus = status;
     this.updatedAt = new Date();
+  }
+
+  public setVerificationState(state: ICandidateVerificationState): void {
+    this.verificationState = state;
+  }
+
+  public verify(): string {
+    return this.verificationState.verify(this);
+  }
+
+  public markRisky(): string {
+    return this.verificationState.markRisky(this);
   }
 
   public getId(): string | null | undefined { return this.id }

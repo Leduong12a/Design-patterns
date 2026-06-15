@@ -21,17 +21,7 @@ export class ConfirmVerifyUseCase {
       throw new Error('Ứng viên không tìm thấy');
     }
 
-    let message = '';
-
-    if (status === 'risky') {
-      candidate.updateVerificationStatus(VerificationStatus.RISKY);
-      candidate.updateStatus(CandidateStatus.APPLIED);
-      message = 'Đánh dấu rủi ro. Reset lại Ứng tuyển.';
-    } else if (status === 'verified') {
-      candidate.updateVerificationStatus(VerificationStatus.VERIFIED);
-      candidate.updateStatus(CandidateStatus.OFFER);
-      message = 'Kiểm chứng thành công! Chuyển sang Đề nghị.';
-    }
+    const message = status === 'risky' ? candidate.markRisky() : candidate.verify();
 
     await this.candidateWriteRepo.update(candidate);
 

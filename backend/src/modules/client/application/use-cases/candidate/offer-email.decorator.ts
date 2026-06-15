@@ -11,20 +11,20 @@ import {
 
 export class OfferEmailDecorator implements IUpdateStatusUseCase {
   constructor(
-    
+
     private readonly wrappee: IUpdateStatusUseCase,
-    
+
     private readonly candidateRepo: ICandidateReadRepo,
-    
+
     private readonly mailSvc: IMailService,
-  ) {}
+  ) { }
 
   async execute(candidateID: string, status: IStatus): Promise<void> {
-    
+
     await this.wrappee.execute(candidateID, status);
 
     if (status.status !== CandidateStatus.OFFER) {
-      return; 
+      return;
     }
 
     await this.sendOfferNotification(candidateID);
@@ -71,14 +71,14 @@ export class OfferEmailDecorator implements IUpdateStatusUseCase {
       );
 
       if (sent) {
-        console.log(`[OfferEmailDecorator] ✅ Đã gửi email trúng tuyển tới: ${personal.email}`);
+        console.log(`[OfferEmailDecorator] Đã gửi email trúng tuyển tới: ${personal.email}`);
       } else {
-        console.warn(`[OfferEmailDecorator] ⚠️ Gửi email thất bại cho ứng viên: ${candidateID}`);
+        console.warn(`[OfferEmailDecorator]  Gửi email thất bại cho ứng viên: ${candidateID}`);
       }
     } catch (error: unknown) {
-      
+
       const e = error as { message?: string };
-      console.error(`[OfferEmailDecorator] ❌ Lỗi khi gửi email: ${e.message ?? 'Lỗi không xác định'}`);
+      console.error(`[OfferEmailDecorator]  Lỗi khi gửi email: ${e.message ?? 'Lỗi không xác định'}`);
     }
   }
 }

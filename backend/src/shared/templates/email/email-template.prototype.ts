@@ -46,7 +46,6 @@ export class EmailTemplate implements Prototype<EmailTemplate> {
     this.content = this.content.replace(/\[Công ty\]/g, company);
     this.title = this.title.replace(/\[Công ty\]/g, company);
 
-    // Thay thế placeholder chữ ký [Tên Chuyên Viên / Công ty]
     const hrSignature = `Bộ phận Tuyển dụng / ${company}`;
     this.content = this.content.replace(/\[Tên Chuyên Viên \/ Công ty\]/g, hrSignature);
     this.title = this.title.replace(/\[Tên Chuyên Viên \/ Công ty\]/g, hrSignature);
