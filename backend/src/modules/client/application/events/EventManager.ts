@@ -17,9 +17,11 @@ export class EventManager {
 
   subscribe(eventName: string, listener: EventListener): void {
     const eventListeners = this.listeners.get(eventName) ?? [];
-    eventListeners.push(listener);
-    this.listeners.set(eventName, eventListeners);
-    console.log(`[EventManager] Đăng ký listener: ${listener.constructor.name} lắng nghe sự kiện "${eventName}"`);
+    if (!eventListeners.includes(listener)) {
+      eventListeners.push(listener);
+      this.listeners.set(eventName, eventListeners);
+      console.log(`[EventManager] Đăng ký listener: ${listener.constructor.name} lắng nghe sự kiện "${eventName}"`);
+    }
   }
 
   unsubscribe(eventName: string, listener: EventListener): void {
