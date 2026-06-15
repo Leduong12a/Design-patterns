@@ -2,10 +2,7 @@ import type { InterviewScheduledPayload } from './interview.events';
 import { TelegramService } from '../../infrastructure/external-service/telegram.service';
 
 export interface IHrNotificationStrategy {
-
   supports(hr: any): boolean;
-
-
   send(payload: InterviewScheduledPayload, hr: any): Promise<void>;
 }
 

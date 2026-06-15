@@ -1,14 +1,7 @@
 import type { InterviewScheduledPayload } from './interview.events';
 
 export interface ICandidateNotificationStrategy {
-  /**
-   * Xác định xem ứng viên có hỗ trợ nhận thông báo qua kênh này hay không.
-   */
   supports(candidate: any): boolean;
-
-  /**
-   * Thực hiện gửi thông điệp chi tiết đến ứng viên.
-   */
   send(payload: InterviewScheduledPayload, candidate: any): Promise<void>;
 }
 

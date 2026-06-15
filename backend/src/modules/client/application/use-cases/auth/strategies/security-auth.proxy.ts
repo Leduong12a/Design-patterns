@@ -1,16 +1,4 @@
-// ============================================================
-// Proxy Design Pattern — SecurityAuthProxy
-// ============================================================
-// Lớp Proxy này bọc ngoài đối tượng IAuthStrategy thực tế để:
-//   1. Kiểm soát quyền truy cập: Triển khai cơ chế brute-force protection
-//      (khóa email tạm thời nếu nhập sai quá 3 lần).
-//   2. Kiểm toán (Audit Logging): Ghi nhật ký bảo mật trước và sau khi
-//      thực hiện xác thực thực tế mà không can thiệp vào logic nghiệp vụ gốc.
-//
-// Ưu điểm:
-//   - Hoàn toàn trong suốt (Transparent) với client do cùng implement IAuthStrategy.
-//   - Tuân thủ nguyên tắc Open-Closed Principle (OCP).
-// ============================================================
+
 
 import type { IAuthStrategy, ILoginResult } from './auth-strategy.interface';
 import { AppError } from '../../../../../../shared/utils/errors';
@@ -28,7 +16,7 @@ export class SecurityAuthProxy implements IAuthStrategy {
     // Giữ tham chiếu đến "Subject" thực tế (Real Subject)
     private readonly realStrategy: IAuthStrategy,
     private readonly strategyName: string
-  ) {}
+  ) { }
 
   async authenticate(payload: any): Promise<ILoginResult> {
     const email = payload.email || 'unknown';
